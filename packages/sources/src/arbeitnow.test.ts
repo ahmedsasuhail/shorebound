@@ -14,7 +14,7 @@ const newest = Math.max(...fixture.data.map((j) => j.created_at));
 const now = new Date((newest + 3600) * 1000);
 const since = new Date(now.getTime() - 7 * 86_400_000);
 
-const fakeFetch: FetchLike = async () => ({ ok: true, status: 200, json: async () => fixture });
+const fakeFetch: FetchLike = async () => ({ ok: true, status: 200, json: async () => fixture, text: async () => "" });
 
 describe("arbeitnow connector", () => {
   it("keeps only jobs from the last 7 days and drops the 30-day-old one", async () => {
@@ -40,7 +40,7 @@ describe("arbeitnow connector", () => {
   });
 
   it("throws a clear error on HTTP failure", async () => {
-    const bad: FetchLike = async () => ({ ok: false, status: 503, json: async () => ({}) });
+    const bad: FetchLike = async () => ({ ok: false, status: 503, json: async () => ({}), text: async () => "" });
     await expect(arbeitnow.fetchJobs({ fetch: bad, since, now, delayMs: 0 })).rejects.toThrow(/HTTP 503/);
   });
 
@@ -48,7 +48,7 @@ describe("arbeitnow connector", () => {
     let calls = 0;
     const paged: FetchLike = async () => {
       calls++;
-      return { ok: true, status: 200, json: async () => ({ ...fixture, links: { next: "https://x/next" } }) };
+      return { ok: true, status: 200, json: async () => ({ ...fixture, links: { next: "https://x/next" } }), text: async () => "" };
     };
     await arbeitnow.fetchJobs({ fetch: paged, since, now, delayMs: 0 });
     expect(calls).toBe(1);

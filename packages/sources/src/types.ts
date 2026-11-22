@@ -4,6 +4,7 @@ export type FetchLike = (url: string, init?: { headers?: Record<string, string> 
   ok: boolean;
   status: number;
   json(): Promise<unknown>;
+  text(): Promise<string>;
 }>;
 
 export interface FetchContext {
@@ -22,11 +23,17 @@ export interface FetchStats {
   tooOld: number;
   /** Dropped because the country could not be determined from the location. */
   unknownCountry: number;
+  /** Dropped as not a software role (company boards list every department). */
+  notSoftware?: number;
+  /** Dropped because nothing showed the employer sponsors (no text, not on a register). */
+  noSponsorshipSignal?: number;
 }
 
 export interface FetchResult {
   jobs: Job[];
   stats: FetchStats;
+  /** Non-fatal problems (e.g. one company board failed). */
+  warnings?: string[];
 }
 
 export interface SourceConnector {
