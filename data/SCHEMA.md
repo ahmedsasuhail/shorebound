@@ -12,7 +12,7 @@ data/
   trust/signals.json       review sites, layoff trackers, company-data APIs, scam signals, scoring weights
 ```
 
-Validate with `python scripts/validate_data.py` (also runs in CI on every push touching `data/`).
+Validate with `npm run validate:data` (zod schemas in `packages/data-schema`; also runs in CI).
 
 ## Adding a country
 
