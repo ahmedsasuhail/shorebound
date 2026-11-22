@@ -1,4 +1,4 @@
 {
   "files": [],
-  "references": [{ "path": "packages/core" }, { "path": "packages/data-schema" }]
+  "references": [{ "path": "packages/core" }, { "path": "packages/data-schema" }, { "path": "packages/server" }]
 }
