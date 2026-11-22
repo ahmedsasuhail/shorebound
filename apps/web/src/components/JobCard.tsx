@@ -3,6 +3,7 @@ import { ArrowUpRight, Clock, MapPin } from "lucide-react";
 import { motion } from "motion/react";
 import { timeAgo } from "../api";
 import { COUNTRY_NAMES, CountryChip, RelocationBadge, SponsorshipBadge } from "./Badges";
+import { ConfidenceRing, MatchPill } from "./Meters";
 
 const RAIL: Record<string, string> = {
   confirmed_text: "bg-emerald-500", confirmed_register: "bg-emerald-500", visa_source: "bg-sky-500",
@@ -44,10 +45,12 @@ export function JobCard({ job, index, onOpen }: { job: JobDTO; index: number; on
           <span className="inline-flex items-center gap-1"><Clock size={12} />{timeAgo(job.postedAt)}</span>
         </div>
         <div className="mt-3 flex flex-wrap gap-2">
+          <MatchPill job={job} />
           <SponsorshipBadge job={job} />
           <RelocationBadge job={job} />
         </div>
       </div>
+      <div className="self-center"><ConfidenceRing job={job} /></div>
       <a
         href={job.url} target="_blank" rel="noreferrer noopener" onClick={(e) => e.stopPropagation()}
         className="hidden h-9 shrink-0 items-center gap-1 self-center rounded-xl bg-surface2 px-3 text-xs font-semibold text-accentink transition-colors hover:bg-accent hover:text-white sm:inline-flex"

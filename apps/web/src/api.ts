@@ -7,12 +7,21 @@ export interface CatalogCountry {
 }
 export interface Settings {
   countries: string[];
-  search: { lookbackDays: number; showUnknownPostedDate: boolean; targetRoles: string[] };
+  search: {
+    lookbackDays: number; showUnknownPostedDate: boolean; targetRoles: string[];
+    sort: "newest" | "match" | "confidence"; onlyMatching: boolean; maxPerCompany: number;
+  };
   sponsorship: { excludeNegative: boolean; relocation: "required" | "bonus" | "ignore" };
   sources: { disabled: string[] };
   schedule: { refreshHours: number };
   appearance: { theme: "system" | "light" | "dark" };
 }
+export interface Profile {
+  skills: string[]; yearsExperience: number | null;
+  seniority: "intern" | "junior" | "mid" | "senior" | "lead" | "manager";
+  families: string[]; title: string | null; source: "rules" | "user" | "claude";
+}
+export interface Feed { jobs: JobDTO[]; total: number; hidden: { notMatching: number; companyCap: number } }
 export interface ResumeInfo { originalName: string; bytes: number; uploadedAt: string }
 export interface RefreshReport {
   startedAt: string;
@@ -53,7 +62,7 @@ export function useSaveSettings() {
 export const useJobs = (q: string, settingsKey: unknown) =>
   useQuery({
     queryKey: ["jobs", q, settingsKey],
-    queryFn: () => call<{ jobs: JobDTO[] }>(`/api/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`),
+    queryFn: () => call<Feed>(`/api/jobs${q ? `?q=${encodeURIComponent(q)}` : ""}`),
     placeholderData: (prev) => prev,
   });
 
@@ -71,12 +80,14 @@ export function useUploadResume() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (file: File) =>
-      call<{ resume: ResumeInfo }>("/api/resume", {
+      call<{ resume: ResumeInfo; profile: Profile | null; parseError: string | null }>("/api/resume", {
         method: "PUT",
         headers: { "content-type": "application/octet-stream", "x-filename": encodeURIComponent(file.name) },
         body: await file.arrayBuffer(),
       }),
-    onSuccess: () => void qc.invalidateQueries({ queryKey: ["resume"] }),
+    onSuccess: () => {
+      for (const k of ["resume", "profile", "jobs"]) void qc.invalidateQueries({ queryKey: [k] });
+    },
   });
 }
 
@@ -96,4 +107,18 @@ export function timeAgo(iso: string, now = Date.now()): string {
   if (h < 24) return `${h}h ago`;
   const d = Math.round(h / 24);
   return d === 1 ? "yesterday" : `${d}d ago`;
+}
+
+export const useProfile = () => useQuery({ queryKey: ["profile"], queryFn: () => call<{ profile: Profile | null }>("/api/profile") });
+
+export function useSaveProfile() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (p: Omit<Profile, "source">) =>
+      call<{ profile: Profile }>("/api/profile", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(p) }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["profile"] });
+      void qc.invalidateQueries({ queryKey: ["jobs"] });
+    },
+  });
 }
