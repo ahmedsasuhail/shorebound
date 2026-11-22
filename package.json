@@ -13,13 +13,16 @@
     "node": ">=22"
   },
   "scripts": {
-    "typecheck": "tsc -b",
+    "typecheck": "tsc -b && tsc -p apps/web --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "validate:data": "npm run validate -w @shorebound/data-schema"
+    "validate:data": "npm run validate -w @shorebound/data-schema",
+    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm run dev -w @shorebound/server\" \"npm run dev -w @shorebound/web\"",
+    "build:web": "npm run build -w @shorebound/web"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "concurrently": "^10.0.7",
     "tsx": "^4.23.15",
     "typescript": "^5.9.0",
     "vitest": "^4.1.12"

@@ -29,3 +29,6 @@ export interface Job {
   sponsorship: { status: SponsorshipStatus; evidence?: string };
   relocation: { status: RelocationStatus; evidence?: string };
 }
+
+/** Job as sent over the API (dates as ISO strings). */
+export type JobDTO = Omit<Job, "postedAt"> & { postedAt: string; firstSeenAt: string };

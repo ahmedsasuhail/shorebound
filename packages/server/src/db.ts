@@ -7,6 +7,20 @@ export type Db = DatabaseSync;
 /** Ordered migrations; index + 1 is the schema version stored in PRAGMA user_version. */
 const MIGRATIONS: string[] = [
   `CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);`,
+  `CREATE TABLE jobs (
+     id TEXT PRIMARY KEY,
+     source_id TEXT NOT NULL,
+     country TEXT NOT NULL,
+     title TEXT NOT NULL,
+     company TEXT NOT NULL,
+     posted_at TEXT NOT NULL,
+     first_seen_at TEXT NOT NULL,
+     sponsorship TEXT NOT NULL,
+     relocation TEXT NOT NULL,
+     json TEXT NOT NULL
+   );
+   CREATE INDEX jobs_posted ON jobs (posted_at DESC);
+   CREATE INDEX jobs_country ON jobs (country);`,
 ];
 
 export function openDb(file: string): Db {
