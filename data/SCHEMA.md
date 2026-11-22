@@ -5,11 +5,20 @@ how to judge sponsorship / relocation / company trust. JSON only, hand-editable,
 
 ```
 data/
+  catalog.json             index of all destination countries: status "available" | "coming_soon"
   countries/<iso2>.json    one file per destination country (lowercase ISO 3166-1 alpha-2)
   origins/<iso2>.json      origin-country specifics (where the user moves FROM). v1: in.json (India)
   sources/global.json      sources that span countries: ATS APIs, aggregators, remote & relocation boards
   trust/signals.json       review sites, layoff trackers, company-data APIs, scam signals, scoring weights
 ```
+
+Validate with `python scripts/validate_data.py` (also runs in CI on every push touching `data/`).
+
+## Adding a country
+
+1. Research and write `countries/<iso2>.json` following the shape below.
+2. Flip its entry in `catalog.json` from `coming_soon` to `available`.
+3. Run the validator.
 
 ## Rules for every file
 
@@ -143,7 +152,7 @@ data/
 
 Origin-side requirements for leaving the country (passport categories, emigration clearance,
 document attestation/apostille, police clearance, official scam advisories, tax-residency notes).
-Shape: `_meta`, `code`, `name`, `requirements[]` (`{id, name, applies_to_destinations[], description, official_url, typical_time, typical_cost, verified}`),
+Shape: `_meta`, `code`, `name`, `ecr_countries[]` (India: destinations needing emigration clearance for ECR passports), `requirements[]` (`{id, name, applies_to_destinations[], description, official_url, typical_time, typical_cost, verified}`),
 `scam_advisories[]`, `degree_evaluation[]` (credential evaluators by destination), `sources[]`.
 
 ## `sources/global.json`
@@ -152,6 +161,9 @@ Shape: `_meta`, `code`, `name`, `requirements[]` (`{id, name, applies_to_destina
 `countries: ["*"] | ["GB","DE",...]` and `category: "ats_api|aggregator|remote_board|relocation_board|community|search"`.
 ATS entries also carry `endpoint_template` (e.g. `https://boards-api.greenhouse.io/v1/boards/{token}/jobs`)
 and `company_discovery` (how to find company board tokens).
+Optional per-entry keys: `fields` (which response fields hold posted date / location), `endpoint_extras`, `countries_note`.
+Top level also has `recommendations` (build order, LinkedIn/Indeed stance, polite-scraping defaults) and
+`sources_cited[]` (citations; named this way because `sources[]` holds the catalogue itself).
 
 ## `trust/signals.json`
 
@@ -160,5 +172,6 @@ and `company_discovery` (how to find company board tokens).
 - `layoff_trackers[]` — where layoff data can be read for free.
 - `company_data_sources[]` — free registries / APIs (size, age, funding, filings).
 - `scam_signals[]` — `{id, description, weight, detect: "how the app can detect it"}`.
+- `entity_resolution` — steps to resolve a company name to a domain / registry entity.
 - `confidence_model` — proposed scoring factors and weights (see PLAN.md §5.3).
 - `sources[]`.

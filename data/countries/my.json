@@ -1,0 +1,301 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred. Counts are Malaysia-attributed only; curl probes of robots.txt files are not counted. No new research after the 2026-11-22 session."
+    },
+    "searches_run": 3,
+    "pages_read": 4,
+    "confidence": "medium",
+    "open_questions": [
+      "EP processing time: sources conflict (about 5 working days, 5-14 working days, within 20 working days, 3-8 weeks). Not confirmed on ESD.",
+      "The degree + 3 years experience rule was read in MIDA's guideline for manufacturing/selected-services 'term posts'. Whether ESD (most tech employers) and MDEC apply the same academic/experience rule to EP Category II was not confirmed.",
+      "Succession plan timing conflicts: one EY alert says Category II/III succession plans apply from 1 Jan 2027; other alerts say the requirement is postponed for GBS companies until 1 Jun 2027.",
+      "Salary-threshold concession reportedly applies only to MDEC-regulated companies (EY/KPMG via search). Its terms were not read.",
+      "Residence Pass-Talent (RP-T) eligibility (salary, years in Malaysia, degree) not found.",
+      "How a 3-year Indian bachelor's is treated: no explicit rule found. It is presumably a 'Degree' for the 3-year-experience tier, but this is unconfirmed.",
+      "EP fees and any employer levy not researched.",
+      "MYFutureJobs was unreachable from the research environment; its access method and robots stance are unknown.",
+      "DE Rantau: whether pass holders may work for Malaysian employers was not confirmed in an official text (assumed no; it is a remote-work pass).",
+      "Income tax rates and relocation norms not researched."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "MY",
+  "name": "Malaysia",
+  "region": "southeast_asia",
+  "tier": "moderate",
+  "default_enabled": true,
+  "currency": "MYR",
+  "languages": {
+    "official": ["Malay"],
+    "english_only_tech_jobs": "common",
+    "note": "English is widely used in tech, multinational and GBS (global business services) roles in Kuala Lumpur and Penang. Some ads ask for Malay or Mandarin; treat that as a filter signal."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 116686, "high": 201738, "currency": "MYR", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://www.levels.fyi/t/software-engineer/levels/senior/locations/malaysia", "https://www.levels.fyi/t/software-engineer/locations/malaysia"],
+    "note": "Levels.fyi Senior Software Engineer TOTAL COMPENSATION, 25th-75th percentile, from only 39 data points; median MYR 162K/yr (about MYR 13,467/month), 90th MYR 280,697. Levels.fyi notes that the percentiles may cover all levels; the all-level page gives a median of MYR 91.7K and P25-P75 of MYR 60,753-135,976 (155 salaries). The data skews to multinational and tech firms."
+  },
+  "income_tax_note": "Progressive resident income tax; 2026 rates not verified this session (see LHDN).",
+  "cost_of_living_note": "Lower than Singapore; no figures researched.",
+  "visa_routes": [
+    {
+      "id": "my-ep",
+      "name": "Employment Pass (Category I / II / III)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": {
+        "amount": 5000,
+        "currency": "MYR",
+        "period": "month",
+        "as_of": "2026-06",
+        "note": "New policy in force from 1 Jun 2026 for new AND renewal applications. Cat I: at least RM20,000/month, 10-year tenure limit. Cat II: RM10,000-19,999, 10-year limit, replacement/succession plan required. Cat III: RM5,000-9,999 (RM7,000-9,999 for specific manufacturing sectors), 5-year limit, succession plan required. MIDA guideline: thresholds are BASIC salary excluding allowances and bonuses. A senior SWE would typically aim for Cat II or Cat I. The amount shown is the Cat III floor."
+      },
+      "degree_requirement": "MIDA guideline (manufacturing/selected-services term posts, 1 Jun 2026): Certificate, Diploma or Degree, with related experience of at least 7 / 5 / 3 years respectively. Key posts have no stated academic requirement. The ESD and MDEC equivalents were not confirmed.",
+      "three_year_indian_bachelors_note": "No specific rule found. A 3-year Indian BCA should count as a 'Degree', which needs at least 3 years of related experience; a senior engineer with 7+ years meets this. Even read as a diploma-level qualification, 5 years of experience would suffice. Unconfirmed.",
+      "processing_time": null,
+      "lottery_or_quota": "No lottery. The employer needs approved expatriate posts. Tenure caps are 10 years (Cat I/II) and 5 years (Cat III).",
+      "path_to_pr": "Residence Pass-Talent (RP-T) is the long-term option for expatriates; its criteria were not found. PR not researched.",
+      "employer_cost_note": "The employer applies. Before the EP it needs Labour Department (JTK) approval under Section 60K of the Employment Act and a MyFutureJobs advertisement for new term-post applications. The advert is exempt if basic salary is at least RM15,000, or for C-suite/key posts, corporate transfers and some other cases. Minimum paid-up capital (MIDA): RM250K Malaysian-owned, RM350K JV, RM500K foreign-owned. Fees not researched.",
+      "official_url": "https://www.mida.gov.my/media-release/announcement-implementation-of-new-expatriate-employment-policy/",
+      "verified": true
+    },
+    {
+      "id": "my-de-rantau",
+      "name": "DE Rantau Nomad Pass (MDEC)",
+      "type": "self_sponsored",
+      "requires_job_offer": false,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": {
+        "amount": 24000,
+        "currency": "USD",
+        "period": "year",
+        "as_of": "2026-11",
+        "note": "Tech talent: at least USD 24,000/year (non-tech: USD 60,000). A Professional Visit Pass for remote workers, 3-12 months, renewable for up to 24 months total. Spouse, children and parents may accompany. Per the MDEC FAQ v10 via search results."
+      },
+      "degree_requirement": "None stated in the material found.",
+      "three_year_indian_bachelors_note": "Not degree-gated in the material found.",
+      "processing_time": null,
+      "lottery_or_quota": "None stated.",
+      "path_to_pr": "None. This is a temporary visit pass.",
+      "employer_cost_note": "Self-funded. Only relevant for someone already working remotely for a non-Malaysian employer; it is not a route into a Malaysian job (assumed, see open_questions).",
+      "official_url": "https://mdec.my/derantau",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": false,
+    "name": "None found. There is no public list of EP-approved employers.",
+    "url": "",
+    "format": "none",
+    "update_frequency": "n/a",
+    "how_to_use": "Nothing to match against. A weak positive signal is an employer that is MDEC-regulated (Malaysia Digital status) or a GBS company, since salary and succession-plan concessions reportedly target these. No downloadable list of such companies was verified.",
+    "verified": false
+  },
+  "sponsorship_phrases": {
+    "positive": ["visa sponsorship", "EP sponsorship", "Employment Pass provided", "Employment Pass sponsorship", "open to foreigners", "open to expatriates", "relocation package", "relocation support", "penajaan visa", "terbuka kepada warga asing"],
+    "negative": ["Malaysians only", "Malaysian citizens only", "only Malaysian applicants will be considered", "open to Malaysians only", "warganegara Malaysia sahaja", "terbuka kepada warganegara Malaysia sahaja", "no visa sponsorship", "must have valid work permit"]
+  },
+  "ease_for_indian_nationals": {
+    "score": 3,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "Tech work is English-friendly and the EP rules are clear. A 7+ year engineer meets the degree + 3 years experience rule even with a 3-year degree. However, salary floors doubled from 1 Jun 2026 (Cat II now RM10,000+ basic). Cat II/III require a succession plan, and employers must clear a JTK approval and a MyFutureJobs advert first. Pay is well below Singapore's.",
+    "factors": {
+      "degree_recognition": "A degree with 3+ years of related experience is accepted (MIDA term-post rule). 3-year degree length is not singled out in the material found.",
+      "language_barrier": "Low for tech/MNC roles.",
+      "processing_speed": "Unclear; sources range from days to 8 weeks.",
+      "quota_or_lottery": "No lottery. Expatriate post approval, tenure caps and succession plans apply.",
+      "employer_willingness": "Common at MNC, GBS and MDEC tech firms. The 2026 salary rise may reduce willingness at the mid-level.",
+      "attestation_or_paperwork": "Passport with at least 12 months validity, employment contract, academic certificates. Attestation needs not researched."
+    }
+  },
+  "relocation_norms": "Not researched. Parse 'relocation package' from the job text.",
+  "job_sites": [
+    {
+      "id": "myfuturejobs-my",
+      "name": "MYFutureJobs (PERKESO / SOCSO)",
+      "url": "https://myfuturejobs.gov.my",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Official portal. Employers must advertise EP term posts here unless basic salary is at least RM15,000 or another exemption applies, so high-salary roles may be absent.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "Connection failed from the research environment (possibly geo-restricted). Access method unknown; re-probe from the app."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": null, "relocation": null, "english": null, "remote": null, "date_posted": null },
+      "english_listings": "some",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "jobstreet-my",
+      "name": "JobStreet Malaysia (SEEK)",
+      "url": "https://my.jobstreet.com",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Largest general job board in Malaysia.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt disallows */job/, all query strings (except ?keywords and ?advertiserid), /graphql and /api/jobsearch/. Deep links only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "linkedin-my",
+      "name": "LinkedIn Jobs",
+      "url": "https://www.linkedin.com/jobs/search/?location=Malaysia",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Widely used by MNC and GBS employers and recruiters.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt: 'User-agent: * Disallow: /'."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "glints-my",
+      "name": "Glints",
+      "url": "https://glints.com/my/opportunities/jobs/explore",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Regional startup-leaning board; Malaysia inventory smaller than Indonesia/Vietnam.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt disallows explore pages with query strings and /api/gt/*. Job sitemaps are listed at https://glints.com/sitemap_index.xml. Terms not read."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "hiredly-my",
+      "name": "Hiredly",
+      "url": "https://my.hiredly.com",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Malaysian job board popular with younger and tech candidates (reputation not verified).",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt explicitly allows named bots (Googlebot, Bingbot, GPTBot, ChatGPT-User); rules for other agents were not inspected in full."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": null, "relocation": null, "english": null, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "nodeflair-my",
+      "name": "NodeFlair (Malaysia)",
+      "url": "https://nodeflair.com/jobs",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Tech job board and salary data originating in Singapore. Malaysia coverage not verified.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt 'Allow: /' with Content-Signal ai-train=no, use=reference. Pages returned 403 to automated fetches."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": null, "relocation": null, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 6,
+      "verified": false
+    },
+    {
+      "id": "techinasia-jobs-my",
+      "name": "Tech in Asia Jobs",
+      "url": "https://www.techinasia.com/jobs",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Asian startup jobs.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt returned 403 to a non-browser client."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": null, "relocation": null, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 7,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    { "name": "Glassdoor", "url": "https://www.glassdoor.com", "access": "link_only", "note": "Not tested." },
+    { "name": "Levels.fyi", "url": "https://www.levels.fyi/t/software-engineer/levels/senior/locations/malaysia", "access": "link_only", "note": "Small sample (39)." }
+  ],
+  "communities": [
+    { "name": "r/malaysia", "url": "https://www.reddit.com/r/malaysia/", "note": "Not reviewed this session." },
+    { "name": "r/MalaysianPF", "url": "https://www.reddit.com/r/MalaysianPF/", "note": "Salary and tax discussion; not reviewed this session." }
+  ],
+  "scam_warnings": [
+    "See the region-wide warnings in th.json and sg.json. Indian missions warn of fake 'IT/data entry/digital marketing/customer support' jobs in Southeast Asia that end in trafficking to scam compounds in Myanmar, Laos and Cambodia, usually routed through Thailand. Malaysia was not named in the advisories found.",
+    "A genuine Malaysian EP is applied for by the employer (ESD/MDEC/MIDA) after JTK approval. Offers that ask the candidate to enter as a visitor and 'convert later', or that charge the candidate EP or agent fees, are red flags.",
+    "App-detectable: employer not findable in the company registry (SSM, not verified as an API); chat-only recruiting; a stated workplace outside Malaysia (Thai border, Cambodia, Laos)."
+  ],
+  "sources": [
+    { "url": "https://www.mida.gov.my/media-release/announcement-implementation-of-new-expatriate-employment-policy/", "title": "MIDA - Implementation of New Expatriate Employment Policy", "used_for": "EP categories, thresholds, tenure, effective 1 Jun 2026", "accessed": "2026-11-22" },
+    { "url": "https://www.mida.gov.my/wp-content/uploads/2026/06/Guidelines-EP_1-June-2026_latest-1.pdf", "title": "MIDA - EP procedures and guidelines (1 Jun 2026)", "used_for": "Degree/experience rule, MyFutureJobs advert and exemptions, JTK 60K, paid-up capital", "accessed": "2026-11-22" },
+    { "url": "https://www.mdec.my/static/pdf/expats/FAQ Booklet - Version 1.0 2026.pdf", "title": "MDEC Expat FAQ Booklet 2026 (via search results)", "used_for": "Cat III RM5,000-9,999 corroboration", "accessed": "2026-11-22" },
+    { "url": "https://taxnews.ey.com/news/2026-1256", "title": "EY - Malaysia transitional concessions (via search results)", "used_for": "MDEC-only salary concession; GBS succession-plan postponement", "accessed": "2026-11-22" },
+    { "url": "https://www.mdec.my/api/media/file/DE-Rantau_Pass_FAQ_v10.pdf", "title": "MDEC - DE Rantau Pass FAQ v10 (via search results)", "used_for": "DE Rantau income thresholds and validity", "accessed": "2026-11-22" },
+    { "url": "https://www.levels.fyi/t/software-engineer/levels/senior/locations/malaysia", "title": "Levels.fyi - Senior Software Engineer, Malaysia", "used_for": "Salary range", "accessed": "2026-11-22" },
+    { "url": "https://www.levels.fyi/t/software-engineer/locations/malaysia", "title": "Levels.fyi - Software Engineer, Malaysia (all levels)", "used_for": "All-level comparison", "accessed": "2026-11-22" },
+    { "url": "https://my.jobstreet.com/robots.txt", "title": "JobStreet MY robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://glints.com/robots.txt", "title": "Glints robots.txt", "used_for": "robots stance, sitemaps", "accessed": "2026-11-22" },
+    { "url": "https://my.hiredly.com/robots.txt", "title": "Hiredly robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" }
+  ]
+}

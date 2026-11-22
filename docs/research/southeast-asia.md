@@ -109,3 +109,42 @@ English phrases suffice. Negatives include "Singaporeans/PRs only" and "SC/PR on
 
 ### Gaps
 - None beyond those above.
+
+## Malaysia: visa routes, degree rule, register, job sites, salary, ease
+
+### Takeaway
+The Employment Pass is the route. From 1 Jun 2026 salary floors roughly doubled: Cat I RM20,000+, Cat II RM10,000-19,999, Cat III RM5,000-9,999 basic salary. Cat II/III need a succession plan. A degree plus 3 years of related experience suffices, so a 3-year BCA with 7+ years should qualify. Ease 3/5.
+
+### Cited Findings
+- Category thresholds and tenure caps (10/10/5 years) apply to new and renewal applications from 1 Jun 2026 — [MIDA](https://www.mida.gov.my/media-release/announcement-implementation-of-new-expatriate-employment-policy/)
+- Term posts: Certificate/Diploma/Degree with 7/5/3 years related experience. MyFutureJobs advert required unless basic salary is at least RM15,000 (plus other exemptions). JTK Section 60K approval required — [MIDA EP guideline 1 Jun 2026](https://www.mida.gov.my/wp-content/uploads/2026/06/Guidelines-EP_1-June-2026_latest-1.pdf)
+- Salary concession only for MDEC-regulated companies; succession plan postponed for GBS to 1 Jun 2027 — [EY](https://taxnews.ey.com/news/2026-1256) (search snippet). One EY alert instead says succession plans apply from 1 Jan 2027 (conflict).
+- DE Rantau: USD 24,000/yr for tech talent; 3-12 months, up to 24 months total — [MDEC FAQ v10](https://www.mdec.my/api/media/file/DE-Rantau_Pass_FAQ_v10.pdf) (search snippet)
+- Senior SWE total compensation MYR 116.7K-201.7K (P25-P75), median MYR 162K, n=39 — [Levels.fyi](https://www.levels.fyi/t/software-engineer/levels/senior/locations/malaysia)
+- JobStreet MY robots.txt disallows */job/ and query strings — [robots](https://my.jobstreet.com/robots.txt)
+
+### Inferences
+- High-salary (RM15,000+) EP roles may not appear on MYFutureJobs because of the advert exemption.
+
+### Gaps
+- EP processing time (sources conflict), whether ESD/MDEC apply the same degree rule as MIDA, RP-T criteria, fees, and MYFutureJobs access (unreachable from the research environment).
+
+## Thailand: visa routes, register, job sites, salary, scams, ease
+
+### Takeaway
+The realistic route is a Non-B visa plus work permit at a BOI-promoted or large tech employer. SMART-T needs THB 100K/month in a targeted industry. LTR-HSP needs USD 80K/yr (or USD 40K plus a master's). Thailand is the main transit point for scam-compound trafficking of Indians. Ease 3/5, confidence low.
+
+### Cited Findings
+- Non-BOI employers need about THB 2M paid-up capital and 4 Thai staff per work permit; BOI firms are reportedly exempt — [ThaiLawOnline](https://www.thailawonline.com/glossary/four-to-one-ratio/); [ASEAN Briefing](https://www.aseanbriefing.com/news/hiring-foreign-employees-in-thailand-work-permit-rules/) (search snippets)
+- Nationality-tiered income test for extensions (Order 327/2557); India tier unconfirmed (Expatica says THB 35,000) — [Expatica](https://expatica.com/th/work/law/thailand-minimum-wage-2172841)
+- SMART T: THB 100,000/month (THB 50,000 for startups) — [BOI SMART T](https://smart-visa.boi.go.th/smart/pages/smart_t.html); [Bangkok Post](https://www.bangkokpost.com/business/2077587) (search snippets)
+- LTR-HSP: USD 80K average over 2 years, or USD 40K plus a master's in science/technology; experience requirement removed in 2025 — [BOI LTR brochure 2025](https://ltr.boi.go.th/documents/BOI-brochure 2025-LTR.pdf) (search snippet)
+- Senior SWE total compensation THB 1.23M-2.87M (P25-P75), median THB 2.07M, n=106 — [Levels.fyi](https://www.levels.fyi/t/software-engineer/levels/senior/locations/thailand)
+- JobThai robots allows all; JobsDB TH disallows */job/ and query strings — [JobThai robots](https://www.jobthai.com/robots.txt); [JobsDB robots](https://th.jobsdb.com/robots.txt)
+- Scam advisories (Bangkok embassy 19 Sep 2024; MEA 2022 Myawaddy; Yangon Jul 2024 Hpa Lu; Mae Sot repatriation Mar 2025; Laos/Cambodia May 2024) are cited in the scam section above.
+
+### Inferences
+- The typical senior median (about USD 60K, not computed from an official rate) is below LTR's USD 80K bar. The LTR route is therefore unrealistic for most candidates.
+
+### Gaps
+- Indian-national salary floor, degree rule for the work permit, processing times, fees, PR route, and the official SMART eligibility page (404).

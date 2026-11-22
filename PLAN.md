@@ -127,7 +127,7 @@ Researched, hand-editable JSON, validated at startup by zod schemas. Format: [`d
 
 | Path | Contents |
 |---|---|
-| `data/countries/<iso2>.json` | One file per destination (9 in v1): visa routes (thresholds, degree rules incl. 3-year Indian bachelor's), sponsor registers, job sites with access method & ToS stance, salaries, ease-from-India score, sponsorship phrases in local language, scams, communities |
+| `data/countries/<iso2>.json` | One file per destination (11 in v1): visa routes (thresholds, degree rules incl. 3-year Indian bachelor's), sponsor registers, job sites with access method & ToS stance, salaries, ease-from-India score, sponsorship phrases in local language, scams, communities |
 | `data/sources/global.json` | Cross-country sources: ATS public APIs (Greenhouse, Lever, Ashby, SmartRecruiters…), free aggregators (Adzuna…), relocation/visa boards, remote boards, logged-out LinkedIn/Indeed assessment |
 | `data/trust/signals.json` | Review sources, layoff trackers, free company-data APIs, scam signals, proposed confidence weights |
 | `data/origins/in.json` | Leaving India: ECR/ECNR & eMigrate, apostille/attestation, PCC, credential evaluators, MEA scam advisories |
@@ -140,7 +140,7 @@ Every file carries `_meta`:
 
 The UI shows data freshness and warns when a file is past its `review_by` date. Immigration data is informational only; the UI always links the official page.
 
-**Destination countries.** v1 covers the countries researched so far, all of which clearly out-pay senior roles at Indian product companies:
+**Destination countries.** v1 covers the countries researched so far: markets that out-pay, or at least match, senior roles at Indian product companies. The full list is in `data/catalog.json`.
 
 | Region | v1 (researched) | Coming soon |
 |---|---|---|
@@ -151,7 +151,7 @@ The UI shows data freshness and warns when a file is past its `review_by` date. 
 | Central & Southern Europe | — | PL · CZ · EE · ES · PT |
 | Oceania | — | AU · NZ |
 | East Asia | — | JP · KR · TW · HK |
-| Southeast Asia | 🇸🇬 SG | MY · TH (pay about level with Indian product companies) · VN · ID · PH (usually pay less) |
+| Southeast Asia | 🇸🇬 SG · 🇲🇾 MY · 🇹🇭 TH | VN · ID · PH (usually pay less) |
 | Middle East (GCC) | 🇦🇪 AE · 🇸🇦 SA · 🇶🇦 QA | BH · KW · OM (small tech markets) |
 
 "Coming soon" countries appear greyed out in Settings until their `data/countries/<iso2>.json` exists. Adding a country means researching one JSON file; no code changes are needed.

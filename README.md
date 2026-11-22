@@ -7,7 +7,7 @@ fresh job postings from dozens of free, reputable job sites in high-paying count
 with a real visa-sponsorship signal, flags paid relocation, and gives every job a confidence score
 based on the company's reputation, employee reviews, sponsorship evidence and how easy the move is.
 
-> **Status: planning.** No runnable app yet. See [PLAN.md](PLAN.md) for the full design and roadmap.
+> **Status: planning → starting development (M1).** No runnable app yet. See [PLAN.md](PLAN.md) for the full design and roadmap.
 
 ## Planned features
 
@@ -19,9 +19,9 @@ based on the company's reputation, employee reviews, sponsorship evidence and ho
 - 📊 **Confidence meter (0–100).** Combines company reputation (size, age, layoffs, startup stage),
   employee reviews, sponsorship evidence strength, how easy the move is from India, posting quality,
   and scam checks. A breakdown shows why each job scored as it did.
-- 🌏 **High-paying countries.** v1: US, Canada, UK, Ireland, Germany, UAE, Saudi Arabia, Qatar and
-  Singapore, each with researched visa routes, sponsor registers and local job sites. More of Europe,
-  Oceania, East Asia and Southeast Asia are coming soon.
+- 🌏 **High-paying countries.** v1: US, Canada, UK, Ireland, Germany, UAE, Saudi Arabia, Qatar,
+  Singapore, Malaysia and Thailand, each with researched visa routes, sponsor registers and local job sites. More of Europe,
+  Oceania and East Asia are coming soon.
 - 🤖 **Optional Claude AI.** Resume parsing, match scoring, unclear-sponsorship classification and
   cover-letter drafts, using your own API key with a monthly budget cap.
 - 📋 **Application tracker.** A board that follows each job from Saved to Applied to Interviewing to Offer.
@@ -32,6 +32,7 @@ based on the company's reputation, employee reviews, sponsorship evidence and ho
 
 Country, job-site and trust research lives in [`data/`](data/) as plain JSON ([schema](data/SCHEMA.md)).
 Each file records which model researched it, when, from which sources, and when it should be re-checked.
+The research notes and a per-file summary are in [`docs/research/`](docs/research/). Validate with `python scripts/validate_data.py`.
 Immigration information changes often: always confirm on the official government pages linked in each file.
 
 ## Disclaimer

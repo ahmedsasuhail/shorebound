@@ -1,0 +1,310 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred. Counts are Thailand-attributed; the 3 region-wide scam-advisory searches and the Indian embassy Bangkok advisory read are counted in sg.json. curl probes of robots.txt files are not counted. No new research after the 2026-11-22 session."
+    },
+    "searches_run": 5,
+    "pages_read": 2,
+    "confidence": "low",
+    "open_questions": [
+      "Minimum salary for Indian nationals on Non-B + work permit (nationality-tiered income test for extensions under Immigration Bureau Order 327/2557). One secondary source puts India in a THB 35,000/month tier, but no official text was found. Left null.",
+      "Whether a degree is legally required for a Thai work permit for a software role. Not found.",
+      "Work permit / Non-B processing times and government fees. Not researched.",
+      "THB 2M paid-up capital and 4 Thai employees per foreign work permit come from law-firm and consultancy sources, not the Department of Employment. The BOI exemption is also from secondary sources.",
+      "SMART visa T: official eligibility page returned 404. THB 100,000/month comes from a search snippet of smart-visa.boi.go.th/smart/pages/smart_t.html and Bangkok Post. Validity 'up to 4 years' is from secondary sources.",
+      "LTR Highly-Skilled Professional: thresholds come from the BOI 2025 brochure via search results. Visa length, the 17% flat tax and the conflicting USD 100,000 deposit claim are unverified.",
+      "Thai PR via employment (quota-based) not researched.",
+      "Income tax rates, relocation norms, and English share on JobThai not researched.",
+      "No 2025-26 MEA or embassy advisory text was found; the latest official text read is the Embassy of India Bangkok advisory of 19 Sep 2024."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "TH",
+  "name": "Thailand",
+  "region": "southeast_asia",
+  "tier": "moderate",
+  "default_enabled": true,
+  "currency": "THB",
+  "languages": {
+    "official": ["Thai"],
+    "english_only_tech_jobs": "possible",
+    "note": "English-only engineering roles exist mainly at regional tech and product companies in Bangkok. Most local listings (e.g. JobThai) are in Thai, and many require Thai."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 1231863, "high": 2865615, "currency": "THB", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://www.levels.fyi/t/software-engineer/levels/senior/locations/thailand"],
+    "note": "Levels.fyi TOTAL COMPENSATION, 25th-75th percentile, 106 data points, updated 2026-11-22. The median of THB 2.07M/yr (about THB 172,582/month) is senior-specific, but the percentiles may cover all levels. The data skews heavily to a few large Bangkok tech employers, so local-company pay is likely much lower."
+  },
+  "income_tax_note": "Progressive personal income tax; 2026 rates not verified this session. The LTR route reportedly offers a 17% flat rate for highly-skilled professionals (unverified).",
+  "cost_of_living_note": "Moderate in Bangkok; no figures researched.",
+  "visa_routes": [
+    {
+      "id": "th-nonb-work-permit",
+      "name": "Non-Immigrant B visa + Work Permit (Department of Employment)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": {
+        "amount": null,
+        "currency": "THB",
+        "period": "month",
+        "as_of": "2026-11",
+        "note": "Forum and secondary sources say there is no salary floor for the work permit itself, but nationality-tiered minimum incomes apply to the one-year extension of stay (Order 327/2557). The figure for Indian nationals is not officially confirmed (one secondary source says THB 35,000)."
+      },
+      "degree_requirement": "Not confirmed in the material found.",
+      "three_year_indian_bachelors_note": "No Thai rule specific to 3-year degrees was found. Degree treatment for the work permit is unconfirmed.",
+      "processing_time": null,
+      "lottery_or_quota": "No lottery. Each work permit at a non-BOI employer reportedly needs THB 2M paid-up capital and 4 Thai employees.",
+      "path_to_pr": "Thai PR has an employment category, which is quota-based. Not researched.",
+      "employer_cost_note": "Non-BOI employers: about THB 2,000,000 paid-up capital and 4 Thai employees per foreign work permit (law-firm sources). BOI-promoted companies are reportedly exempt from the ratio. Government fees not researched.",
+      "official_url": "https://www.doe.go.th",
+      "verified": false
+    },
+    {
+      "id": "th-smart-t",
+      "name": "SMART Visa - T (Talent), BOI",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": true,
+      "salary_threshold": {
+        "amount": 100000,
+        "currency": "THB",
+        "period": "month",
+        "as_of": "2026-11",
+        "note": "Minimum income of THB 100,000/month, or THB 50,000 for startup employees or retired experts (Bangkok Post). Older documents show THB 200,000, which is outdated. The employer must be in one of the targeted S-curve industries (including Digital), and the role must be endorsed by an agency in BOI's Strategic Talent Center network (e.g. the Digital Economy Promotion Agency for digital roles). Requires a Thai employment contract of at least 1 year. Work-permit exempt."
+      },
+      "degree_requirement": "Science/technology expertise relevant to the targeted industry. A specific degree rule was not confirmed.",
+      "three_year_indian_bachelors_note": "No specific rule found.",
+      "processing_time": null,
+      "lottery_or_quota": "None stated.",
+      "path_to_pr": "Not researched.",
+      "employer_cost_note": "The employer must be in a targeted industry and the role certified. Fees not researched.",
+      "official_url": "https://smart-visa.boi.go.th/smart/pages/smart_t.html",
+      "verified": false
+    },
+    {
+      "id": "th-ltr-hsp",
+      "name": "Long-Term Resident (LTR) visa - Highly-Skilled Professional, BOI",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": true,
+      "salary_threshold": {
+        "amount": 80000,
+        "currency": "USD",
+        "period": "year",
+        "as_of": "2025-01",
+        "note": "Average personal income of at least USD 80,000/year over the past 2 years. Alternative: USD 40,000/year plus a master's degree in science or technology (or IP ownership / Series A funding). The 2025 update removed the work-experience requirement. The employer must be in a targeted industry, an approved institution or a Thai government agency. Issuance fee reportedly THB 50,000. Thresholds from the BOI 2025 brochure via search results."
+      },
+      "degree_requirement": "None on the USD 80,000 route; a master's in science/technology on the USD 40,000 route.",
+      "three_year_indian_bachelors_note": "A bachelor's (3-year or 4-year) does not unlock the USD 40,000 route. The candidate needs USD 80,000+ average income, which exceeds the Thailand senior median.",
+      "processing_time": null,
+      "lottery_or_quota": "None stated.",
+      "path_to_pr": "Not researched.",
+      "employer_cost_note": "The employer must be in a qualifying industry or institution. Fees not verified.",
+      "official_url": "https://ltr.boi.go.th",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": false,
+    "name": "None found. There is no public list of work-permit-approved employers.",
+    "url": "",
+    "format": "none",
+    "update_frequency": "n/a",
+    "how_to_use": "Nothing to match against. Positive signals: BOI-promoted status (exempt from the 4:1 ratio; reportedly sponsors more easily) or a mention of SMART/LTR endorsement. A BOI list of promoted companies was not verified. A company record in the Thai Department of Business Development (DBD) registry is a basic legitimacy check (API not verified).",
+    "verified": false
+  },
+  "sponsorship_phrases": {
+    "positive": ["visa and work permit provided", "visa sponsorship", "work permit support", "relocation package", "BOI company", "สนับสนุนวีซ่าและใบอนุญาตทำงาน", "บริษัทดำเนินการวีซ่าและใบอนุญาตทำงานให้", "มีวีซ่าและเวิร์คเพอร์มิตให้", "ยินดีรับชาวต่างชาติ"],
+    "negative": ["Thai nationals only", "Thai nationality only", "must have valid work permit", "no visa sponsorship", "สัญชาติไทยเท่านั้น", "รับเฉพาะคนไทย", "สัญชาติไทย", "พูดภาษาไทยได้"]
+  },
+  "ease_for_indian_nationals": {
+    "score": 3,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "Bangkok tech hubs do hire foreign engineers, and BOI/SMART routes exist. However, non-BOI employers face per-permit capital and 4:1 Thai staffing rules, many listings require Thai, and LTR's USD 80K bar is above typical senior pay. Thailand is also the main transit point for job-scam trafficking of Indians, so every Thai offer needs heavy verification.",
+    "factors": {
+      "degree_recognition": "Unconfirmed for the work permit. Irrelevant for LTR on the USD 80K route.",
+      "language_barrier": "Medium-high outside large tech firms.",
+      "processing_speed": "Unknown.",
+      "quota_or_lottery": "No lottery. Capital and Thai-employee ratio per permit at non-BOI firms.",
+      "employer_willingness": "Mostly limited to large regional tech/product companies and BOI-promoted firms.",
+      "attestation_or_paperwork": "Not researched."
+    }
+  },
+  "relocation_norms": "Not researched. Parse the job text for relocation terms.",
+  "job_sites": [
+    {
+      "id": "jobthai-th",
+      "name": "JobThai",
+      "url": "https://www.jobthai.com",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Large Thai job board; listings mostly in Thai.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "robots.txt: 'User-agent: * Allow: /' with sitemap https://www.jobthai.com/sitemap.xml. Terms not read. Needs Thai-language keyword handling."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "few",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "jobsdb-th",
+      "name": "JobsDB Thailand (SEEK)",
+      "url": "https://th.jobsdb.com",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Major board with more English and MNC listings than JobThai.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt disallows */job/, all query strings (except ?keywords and ?advertiserid), /graphql and /api/jobsearch/."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "some",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "linkedin-th",
+      "name": "LinkedIn Jobs",
+      "url": "https://www.linkedin.com/jobs/search/?location=Thailand",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Best source for English-language tech roles in Bangkok.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt: 'User-agent: * Disallow: /'."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "blognone-jobs-th",
+      "name": "Blognone Jobs",
+      "url": "https://jobs.blognone.com",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Job board of Thai tech news site Blognone (reputation not verified).",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt contains 'User-agent: *' with no Disallow rules seen. Terms not read."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": null, "relocation": null, "english": null, "remote": null, "date_posted": null },
+      "english_listings": "some",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "indeed-th",
+      "name": "Indeed Thailand",
+      "url": "https://th.indeed.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Aggregator; duplicates other boards.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt allows / and paginated search for '*'. Terms of service not read, so link only."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "some",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "techinasia-jobs-th",
+      "name": "Tech in Asia Jobs",
+      "url": "https://www.techinasia.com/jobs",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Asian startup jobs.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt returned 403 to a non-browser client."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": null, "relocation": null, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 6,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    { "name": "Glassdoor", "url": "https://www.glassdoor.com", "access": "link_only", "note": "Not tested." },
+    { "name": "Levels.fyi", "url": "https://www.levels.fyi/t/software-engineer/levels/senior/locations/thailand", "access": "link_only", "note": "Skews to a few large employers." }
+  ],
+  "communities": [
+    { "name": "r/Thailand", "url": "https://www.reddit.com/r/Thailand/", "note": "Not reviewed this session." },
+    { "name": "ASEAN NOW (formerly Thaivisa) forum", "url": "https://aseannow.com", "note": "Long-running visa and work permit threads; quality varies; not reviewed this session." }
+  ],
+  "scam_warnings": [
+    "CRITICAL: Thailand is the main transit point for trafficking Indian job-seekers into cyber-scam compounds. Embassy of India Bangkok, 19 Sep 2024: Indians are 'lured with lucrative employment offers from dubious/non-existent firms in Thailand' and then 'illegally taken across the land border' to scam centres in neighbouring countries. Recruitment runs online and offline through social media and agents, in India and overseas.",
+    "Visa-free entry to Thailand for Indians is 'meant for tourism purposes only, and it does not permit any type of employment' (Embassy of India Bangkok). Any offer to fly in visa-free or on visa-on-arrival and 'arrange the work permit later' is a scam signal. A real job needs a Non-B visa plus work permit, or a SMART/LTR endorsement, before starting work.",
+    "MEA (2022): IT-skilled youth were lured by 'data entry' and 'digital sales and marketing executive' jobs in Thailand through social media and Dubai- and India-based agents, then taken into the Myawaddy area of Myanmar to work for call-centre and crypto-fraud firms.",
+    "Named danger areas: Myawaddy and the Hpa Lu area south of Myawaddy, Myanmar (Indian Embassy Yangon, Jul 2024); Mae Sot, Thailand, the border crossing through which 549 Indians were repatriated by special flights on 10-11 Mar 2025; the Golden Triangle Special Economic Zone, Laos (May 2024 advisory: fake 'Digital Sales and Marketing Executive' and 'Customer Support Service' jobs; Lao authorities do not issue work permits to Indians entering on visa-on-arrival); Cambodia (use only MEA-authorised agents; just over 1,000 Indians rescued since 2022).",
+    "App-detectable red flags: workplace in Tak province / Mae Sot, near the Myanmar border, or the Golden Triangle; job titles like 'data entry', 'typing', 'digital marketing executive', 'customer support', 'crypto' with unusually high pay and low requirements; recruitment only through WhatsApp/Telegram/Facebook; recruiter in Dubai or India acting for a Thai 'company'; free flights or 'visa-free entry, work permit later'; interview only by chat; company not found in the Thai DBD registry or with no website; any upfront fee from the candidate.",
+    "Embassy guidance: thoroughly verify the antecedents of recruiting agents and companies, enter only on the correct visa, and never pay unauthorised persons during rescue or repatriation."
+  ],
+  "sources": [
+    { "url": "https://embassyofindiabangkok.gov.in/public/assets/pdf/advisory_sep20_bangkok.pdf", "title": "Embassy of India Bangkok - Advisory, 19 Sep 2024", "used_for": "Scam-compound trafficking warning; visa-free entry does not permit work", "accessed": "2026-11-22" },
+    { "url": "https://www.tribuneindia.com/news/delhi/mea-warns-against-fake-job-racket-in-myanmar-targeting-it-graduates-435028", "title": "Tribune India - MEA warns against fake job racket in Myanmar targeting IT graduates (2022, via search results)", "used_for": "MEA 2022 advisory: data entry / digital sales lures, Myawaddy", "accessed": "2026-11-22" },
+    { "url": "https://embassyofindiayangon.gov.in/public_files/assets/pdf/yangon_3july2024_popup.pdf", "title": "Embassy of India Yangon - Advisory, Jul 2024 (via search results)", "used_for": "Hpa Lu area south of Myawaddy", "accessed": "2026-11-22" },
+    { "url": "https://www.tribuneindia.com/news/world/india-secures-repatriation-of-283-indians-from-myanmar-thailand-lured-on-pretext-of-fake-jobs", "title": "Tribune India - repatriation via Mae Sot (via search results)", "used_for": "Mar 2025 repatriation of 549 Indians", "accessed": "2026-11-22" },
+    { "url": "https://www.newsonair.gov.in/government-issues-advisory-to-nationals-travelling-to-cambodia-for-jobs-to-be-wary-of-fake-agents", "title": "All India Radio - Cambodia/Laos job advisory, May 2024 (via search results)", "used_for": "Golden Triangle SEZ lure roles; visa-on-arrival no work permit", "accessed": "2026-11-22" },
+    { "url": "https://phnompenhpost.com/post-in-depth/india-implements-airport-warnings-to-caution-citizens-about-job-scams-", "title": "Phnom Penh Post - India airport warnings (via search results)", "used_for": "Just over 1,000 Indians rescued in Cambodia since 2022", "accessed": "2026-11-22" },
+    { "url": "https://smart-visa.boi.go.th/smart/pages/smart_t.html", "title": "BOI - SMART T (Talent) (via search results)", "used_for": "THB 100,000/month income criterion", "accessed": "2026-11-22" },
+    { "url": "https://www.bangkokpost.com/business/2077587", "title": "Bangkok Post - SMART visa criteria (via search results)", "used_for": "THB 50,000 threshold for startups/retired experts", "accessed": "2026-11-22" },
+    { "url": "https://ltr.boi.go.th/documents/BOI-brochure 2025-LTR.pdf", "title": "BOI - LTR brochure 2025 (via search results)", "used_for": "LTR Highly-Skilled Professional thresholds", "accessed": "2026-11-22" },
+    { "url": "https://www.thailawonline.com/glossary/four-to-one-ratio/", "title": "ThaiLawOnline - 4:1 Thai-to-foreign ratio (via search results)", "used_for": "THB 2M paid-up capital and 4 Thai employees per work permit", "accessed": "2026-11-22" },
+    { "url": "https://www.aseanbriefing.com/news/hiring-foreign-employees-in-thailand-work-permit-rules/", "title": "ASEAN Briefing - Thailand work permit rules (via search results)", "used_for": "Capital and ratio rule corroboration", "accessed": "2026-11-22" },
+    { "url": "https://expatica.com/th/work/law/thailand-minimum-wage-2172841", "title": "Expatica - Thailand minimum wage (via search results)", "used_for": "Unconfirmed THB 35,000 tier for India (open question)", "accessed": "2026-11-22" },
+    { "url": "https://www.levels.fyi/t/software-engineer/levels/senior/locations/thailand", "title": "Levels.fyi - Senior Software Engineer, Thailand", "used_for": "Salary range", "accessed": "2026-11-22" },
+    { "url": "https://www.jobthai.com/robots.txt", "title": "JobThai robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://th.jobsdb.com/robots.txt", "title": "JobsDB TH robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://th.indeed.com/robots.txt", "title": "Indeed TH robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://jobs.blognone.com/robots.txt", "title": "Blognone Jobs robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" }
+  ]
+}
