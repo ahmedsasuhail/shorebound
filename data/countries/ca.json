@@ -1,0 +1,305 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred; robots.txt fetched directly with curl for job sites"
+    },
+    "searches_run": 19,
+    "pages_read": 25,
+    "confidence": "medium",
+    "open_questions": [
+      "Recent Express Entry CRS cut-offs and whether any STEM-category draw happened in 2026: secondary sources (to July 2026) report CEC cut-offs ~507-515 and no recent STEM draw; not confirmed on IRCC rounds page.",
+      "CRS criteria page (modified 2026-11-03) shows a 'Labour Market Integration' factor awarding 100/70/50 points for high-wage job offers (2x/1.5x/1.3x median wage). This differs from the pre-2026 'arranged employment' scheme; read the full page before coding CRS logic.",
+      "Global Talent Stream actual processing time: ESDC 10-business-day standard reported by secondary sources (GTS ~8-12 days through mid-2026); not read on the ESDC processing-times page.",
+      "Work-permit processing time after LMIA approval and Express Entry PR processing standard not read on IRCC pages.",
+      "How WES/other ECA bodies currently classify a specific 3-year Indian bachelor's for Canada (usually 'three-year bachelor's') not confirmed on an official ECA page.",
+      "Whether Job Bank monthly open-data CSV includes employer name not stated on dataset page.",
+      "Tax rates and relocation norms not verified."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "CA",
+  "name": "Canada",
+  "region": "north_america",
+  "tier": "high_pay",
+  "default_enabled": true,
+  "currency": "CAD",
+  "languages": {
+    "official": ["English", "French"],
+    "english_only_tech_jobs": "common",
+    "note": "English-only is normal outside Quebec; French adds Express Entry points and has its own category draws."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 140092, "high": 243112, "currency": "CAD", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://www.levels.fyi/t/software-engineer/locations/canada"],
+    "note": "Levels.fyi all-levels TOTAL compensation, 5,194 data points: 25th CA$105,646, median CA$140,092, 75th CA$190,496, 90th CA$243,112; Toronto median CA$162,209, Vancouver median CA$195,113. Range uses median→90th as a rough senior proxy; base salary lower."
+  },
+  "income_tax_note": "Federal plus provincial progressive income tax; rates differ by province. Not re-verified in this session.",
+  "cost_of_living_note": "Housing costs high in Toronto and Vancouver. Not quantified here.",
+  "visa_routes": [
+    {
+      "id": "ca-express-entry",
+      "name": "Express Entry (Federal Skilled Worker / Canadian Experience Class) – permanent residence",
+      "type": "points_based",
+      "requires_job_offer": false,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "CAD", "period": "year", "as_of": "2026-11", "note": "No salary threshold; ranked by Comprehensive Ranking System (CRS) score. Proof of settlement funds required for FSW without valid job offer (amount not read this session)." },
+      "degree_requirement": "No degree mandatory, but education earns CRS points; foreign education needs an Educational Credential Assessment (ECA) from a designated body (e.g. WES).",
+      "three_year_indian_bachelors_note": "CRS awards the same points to a 'bachelor's degree OR a three or more year program' (120 points single / 112 with spouse) as long as the ECA confirms it, so a 3-year Indian bachelor's is not penalised versus a 4-year one in CRS. Two-year credentials earn 98/91. The ECA result for the specific program decides.",
+      "processing_time": null,
+      "lottery_or_quota": "Not a lottery: periodic invitation rounds by CRS score, increasingly by category (STEM, French, healthcare, trades, etc.). Category draws in 2026 require 12 months of experience in the category (up from 6). Recent general/CEC cut-offs reported above 500, hard for offshore candidates without Canadian experience or French.",
+      "path_to_pr": "This IS permanent residence directly.",
+      "employer_cost_note": "No employer needed. Applicant pays IRCC fees, language test (IELTS/CELPIP), ECA.",
+      "official_url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry.html",
+      "verified": true
+    },
+    {
+      "id": "ca-gts",
+      "name": "Global Talent Stream (LMIA-based work permit), Category B",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "CAD", "period": "year", "as_of": "2026-11", "note": "For NOC 21231/21232/21234/21211 the employer must pay at least the prevailing wage (highest of regional median Job Bank wage, wage paid to current staff, or Category minimum). Category A (referral-based) minimums: CA$80,000 for first 2 positions/year, CA$150,000 thereafter." },
+      "degree_requirement": "No statutory degree requirement for the LMIA; work-permit officer checks the worker meets the job requirements.",
+      "three_year_indian_bachelors_note": "Not a formal barrier for the work permit; later PR via Express Entry uses the ECA (3-year program = bachelor's-level CRS points).",
+      "processing_time": "ESDC service standard reported as 10 business days for the LMIA (secondary sources: 8-12 days in 2026); work permit processed separately by IRCC.",
+      "lottery_or_quota": "No cap or lottery.",
+      "path_to_pr": "Canadian work experience (1 year) enables Canadian Experience Class in Express Entry; provincial nominee programs also possible.",
+      "employer_cost_note": "Employer pays CA$1,000 LMIA fee per position (cannot be paid by or recovered from the worker) and must commit to a Labour Market Benefits Plan with annual reviews.",
+      "official_url": "https://www.canada.ca/en/employment-social-development/services/foreign-workers/global-talent/requirements.html",
+      "verified": true
+    },
+    {
+      "id": "ca-ict",
+      "name": "Intra-company transferee work permit (LMIA-exempt)",
+      "type": "intra_company",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "CAD", "period": "year", "as_of": "2026-11", "note": "Not researched." },
+      "degree_requirement": "Not researched in this session; generally requires recent continuous employment with the foreign related company.",
+      "three_year_indian_bachelors_note": "Not researched.",
+      "processing_time": null,
+      "lottery_or_quota": "No cap.",
+      "path_to_pr": "Canadian experience counts toward Express Entry CEC.",
+      "employer_cost_note": "Employer compliance fee applies for LMIA-exempt offers (amount not read).",
+      "official_url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/work-canada/hire-temporary-foreign/international-mobility-program.html",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": true,
+    "name": "TFWP Positive Labour Market Impact Assessment (LMIA) Employers List (ESDC, Open Government Portal)",
+    "url": "https://open.canada.ca/data/en/dataset/90fed587-1364-4f33-a9ee-208181dc0b97",
+    "format": "xlsx",
+    "update_frequency": "Quarterly (latest 2026 Q2 = Apr-Jun 2026, published 2026-10-30). Older releases CSV.",
+    "how_to_use": "Download the latest quarterly XLSX (e.g. tfwp_2026q2_pos_en.xlsx), filter rows by program stream (Global Talent / High-wage) and NOC 2021 codes 21231/21232/21234/21211, then fuzzy-match normalised employer names (lowercase, strip Inc/Ltd/Corp/Ltée, punctuation). Positive LMIA = employer recently approved to hire a foreign worker; it does not cover LMIA-exempt hires (ICT etc.) and omits personal-name employers. Licence: Open Government Licence – Canada.",
+    "verified": true
+  },
+  "sponsorship_phrases": {
+    "positive": ["LMIA approved", "LMIA support available", "open to sponsoring work permits", "visa sponsorship available", "relocation assistance", "Global Talent Stream"],
+    "negative": ["must be legally eligible to work in Canada", "Canadian citizens and permanent residents only", "no sponsorship", "must have a valid work permit", "we are unable to provide LMIA"]
+  },
+  "ease_for_indian_nationals": {
+    "score": 3,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "Express Entry needs no employer and treats a 3-year bachelor's like a 4-year one for CRS, but offshore candidates without Canadian experience or French face high cut-offs and STEM draws have been scarce. With an employer, the Global Talent Stream is fast (~2 weeks LMIA) for software NOCs, but employers must pay CA$1,000 and commit to a benefits plan, so few sponsor from abroad.",
+    "factors": {
+      "degree_recognition": "Good: 3-year program scores as bachelor's in CRS once ECA done.",
+      "language_barrier": "None for English; French is a bonus.",
+      "processing_speed": "GTS LMIA ~10 business days; PR via Express Entry months.",
+      "quota_or_lottery": "No lottery; competitive CRS ranking and annual levels plan.",
+      "employer_willingness": "Moderate; mostly larger tech firms and scale-ups use GTS.",
+      "attestation_or_paperwork": "ECA, IELTS/CELPIP, police certificates, proof of funds (FSW)."
+    }
+  },
+  "relocation_norms": "Not researched from a citable source in this session.",
+  "job_sites": [
+    {
+      "id": "jobbank-ca",
+      "name": "Job Bank (Government of Canada)",
+      "url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?searchstring=software+engineer&sort=D",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Official federal job board run by ESDC; also hosts wage data used for LMIA prevailing wages.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": "https://open.canada.ca/data/en/dataset/ea639e28-c0fc-48bf-b5dd-b8899bd43072",
+        "rate_limit": "robots.txt Crawl-delay: 5",
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "robots.txt is 'User-agent: * / Crawl-delay: 5' with no Disallow (2026-11-22). Search page sort=D = newest first. Also monthly open-data CSV of all postings (latest Oct 2026, OGL-Canada) for bulk/backfill."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "adzuna-ca",
+      "name": "Adzuna (Canada)",
+      "url": "https://www.adzuna.ca",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Aggregator with documented API.",
+      "access": {
+        "method": "official_api",
+        "auth": "free_key",
+        "docs_url": "https://developer.adzuna.com/overview",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "app_id/app_key registration; country code 'ca' assumed (country list not shown on overview page)."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": true },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "linkedin-ca",
+      "name": "LinkedIn Jobs (Canada)",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Dominant for tech hiring.",
+      "access": {
+        "method": "link_only",
+        "auth": "account_required",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": false,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt prohibits automated access without permission."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "indeed-ca",
+      "name": "Indeed Canada",
+      "url": "https://ca.indeed.com",
+      "kind": "aggregator",
+      "reputation": "high",
+      "reputation_note": "Largest aggregator in Canada.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "indeed.com robots.txt disallows ?rss and /jobs/CA/ paths; ToS not read."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": true
+    },
+    {
+      "id": "talent-ca",
+      "name": "Talent.com (formerly Neuvoo)",
+      "url": "https://ca.talent.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Montreal-based aggregator.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt disallows /search-jobs/*, /api/ and /services/api-new/search."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": true },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": true
+    },
+    {
+      "id": "eluta-ca",
+      "name": "Eluta.ca",
+      "url": "https://www.eluta.ca",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Indexes jobs directly from Canadian employer career sites.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt could not be retrieved (connection failed) on 2026-11-22."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 6,
+      "verified": false
+    },
+    {
+      "id": "workbc-ca",
+      "name": "WorkBC Job Board (British Columbia government)",
+      "url": "https://www.workbc.ca",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Provincial government portal for BC.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Site returned a maintenance page on 2026-11-22; recheck."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 7,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    { "name": "Glassdoor", "url": "https://www.glassdoor.ca", "access": "link_only", "note": "Employee reviews and salaries." },
+    { "name": "Levels.fyi", "url": "https://www.levels.fyi", "access": "link_only", "note": "Compensation by company (Toronto/Vancouver data)." },
+    { "name": "Indeed company reviews", "url": "https://ca.indeed.com/companies", "access": "link_only", "note": "Not verified this session." }
+  ],
+  "communities": [
+    { "name": "r/ImmigrationCanada", "url": "https://www.reddit.com/r/ImmigrationCanada/", "note": "Express Entry/LMIA experiences (not verified this session)." },
+    { "name": "r/cscareerquestionsCAD", "url": "https://www.reddit.com/r/cscareerquestionsCAD/", "note": "Canadian tech careers (not verified this session)." },
+    { "name": "CanadaVisa forum", "url": "https://www.canadavisa.com/canada-immigration-discussion-board/", "note": "Large Express Entry discussion board (run by an immigration law firm)." }
+  ],
+  "scam_warnings": [
+    "Paying for an LMIA or a job offer: the LMIA fee cannot be paid by or recovered from the worker (ESDC). 'LMIA for sale' offers are fraud.",
+    "Consultants promising guaranteed Express Entry invitations; only licensed RCICs or lawyers may charge for immigration advice.",
+    "Fake job offers on chat apps asking for 'processing fees' or medical/insurance deposits.",
+    "Phishing that impersonates IRCC/ESDC; check that links are on canada.ca."
+  ],
+  "sources": [
+    { "url": "https://www.canada.ca/en/employment-social-development/services/foreign-workers/global-talent/requirements.html", "title": "ESDC: Global Talent Stream requirements (modified 2026-11-10)", "used_for": "Category A/B, NOC list, wage rules, CA$1,000 fee, LMBP", "accessed": "2026-11-22" },
+    { "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/check-score/crs-criteria.html", "title": "IRCC: CRS criteria (modified 2026-11-03)", "used_for": "Education points for 3+ year programs; job-offer points", "accessed": "2026-11-22" },
+    { "url": "https://open.canada.ca/data/en/dataset/90fed587-1364-4f33-a9ee-208181dc0b97", "title": "TFWP Positive LMIA Employers List", "used_for": "Sponsor register: quarterly XLSX, latest 2026 Q2", "accessed": "2026-11-22" },
+    { "url": "https://open.canada.ca/data/en/dataset/ea639e28-c0fc-48bf-b5dd-b8899bd43072", "title": "Job Postings Advertised on Canada's National Job Bank Website", "used_for": "Monthly CSV of Job Bank postings (latest Oct 2026)", "accessed": "2026-11-22" },
+    { "url": "https://www.cicnews.com/2026/08/lmia-processing-times-edge-higher-0879065.html", "title": "CIC News: LMIA processing times edge higher (search snippet)", "used_for": "GTS ~10 days July 2026 (secondary)", "accessed": "2026-11-22" },
+    { "url": "https://moving2canada.com/immigration/express-entry/category-based-express-entry-draws/", "title": "Moving2Canada: category-based Express Entry draws (search snippet)", "used_for": "2026 category experience requirement raised to 12 months (secondary)", "accessed": "2026-11-22" },
+    { "url": "https://www.levels.fyi/t/software-engineer/locations/canada", "title": "Levels.fyi Software Engineer salaries, Canada", "used_for": "Salary percentiles", "accessed": "2026-11-22" },
+    { "url": "https://www.jobbank.gc.ca/robots.txt", "title": "Job Bank robots.txt", "used_for": "Crawl-delay 5, no disallow", "accessed": "2026-11-22" },
+    { "url": "https://ca.talent.com/robots.txt", "title": "Talent.com robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://developer.adzuna.com/overview", "title": "Adzuna API overview", "used_for": "API auth", "accessed": "2026-11-22" }
+  ]
+}

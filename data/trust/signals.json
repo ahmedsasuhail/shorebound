@@ -1,0 +1,567 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred"
+    },
+    "searches_run": 20,
+    "pages_read": 8,
+    "confidence": "medium",
+    "open_questions": [
+      "Glassdoor Terms of Use automated-access clause not read (glassdoor.com/about/terms.htm returned HTTP 403). Treated as link-only until a human reads it.",
+      "Reddit Data API Wiki and Responsible Builder Policy text not read (support.reddithelp.com returned 403). The 100 QPM free OAuth limit and the Nov-2025 approval requirement come from secondary sources and community threads only.",
+      "Indeed company reviews, AmbitionBox, kununu, Blind, Comparably: own ToS/robots not read this session. All set to link_only pending review.",
+      "Levels.fyi ToS (dated 2023-08-22 per search) scraping clause not seen; no official public API found.",
+      "Trustpilot Business Units API (public) needs an API key; whether any free key tier exists for non-customers is unconfirmed (secondary source says API is a paid add-on).",
+      "layoffs.fyi: press page says data free for editorial/research/educational use with attribution; whether that covers automated fetching by an app is unconfirmed. No API.",
+      "TrueUp layoffs tracker: access method and terms not researched (no results read).",
+      "UK HR1 (advance notification of redundancies) data: no public dataset found; assumed not public.",
+      "GLEIF API rate limit and license not confirmed on the page read (page links to api.gleif.org/docs). Common knowledge says LEI data is CC0 and free; not verified this session.",
+      "SEC EDGAR fair-access numeric limit (widely cited as 10 requests/second with a declared User-Agent) not confirmed on the API page read; it points to sec.gov/os/webmaster-faq#developers.",
+      "Companies House: API key cost not stated on the rate-limit page (widely known to be free with registration; not verified this session).",
+      "OpenCorporates: free access appears limited to open-data / public-benefit projects on application; commercial pricing (third-party says from GBP 2,250/yr) unverified.",
+      "Wikidata Query Service User-Agent enforcement changed in 2025-2026; status after 2026-02-18 exception unverified.",
+      "Confidence-model weights are a design proposal (heuristic), not sourced from any study."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "review_sources": [
+    {
+      "id": "glassdoor",
+      "name": "Glassdoor",
+      "url": "https://www.glassdoor.com",
+      "access": "link_only",
+      "free": true,
+      "api": {
+        "exists": false,
+        "note": "Public partner API closed to new applicants (reported 2021); current access is enterprise/sales-led for ATS and employer-brand partners. No self-serve developer portal."
+      },
+      "tos_note": "Terms page revised 2026-06-30 (per glassdoor.co.in result) could not be read (HTTP 403). Most review content is behind a login/contribute wall, and the app never logs in, so scraping is impractical as well as ToS-unclear.",
+      "coverage": ["US", "GB", "CA", "IN", "DE", "AU", "*"],
+      "how_app_uses_it": "Build a search deep link (https://www.glassdoor.com/Search/results.htm?keyword={company}) and show it as 'Check reviews'. Do not fetch.",
+      "verified": false
+    },
+    {
+      "id": "indeed-company-reviews",
+      "name": "Indeed company reviews",
+      "url": "https://www.indeed.com/companies",
+      "access": "link_only",
+      "free": true,
+      "api": { "exists": null, "note": "No public company-review API found in this research." },
+      "tos_note": "Not read this session.",
+      "coverage": ["*"],
+      "how_app_uses_it": "Deep link to company search page.",
+      "verified": false
+    },
+    {
+      "id": "ambitionbox",
+      "name": "AmbitionBox",
+      "url": "https://www.ambitionbox.com",
+      "access": "link_only",
+      "free": true,
+      "api": { "exists": null, "note": "No public API found." },
+      "tos_note": "Not read this session. India-centric (Info Edge / Naukri group); strongest coverage of Indian offices of multinationals - useful to judge an employer's treatment of Indian staff.",
+      "coverage": ["IN"],
+      "how_app_uses_it": "Deep link only.",
+      "verified": false
+    },
+    {
+      "id": "kununu",
+      "name": "kununu",
+      "url": "https://www.kununu.com",
+      "access": "link_only",
+      "free": true,
+      "api": { "exists": null, "note": "Not researched in depth." },
+      "tos_note": "Not read this session. DACH-focused (Germany, Austria, Switzerland).",
+      "coverage": ["DE", "AT", "CH"],
+      "how_app_uses_it": "Deep link only.",
+      "verified": false
+    },
+    {
+      "id": "blind",
+      "name": "Blind (Team Blind)",
+      "url": "https://www.teamblind.com",
+      "access": "link_only",
+      "free": true,
+      "api": { "exists": null, "note": "No information found on data access." },
+      "tos_note": "Not read; most content requires a verified work-email account, which the app will not use.",
+      "coverage": ["US", "IN", "*"],
+      "how_app_uses_it": "Deep link only.",
+      "verified": false
+    },
+    {
+      "id": "comparably",
+      "name": "Comparably",
+      "url": "https://www.comparably.com",
+      "access": "link_only",
+      "free": true,
+      "api": { "exists": null, "note": "Not researched." },
+      "tos_note": "Not read.",
+      "coverage": ["US"],
+      "how_app_uses_it": "Deep link only.",
+      "verified": false
+    },
+    {
+      "id": "levels-fyi",
+      "name": "Levels.fyi",
+      "url": "https://www.levels.fyi",
+      "access": "link_only",
+      "free": true,
+      "api": { "exists": false, "note": "No official public API found; third-party scrapers claim the internal API needs session cookies." },
+      "tos_note": "Terms of Use page dated 2023-08-22 found; scraping clause not seen in excerpt. Useful mainly as a salary sanity-check, not reviews.",
+      "coverage": ["US", "GB", "IN", "CA", "DE", "NL", "SG", "*"],
+      "how_app_uses_it": "Deep link for salary sanity-check; could feed the 'salary far above market' scam check only via the country files' curated salary ranges, not live data.",
+      "verified": false
+    },
+    {
+      "id": "reddit",
+      "name": "Reddit (e.g. r/cscareerquestionsEU, r/IWantOut, r/developersIndia)",
+      "url": "https://www.reddit.com",
+      "access": "link_only",
+      "free": true,
+      "api": {
+        "exists": true,
+        "note": "Free tier historically 100 queries/min per OAuth client id (10/min without OAuth) since 2023-07-01; free tier is for non-commercial use. Since Nov 2025 (Responsible Builder Policy) self-service API access is closed and new apps must request approval (reported ~7-day target turnaround). Not confirmed on Reddit's own page this session.",
+        "rate_limit": "100 QPM per OAuth client id (secondary sources)",
+        "auth": "free_key_with_approval"
+      },
+      "tos_note": "Data API Terms apply; commercial use needs a separate agreement. Logged-out .json endpoint scraping is not recommended given the policy.",
+      "coverage": ["*"],
+      "how_app_uses_it": "v1: deep link to a Reddit search URL (https://www.reddit.com/search/?q={company}+visa). Only call the API if the developer obtains approval; app never logs in as the user.",
+      "verified": false
+    },
+    {
+      "id": "trustpilot",
+      "name": "Trustpilot (for job sites, recruiters, relocation agencies - not employers)",
+      "url": "https://www.trustpilot.com",
+      "access": "link_only",
+      "free": true,
+      "api": {
+        "exists": true,
+        "note": "Business Units API (public) has find-by-name and public reviews endpoints but requires an API key; secondary source says API access is a paid add-on (Premium/Enterprise). Free key availability unconfirmed.",
+        "docs_url": "https://developers.trustpilot.com/business-units-api-(public)"
+      },
+      "tos_note": "Not read.",
+      "coverage": ["*"],
+      "how_app_uses_it": "Deep link https://www.trustpilot.com/review/{domain} for recruiter/agency domains. Note: Trustpilot rates customer experience, not employment.",
+      "verified": false
+    },
+    {
+      "id": "google-maps-reviews",
+      "name": "Google Maps reviews",
+      "url": "https://www.google.com/maps",
+      "access": "link_only",
+      "free": false,
+      "api": { "exists": true, "note": "Google Places API returns limited reviews but is a paid, billing-account product; not researched in this session. Customer reviews of an office, weak employment signal; useful only to confirm a physical office exists." },
+      "tos_note": "Not read.",
+      "coverage": ["*"],
+      "how_app_uses_it": "Deep link https://www.google.com/maps/search/{company}+{city} so the user can confirm an office exists.",
+      "verified": false
+    }
+  ],
+  "layoff_trackers": [
+    {
+      "id": "layoffs-fyi",
+      "name": "Layoffs.fyi",
+      "url": "https://layoffs.fyi",
+      "access": "html_scrape",
+      "auth": "none",
+      "coverage": "Tech companies worldwide, Mar-2020 to present; llms.txt lists 3,005 companies and 4,704 events.",
+      "fields": ["company", "date", "employees_laid_off", "percent_of_workforce", "source_url", "industry", "funding_stage", "hq_city", "country"],
+      "endpoints": {
+        "company_page": "https://layoffs.fyi/company/{slug}/",
+        "company_sitemap": "https://layoffs.fyi/company-sitemap/",
+        "llms_txt": "https://layoffs.fyi/llms.txt"
+      },
+      "terms": "Press page: data free for editorial, research and educational purposes with attribution and link to layoffs.fyi. App use not explicitly covered.",
+      "how_app_uses_it": "Resolve company to slug via sitemap (cache weekly), fetch company page, extract events in last 12 months. Attribute. Fall back to link if blocked.",
+      "verified": true
+    },
+    {
+      "id": "trueup-layoffs",
+      "name": "TrueUp layoffs tracker",
+      "url": "https://www.trueup.io/layoffs",
+      "access": "link_only",
+      "auth": null,
+      "coverage": "Tech; not researched.",
+      "terms": null,
+      "how_app_uses_it": "Deep link only until terms are reviewed.",
+      "verified": false
+    },
+    {
+      "id": "warn-state-portals",
+      "name": "US state WARN Act notice portals (e.g. New York DOL WARN dashboard)",
+      "url": "https://dol.ny.gov/warn-dashboard",
+      "access": "html_scrape",
+      "auth": "none",
+      "coverage": "US only; each state publishes separately in its own format (no national WARN API). Only covers mass layoffs/closures above WARN thresholds.",
+      "terms": "Government data; check each state.",
+      "how_app_uses_it": "Optional US-only adapter per state; prefer the research dataset below for bulk.",
+      "verified": false
+    },
+    {
+      "id": "warn-openicpsr",
+      "name": "WARN Factor multistate panel (Krolikowski & Lunsford) on OpenICPSR",
+      "url": "https://www.openicpsr.org/openicpsr/project/155161",
+      "access": "bulk_download",
+      "auth": "free_account_may_be_required",
+      "coverage": "US states, aggregated CSV by state and month (workers affected); updated by the authors, not an official Federal Reserve product.",
+      "terms": "OpenICPSR terms; not read.",
+      "how_app_uses_it": "Low value for per-company checks (aggregated). Skip in v1.",
+      "verified": false
+    },
+    {
+      "id": "warntracker",
+      "name": "WARNTracker.com",
+      "url": "https://www.warntracker.com",
+      "access": "link_only",
+      "auth": "account_required",
+      "coverage": "US WARN notices from federal and state sources.",
+      "terms": "Data sold by subscription ($250 then $250/month per its data page) - not free. Company pages viewable as links.",
+      "how_app_uses_it": "Deep link https://www.warntracker.com/?company={company}.",
+      "verified": false
+    },
+    {
+      "id": "api-ninjas-layoffnotices",
+      "name": "API Ninjas Layoff Notices API",
+      "url": "https://api-ninjas.com/api/layoffnotices",
+      "access": "official_api",
+      "auth": "free_key",
+      "coverage": "US WARN notices as JSON; filter by state, min workers, event type. Free plan omits notice_url.",
+      "terms": "Free-plan quota not confirmed.",
+      "how_app_uses_it": "Optional US layoff check by company name.",
+      "verified": false
+    },
+    {
+      "id": "uk-hr1",
+      "name": "UK HR1 advance redundancy notifications",
+      "url": null,
+      "access": "none",
+      "auth": null,
+      "coverage": "HR1 forms go to the Insolvency Service; no public dataset found.",
+      "terms": null,
+      "how_app_uses_it": "Not usable. For UK use news/layoffs.fyi.",
+      "verified": false
+    }
+  ],
+  "company_data_sources": [
+    {
+      "id": "wikidata",
+      "name": "Wikidata Query Service (SPARQL) + wbsearchentities",
+      "url": "https://query.wikidata.org/sparql",
+      "auth": "none",
+      "free": true,
+      "rate_limit": "60 s hard query timeout; per client (User-Agent + IP) 60 s of processing per 60 s; 30 error queries/min. Descriptive User-Agent required (enforcement tightened 2025-2026).",
+      "fields_useful": ["official website (P856)", "inception (P571)", "employees (P1128)", "stock exchange (P414)", "ticker (P249)", "country (P17)", "LEI (P1278)", "parent org (P749)", "industry (P452)"],
+      "how_app_uses_it": "Primary name -> entity -> domain resolver. Search label via Wikidata API wbsearchentities, confirm by matching P856 domain to posting's apply/company domain, then SPARQL for age, size, listing.",
+      "license": "CC0",
+      "verified": true
+    },
+    {
+      "id": "uk-companies-house",
+      "name": "UK Companies House Public Data API",
+      "url": "https://developer.company-information.service.gov.uk/",
+      "auth": "free_key",
+      "free": true,
+      "rate_limit": "600 requests per 5 minutes; 429 beyond; repeated abuse can be banned.",
+      "fields_useful": ["company status (active/dissolved)", "incorporation date", "SIC codes", "registered office", "officers", "filing history", "insolvency"],
+      "how_app_uses_it": "For GB jobs: search by name, confirm active status and age; cross-check with UK sponsor register name.",
+      "verified": true
+    },
+    {
+      "id": "sec-edgar",
+      "name": "SEC EDGAR APIs (data.sec.gov)",
+      "url": "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+      "auth": "none",
+      "free": true,
+      "rate_limit": null,
+      "rate_limit_note": "No numeric limit on the API page; automated access must follow SEC fair-access policy (see sec.gov/os/webmaster-faq#developers) incl. declared User-Agent.",
+      "endpoints": {
+        "submissions": "https://data.sec.gov/submissions/CIK##########.json",
+        "companyfacts": "https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json",
+        "companyconcept": "https://data.sec.gov/api/xbrl/companyconcept/CIK##########/us-gaap/{concept}.json",
+        "frames": "https://data.sec.gov/api/xbrl/frames/us-gaap/{concept}/USD/CY2019Q1I.json",
+        "bulk_companyfacts": "https://www.sec.gov/Archives/edgar/daily-index/xbrl/companyfacts.zip",
+        "bulk_submissions": "https://www.sec.gov/Archives/edgar/daily-index/bulkdata/submissions.zip"
+      },
+      "fields_useful": ["is US-listed filer", "tickers/exchanges", "SIC", "recent 10-K/10-Q", "financial facts"],
+      "how_app_uses_it": "Public-company check for US filers (incl. foreign private issuers). Resolve name -> CIK from submissions/ticker data, cache nightly bulk.",
+      "verified": true
+    },
+    {
+      "id": "gleif",
+      "name": "GLEIF LEI API",
+      "url": "https://www.gleif.org/en/lei-data/gleif-api",
+      "auth": null,
+      "free": null,
+      "rate_limit": null,
+      "docs_url": "https://api.gleif.org/docs",
+      "fields_useful": ["legal name", "jurisdiction", "registration status", "legal address", "parent/child relationships", "BIC/ISIN mappings"],
+      "how_app_uses_it": "Fuzzy name search to confirm a legal entity exists in a jurisdiction and find parent company. Global coverage, good for non-US/UK firms that have LEIs.",
+      "verified": false
+    },
+    {
+      "id": "opencorporates",
+      "name": "OpenCorporates API",
+      "url": "https://api.opencorporates.com/documentation/Home",
+      "auth": "free_key",
+      "free": null,
+      "rate_limit": null,
+      "terms": "API key required; free for open-data / public-benefit projects on application; commercial use is paid.",
+      "how_app_uses_it": "Optional; only if the project qualifies for public-benefit access. Otherwise link https://opencorporates.com/companies?q={company}.",
+      "verified": false
+    },
+    {
+      "id": "crunchbase",
+      "name": "Crunchbase",
+      "url": "https://www.crunchbase.com",
+      "auth": "account_required",
+      "free": false,
+      "terms": "Funding data API is paid. Note only; app uses link-out.",
+      "how_app_uses_it": "Deep link only.",
+      "verified": false
+    },
+    {
+      "id": "github-orgs",
+      "name": "GitHub REST API - organizations",
+      "url": "https://docs.github.com/en/rest/orgs/orgs",
+      "auth": "none",
+      "free": true,
+      "rate_limit": null,
+      "rate_limit_note": "Unauthenticated limits are low; exact current values not checked this session.",
+      "fields_useful": ["org created_at", "public_repos", "blog (website)", "verified domain"],
+      "how_app_uses_it": "Weak engineering-presence signal for tech firms; verified-domain match helps confirm domain.",
+      "verified": false
+    },
+    {
+      "id": "logo-domain",
+      "name": "Logo / domain lookup (Clearbit Logo API successor)",
+      "url": "https://www.logo.dev",
+      "auth": "free_key",
+      "free": null,
+      "terms": "Clearbit Logo API sunset 2025-12-08 (notices first said 2025-12-01). Logo.dev (built by original team) needs a key; Brandfetch claims a free tier. Cosmetic only - not a trust signal.",
+      "how_app_uses_it": "Optional cosmetic logos; do not use for trust.",
+      "verified": false
+    },
+    {
+      "id": "stock-listing",
+      "name": "Stock listing (free)",
+      "url": null,
+      "auth": "none",
+      "free": true,
+      "terms": "Use Wikidata P414/P249 and SEC EDGAR tickers instead of a paid market-data API; no live prices needed.",
+      "how_app_uses_it": "is_listed boolean only.",
+      "verified": false
+    }
+  ],
+  "entity_resolution": {
+    "steps": [
+      "1. Take company name + any domain from the posting (apply URL host, ATS board token, company email domain).",
+      "2. Normalise name (strip legal suffixes: Ltd, GmbH, Inc, BV, Pte Ltd, LLC, AG, SA, Pvt).",
+      "3. If an ATS board (Greenhouse/Lever/Ashby etc.) lists a company website, use that as the canonical domain.",
+      "4. Query Wikidata wbsearchentities; accept a candidate only if its P856 website host matches the domain (or the country matches and the label is an exact normalised match).",
+      "5. Country registry: GB -> Companies House; US -> SEC EDGAR (listed only); elsewhere -> GLEIF fuzzy search.",
+      "6. Match against destination sponsor register (see countries/<iso2>.json) using normalised name; record match quality (exact/fuzzy).",
+      "7. Store resolution confidence; if nothing resolves, mark company as 'unverified' (scam signal vague_company)."
+    ]
+  },
+  "scam_signals": [
+    {
+      "id": "fee_demanded",
+      "description": "Candidate asked to pay for the job: registration, processing, training, visa, 'security deposit', certification, equipment.",
+      "weight": -60,
+      "hard_flag": true,
+      "detect": "Regex on posting/description/message text: (registration|processing|visa|placement|training|security|refundable) (fee|charge|deposit), 'pay .* (INR|Rs|₹|USD|\\$)', 'advance payment'. FTC: honest employers never ask you to pay to get a job. MEA: overcharging Rs 2-5 lakh reported; legal RA service charge capped at Rs 30,000 + 18% GST (ECR recruitment only).",
+      "source_ids": ["ftc-job-scams", "mea-advisory-dec-2023"]
+    },
+    {
+      "id": "visa_for_fee",
+      "description": "Offer of a work visa / 'guaranteed visa' or sponsorship in exchange for money.",
+      "weight": -50,
+      "hard_flag": true,
+      "detect": "Text match: 'guaranteed visa', 'visa guarantee', '100% visa', 'work permit .* fee', 'sponsorship .* (fee|cost) .* candidate'. Exclude legit employer-pays statements ('we cover visa costs').",
+      "source_ids": ["ftc-job-scams", "mea-advisory-dec-2023"]
+    },
+    {
+      "id": "tourist_visa_convert",
+      "description": "Told to travel on a tourist/visit visa and 'convert' to work visa on arrival.",
+      "weight": -50,
+      "hard_flag": true,
+      "detect": "Text match: '(tourist|visit|visitor) visa' near '(convert|change|then|work permit)'. MEA: genuine offers come with an employment/work visa and a signed contract, not a tourist visa.",
+      "source_ids": ["mea-advisory-dec-2023", "mea-oe-overview-2026"]
+    },
+    {
+      "id": "se_asia_cyber_compound_lure",
+      "description": "Lure matching the SE Asia cyber-scam compound pattern: 'Digital Sales and Marketing Executive', 'Customer Support', 'data entry' jobs in Cambodia, Laos, Myanmar or via Thailand, high pay, low requirements, recruited via social media.",
+      "weight": -45,
+      "hard_flag": true,
+      "detect": "Job location in KH/LA/MM (or TH with onward travel / border cities e.g. Mae Sot, Golden Triangle SEZ) AND role keywords (digital marketing, customer support, data entry, crypto, chat operator, 'typing job') AND (salary_above_market OR messaging_only_contact). Govt: 6,998 Indians rescued from Cambodia/Myanmar/Laos centres 2022-2025.",
+      "source_ids": ["mea-advisory-cambodia-laos-2024", "pib-se-asia-rescue-2025"]
+    },
+    {
+      "id": "check_or_reshipping",
+      "description": "Deposit-a-check-and-send-back, reshipping packages, or buying equipment from a 'vendor' before starting.",
+      "weight": -40,
+      "hard_flag": true,
+      "detect": "Text match: '(deposit|cash) .* check', 'reship', 'receive packages', 'purchase equipment from our vendor'.",
+      "source_ids": ["ftc-job-scams"]
+    },
+    {
+      "id": "messaging_only_contact",
+      "description": "Only contact is WhatsApp/Telegram/Signal number or social DM; no company email/ATS.",
+      "weight": -25,
+      "hard_flag": false,
+      "detect": "Posting has wa.me / t.me / 'WhatsApp' / 'Telegram' / phone-number-only contact and no ATS or company-domain apply link. MEA: illegal agents usually communicate only through WhatsApp.",
+      "source_ids": ["mea-advisory-dec-2023"]
+    },
+    {
+      "id": "unregistered_recruiting_agent",
+      "description": "Indian recruiting agent involved but no valid eMigrate RA licence (or appears on notified illegal agents list).",
+      "weight": -25,
+      "hard_flag": false,
+      "detect": "If posting names an Indian agency/RC number, check against eMigrate 'List of active RA' and notified illegal agents (3,505 notified as of 2026-04-09). Manual/link check in v1 unless a downloadable list is confirmed.",
+      "source_ids": ["mea-oe-overview-2026", "mea-advisory-dec-2023"]
+    },
+    {
+      "id": "personal_email_domain",
+      "description": "Recruiter/apply email on a free webmail domain (gmail, yahoo, outlook, hotmail, proton, rediffmail, etc.) for a company that should have its own domain.",
+      "weight": -20,
+      "hard_flag": false,
+      "detect": "Extract emails; flag if domain in free-mail list and company resolved to a corporate domain (or failed to resolve).",
+      "source_ids": ["ftc-job-scams"]
+    },
+    {
+      "id": "salary_far_above_market",
+      "description": "Pay far above market for the role/country with little required work or experience.",
+      "weight": -20,
+      "hard_flag": false,
+      "detect": "Parsed salary > 1.5x the country file's salary.senior_swe_annual_gross.high (threshold is a heuristic; tune) OR phrases like 'earn .* per week from home', 'no experience required' with high pay. FTC: lots of money for little work is almost certainly a scam.",
+      "source_ids": ["ftc-job-scams"]
+    },
+    {
+      "id": "domain_mismatch",
+      "description": "Apply URL / email domain does not match the company's resolved domain (lookalike domains, URL shorteners, form builders).",
+      "weight": -15,
+      "hard_flag": false,
+      "detect": "Compare apply host and email domain with resolved company domain and known ATS hosts (greenhouse.io, lever.co, ashbyhq.com, workable.com, smartrecruiters.com, myworkdayjobs.com, etc.); flag bit.ly/forms.gle/typeform or edit-distance <=2 lookalikes.",
+      "source_ids": []
+    },
+    {
+      "id": "vague_company",
+      "description": "Company cannot be resolved to any website, registry entry, or ATS board; generic name ('Global Solutions LLC'), no address.",
+      "weight": -15,
+      "hard_flag": false,
+      "detect": "Entity resolution failed in all of Wikidata, national registry, GLEIF, ATS; or posting lacks company name ('confidential client') AND is not from a known recruiter.",
+      "source_ids": ["ftc-job-scams"]
+    },
+    {
+      "id": "no_interview_instant_offer",
+      "description": "Offer without interview, or 'selected' message before applying.",
+      "weight": -15,
+      "hard_flag": false,
+      "detect": "Text: 'you have been selected', 'no interview', 'direct joining', 'offer letter within 24 hours'.",
+      "source_ids": ["mea-advisory-dec-2023"]
+    },
+    {
+      "id": "early_sensitive_data_request",
+      "description": "Asks for passport scan, Aadhaar/PAN, bank details before a formal offer.",
+      "weight": -15,
+      "hard_flag": false,
+      "detect": "Text: '(send|share|upload) .* (passport|aadhaar|pan card|bank details|OTP)' in posting body.",
+      "source_ids": []
+    },
+    {
+      "id": "urgent_pressure",
+      "description": "Artificial urgency ('urgent hiring', 'limited seats', 'join within 3 days', 'immediate visa').",
+      "weight": -5,
+      "hard_flag": false,
+      "detect": "Keyword list; low weight because many real postings say 'urgent'.",
+      "source_ids": []
+    }
+  ],
+  "confidence_model": {
+    "scale": "0-100",
+    "status": "proposal - heuristic weights, tune with labelled data",
+    "formula": "score = round( sum(w_i * f_i) / sum(w_i for available factors) * 100 ) + sum(scam penalties); clamp 0..100. If any hard_flag scam signal fires, cap at 10. If posting explicitly says no sponsorship, cap at 5. Show 'coverage' = share of weight with data so the meter can render uncertainty.",
+    "factors": [
+      {
+        "id": "sponsorship_evidence",
+        "weight": 30,
+        "levels": {
+          "explicit_posting_text": 1.0,
+          "sponsor_register_match_exact": 0.8,
+          "sponsor_register_match_fuzzy": 0.6,
+          "relocation_board_listing": 0.6,
+          "company_known_sponsor_history": 0.5,
+          "inferred_from_country_or_seniority": 0.2,
+          "unknown": 0.1,
+          "explicit_no_sponsorship": 0.0
+        },
+        "justification": "The app's core promise is visa-sponsored jobs; this is the factor that most often makes a lead useless for an Indian applicant, so it carries the most weight. Explicit text beats a register match because register presence only proves the employer can sponsor, not that this role will."
+      },
+      {
+        "id": "company_reputation",
+        "weight": 20,
+        "subfactors": {
+          "resolved_entity": "required for any credit; else 0",
+          "age_years": ">=10: 1.0, 5-9: 0.8, 2-4: 0.5, <2: 0.2",
+          "size_employees": ">=1000: 1.0, 200-999: 0.8, 50-199: 0.6, <50: 0.4, unknown: 0.5",
+          "listed_or_registry_active": "listed: +0.1 bonus (cap 1.0); dissolved/insolvent: 0",
+          "recent_layoffs_12m": "none: 0; >=10% workforce: -0.4; smaller: -0.2"
+        },
+        "justification": "A sponsorship move is costly and hard to undo for the user; established, active, non-shrinking employers are less likely to withdraw offers or fail before the visa lands. Early-stage startups get partial credit, not zero, since many genuinely sponsor."
+      },
+      {
+        "id": "ease_of_move_from_india",
+        "weight": 20,
+        "mapping": "countries/<iso2>.json ease_for_indian_nationals.score 1..5 -> (score-1)/4",
+        "justification": "Captures degree recognition (e.g. 3-year degrees), lotteries/quotas, processing time and ECR/attestation burden; differs strongly by destination and directly affects whether an offer converts into a move."
+      },
+      {
+        "id": "posting_freshness",
+        "weight": 15,
+        "mapping": "<=7 days: 1.0; 8-14: 0.7; 15-30: 0.4; >30: 0.1; unknown date: 0.3",
+        "justification": "User asked for recent jobs; stale postings are often filled and re-posted aggregator copies are a scam vector."
+      },
+      {
+        "id": "employee_reviews",
+        "weight": 15,
+        "mapping": "rating/5 scaled, multiplied by volume factor min(1, log10(n_reviews)/3); unknown -> factor excluded (weight renormalised)",
+        "justification": "Useful but mostly link-only for a logged-out free app, so often missing; kept below sponsorship and company data. In v1 this will usually be excluded and coverage shown as reduced."
+      }
+    ],
+    "penalties": "See scam_signals[].weight (negative points applied after weighted score).",
+    "display": "0-39 low (red), 40-69 medium (amber), 70-100 high (green); always show top 3 reasons and the coverage percentage."
+  },
+  "sources": [
+    { "id": "ftc-job-scams", "url": "https://consumer.ftc.gov/articles/job-scams", "title": "FTC - Job Scams", "used_for": "scam signals: paying for job, check/reshipping, too-good pay, research the company", "accessed": "2026-11-22" },
+    { "id": "mea-oe-overview-2026", "url": "https://www.mea.gov.in/images/pdf/01-Overview-of-work-of-Overseas-Employment-21-04-2026.pdf", "title": "MEA - Overview of work of OE & PGE Division (21-04-2026)", "used_for": "illegal agents notified (3,505 as of 2026-04-09), eMigrate role, helplines", "accessed": "2026-11-22" },
+    { "id": "mea-advisory-dec-2023", "url": "https://pib.gov.in/PressReleasePage.aspx?PRID=1985025", "title": "PIB/MEA advisory on fake overseas job offers and overcharging (Dec 2023) - page returned 403; content via news copies e.g. https://news.careers360.com/dont-fall-prey-fake-employment-offers-ministry-of-external-affairs-job-seekers-abroad", "used_for": "WhatsApp-only contact, Rs 2-5 lakh overcharging, Rs 30,000+GST RA cap, tourist visa red flag, verify RA on eMigrate", "accessed": "2026-11-22" },
+    { "id": "mea-advisory-cambodia-laos-2024", "url": "https://www.newsonair.gov.in/government-issues-advisory-to-nationals-travelling-to-cambodia-for-jobs-to-be-wary-of-fake-agents", "title": "AIR News - Govt advisory on Cambodia/Laos fake job agents (May 2024)", "used_for": "SE Asia cyber-scam lure roles", "accessed": "2026-11-22" },
+    { "id": "pib-se-asia-rescue-2025", "url": "https://scroll.in/latest/1090539/scroll_in", "title": "Scroll - Nearly 7,000 Indians rescued from Cambodia, Myanmar, Laos cybercrime compounds since 2022", "used_for": "6,998 rescued 2022-2025 figure (secondary report of govt reply)", "accessed": "2026-11-22" },
+    { "id": "companies-house-rate", "url": "https://developer-specs.company-information.service.gov.uk/guides/rateLimiting", "title": "Companies House API - Rate limiting", "used_for": "600 requests / 5 min", "accessed": "2026-11-22" },
+    { "id": "sec-edgar-apis", "url": "https://www.sec.gov/search-filings/edgar-application-programming-interfaces", "title": "SEC - EDGAR Application Programming Interfaces", "used_for": "endpoints, no auth, bulk zips", "accessed": "2026-11-22" },
+    { "id": "gleif-api", "url": "https://www.gleif.org/en/lei-data/gleif-api", "title": "GLEIF API", "used_for": "fuzzy name search, relationships; docs at api.gleif.org/docs", "accessed": "2026-11-22" },
+    { "id": "opencorporates-docs", "url": "https://api.opencorporates.com/documentation/Home", "title": "OpenCorporates API Reference", "used_for": "API key required; free for open data projects", "accessed": "2026-11-22" },
+    { "id": "wikidata-access", "url": "https://www.wikidata.org/wiki/Wikidata:Data_access", "title": "Wikidata: Data access", "used_for": "WDQS limits, User-Agent policy", "accessed": "2026-11-22" },
+    { "id": "wikimedia-t402959", "url": "https://phabricator.wikimedia.org/T402959", "title": "Phabricator T402959 - UA enforcement blocking SPARQL", "used_for": "UA enforcement change", "accessed": "2026-11-22" },
+    { "id": "layoffs-fyi-llms", "url": "https://layoffs.fyi/llms.txt", "title": "Layoffs.fyi llms.txt", "used_for": "fields, sitemap, coverage counts", "accessed": "2026-11-22" },
+    { "id": "layoffs-fyi-press", "url": "https://layoffs.fyi/press/", "title": "About Layoffs.fyi (press)", "used_for": "free for editorial/research/educational use with attribution", "accessed": "2026-11-22" },
+    { "id": "ny-warn", "url": "https://dol.ny.gov/warn-dashboard", "title": "NY DOL WARN dashboard", "used_for": "state WARN portal example", "accessed": "2026-11-22" },
+    { "id": "openicpsr-warn", "url": "https://www.openicpsr.org/openicpsr/project/155161", "title": "WARN Factor dataset (OpenICPSR)", "used_for": "multistate WARN panel", "accessed": "2026-11-22" },
+    { "id": "warntracker-data", "url": "https://www.warntracker.com/data", "title": "WARNTracker data", "used_for": "paid subscription", "accessed": "2026-11-22" },
+    { "id": "api-ninjas-layoff", "url": "https://api-ninjas.com/api/layoffnotices", "title": "API Ninjas Layoff Notices API", "used_for": "free-key WARN JSON", "accessed": "2026-11-22" },
+    { "id": "glassdoor-api-status", "url": "https://apis.io/providers/glassdoor/", "title": "APIs.io - Glassdoor provider (secondary)", "used_for": "partner API closed 2021, enterprise-only", "accessed": "2026-11-22" },
+    { "id": "glassdoor-terms", "url": "https://www.glassdoor.com/about/terms.htm", "title": "Glassdoor Terms of Use (403 - not read)", "used_for": "pending", "accessed": "2026-11-22" },
+    { "id": "reddit-data-api-wiki", "url": "https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki", "title": "Reddit Data API Wiki (403 - not read)", "used_for": "pending; limits taken from secondary sources", "accessed": "2026-11-22" },
+    { "id": "reddit-rbp-thread", "url": "https://r.datuan.dev/r/redditdev/comments/1oug31u/introducing_the_responsible_builder_policy_new/", "title": "r/redditdev mirror - Introducing the Responsible Builder Policy (Nov 2025)", "used_for": "approval now required for new API access", "accessed": "2026-11-22" },
+    { "id": "reddit-limits-secondary", "url": "https://data365.co/blog/reddit-api-limits", "title": "Reddit API Rate Limits in 2026 (secondary)", "used_for": "100 QPM OAuth free tier", "accessed": "2026-11-22" },
+    { "id": "trustpilot-bu-api", "url": "https://developers.trustpilot.com/business-units-api-(public)", "title": "Trustpilot Business Units API (public)", "used_for": "API key required; find by name; reviews", "accessed": "2026-11-22" },
+    { "id": "levels-terms", "url": "https://levels.fyi/about/terms.html", "title": "Levels.fyi Terms of Use", "used_for": "existence of ToS; clause unread", "accessed": "2026-11-22" },
+    { "id": "clearbit-sunset", "url": "https://clearbit.com/changelog/2025-11-24", "title": "Clearbit release notes 2025-11-24", "used_for": "Logo API sunset 2025-12-08", "accessed": "2026-11-22" }
+  ]
+}

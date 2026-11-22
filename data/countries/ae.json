@@ -1,0 +1,673 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred. Counts are for the whole Gulf research session (shared across ae/sa/qa and research later dropped for bh/kw/om); pages_read = 7 full pages via WebFetch + robots.txt of 20 job-site hosts via curl. Several official pages (mohre.gov.ae, saudieng.sa, sapr.gov.sa, mol.gov.qa) timed out or refused automated fetches."
+    },
+    "searches_run": 30,
+    "pages_read": 27,
+    "confidence": "medium",
+    "open_questions": [
+      "Whether the AED 30,000 Golden Visa threshold is basic salary or total salary outside Dubai (ADDED page does not say; Vialto June 2026 says Dubai requires basic salary, excluding allowances, plus 2+ years with current employer).",
+      "Whether a 3-year Indian BCA is accepted as 'bachelor's or equivalent' for MOHRE skill levels 1-3 / Green and Golden visas without extra evaluation (not found on an official page).",
+      "General employment residence visa: official fee schedule and processing time from ICP/MOHRE (mohre.gov.ae unreachable during research).",
+      "Exact rules of MOHRE establishment classification (categories 1-3) and whether any list is public.",
+      "Senior SWE salary: sources disagree widely (Indeed ~AED 9.5k/month from postings, PayScale ~AED 224k/year base, Jooble ~AED 28k/month); no Cooper Fitch/Hays tech figures could be read.",
+      "Typical relocation package contents (housing, schooling, flights) are not sourced in this research.",
+      "Robots/ToS of Naukrigulf and Laimoon could not be retrieved; Dubizzle and GulfTalent ToS not reviewed."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "AE",
+  "name": "United Arab Emirates",
+  "region": "middle_east",
+  "tier": "emerging_high_pay",
+  "default_enabled": true,
+  "currency": "AED",
+  "languages": {
+    "official": [
+      "Arabic"
+    ],
+    "english_only_tech_jobs": "common",
+    "note": "English is the working language of most private-sector tech teams; Arabic is a plus for government/semi-government roles (general observation, not sourced)."
+  },
+  "salary": {
+    "senior_swe_annual_gross": {
+      "low": 113484,
+      "high": 223924,
+      "currency": "AED",
+      "period": "year",
+      "as_of": "2026-09"
+    },
+    "source_urls": [
+      "https://ae.indeed.com/career/software-engineer/salaries",
+      "https://ae.indeed.com/career/senior-developer/salaries",
+      "https://www.payscale.com/research/AE/Job=Senior_Software_Engineer/Salary",
+      "https://ae.jooble.org/salary/senior-software-engineer"
+    ],
+    "note": "Bounded by two published averages, not percentiles: low = Indeed senior software engineer average AED 9,457/month x 12 (job-posting based, updated 2026-09-30); high = PayScale senior software engineer average base AED 223,924/year (2026). Indeed senior developer averages AED 10,039/month; Jooble posting-based average ~AED 28,451/month (~AED 341k/year) suggests strong candidates at product companies can exceed the high value. Gulf offers are often split into basic + housing + transport allowances; check whether a quoted figure is basic or total. Approximate, low confidence."
+  },
+  "income_tax_note": "0% personal income tax on salaries (general knowledge, not re-verified this session); 5% VAT applies to goods/services and government fees (GDRFA fee page quotes '+5% VAT').",
+  "cost_of_living_note": "Housing is the dominant cost, especially in Dubai; employers typically quote packages with a housing allowance. No sourced figures gathered.",
+  "visa_routes": [
+    {
+      "id": "ae-employment-residence",
+      "name": "Employer-sponsored work permit + employment residence visa",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": true,
+      "salary_threshold": {
+        "amount": null,
+        "currency": "AED",
+        "period": "month",
+        "as_of": "2026-11",
+        "note": "No general minimum salary found for the standard work permit."
+      },
+      "degree_requirement": "Not strictly required for a work permit, but the MOHRE occupational skill level (1-9) recorded on the permit depends on attested qualifications; skill levels 1-3 (needed for Green/Golden visas) require at least a bachelor's or equivalent.",
+      "three_year_indian_bachelors_note": "A BCA is a bachelor's degree; it must be attested (Indian state HRD/university -> MEA apostille/attestation -> UAE embassy -> UAE MOFA) to be used for skill-level classification. Official confirmation that 3-year degrees are treated as 'bachelor's or equivalent' was not found - open question.",
+      "processing_time": null,
+      "lottery_or_quota": "No lottery. Emiratisation: private establishments with 50+ employees must raise Emirati share of skilled jobs by 2 percentage points a year to 10% by end-2026 (half-year steps of 1%); firms with 20-49 staff in 14 activities, including information and communications, have targets too. Non-compliant firms pay contributions and can be downgraded in MOHRE's establishment classification. Affects hiring mix but does not bar foreign tech hires.",
+      "path_to_pr": "No permanent residency; long-term options are the 5-year Green Visa and 10-year Golden Visa (renewable).",
+      "employer_cost_note": "Employer bears recruitment and visa costs; MOHRE says genuine employers cover all recruitment costs and job seekers should never pay to secure a job. Fee amounts not confirmed on an official page this session.",
+      "official_url": "https://u.ae/en/information-and-services/visa-and-emirates-id/residence-visas/residence-visa-for-working-in-the-uae",
+      "verified": false
+    },
+    {
+      "id": "ae-green-visa-skilled",
+      "name": "Green Visa - high-level skilled employee (5-year, self-sponsored residence)",
+      "type": "self_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": {
+        "amount": 15000,
+        "currency": "AED",
+        "period": "month",
+        "as_of": "2026-11",
+        "note": "GDRFA: salary at least AED 15,000 or equivalent; basic vs total not specified on the page."
+      },
+      "degree_requirement": "Bachelor's degree or equivalent, minimum; MOHRE occupational skill level 1, 2 or 3; MOHRE high-level skilled worker permit / approved employment contract.",
+      "three_year_indian_bachelors_note": "BCA should count as a bachelor's but must be attested; no official statement on 3-year degrees found.",
+      "processing_time": "48 hours (GDRFA expected completion time)",
+      "lottery_or_quota": "None",
+      "path_to_pr": "No PR; renewable 5-year residence not tied to employer sponsorship.",
+      "employer_cost_note": "GDRFA lists work visa fee AED 200 + 5% VAT; if already in-country, Knowledge Dirham AED 10, Innovation Dirham AED 10 and in-country fee AED 500. Totals vary by case.",
+      "official_url": "https://www.gdrfad.gov.ae/en/node/13903",
+      "verified": true
+    },
+    {
+      "id": "ae-golden-visa-skilled-professional",
+      "name": "Golden Visa - skilled professional (10-year)",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": {
+        "amount": 30000,
+        "currency": "AED",
+        "period": "month",
+        "as_of": "2026-06",
+        "note": "Abu Dhabi (ADDED): AED 30,000/month shown by salary certificate + 6 months' bank statements. Dubai (Vialto alert 2026-06-12): AED 30,000 BASIC salary, excluding housing/transport allowances, plus >2 years continuous employment with current employer."
+      },
+      "degree_requirement": "Attested bachelor's degree or equivalent; role classified at MOHRE occupational level 1 (managers) or 2 (professionals incl. IT); UAE-approved employment contract.",
+      "three_year_indian_bachelors_note": "BCA must be attested; whether 3-year degrees qualify as 'equivalent' not confirmed officially.",
+      "processing_time": null,
+      "lottery_or_quota": "None",
+      "path_to_pr": "No PR; renewable 10-year residence.",
+      "employer_cost_note": "Fees not captured this session.",
+      "official_url": "https://www.added.gov.ae/en/live/long-term-residency/abu-dhabi-golden-visa/for-specialists/for-skilled-professionals",
+      "verified": true
+    }
+  ],
+  "sponsor_register": {
+    "exists": false,
+    "name": "No public sponsor register. Company-licence check: National Economic Register (NER, now under growth.gov.ae). Offer check: MOHRE job-offer serial number/barcode.",
+    "url": "https://ner.economy.ae/",
+    "format": "html",
+    "update_frequency": null,
+    "how_to_use": "Any licensed UAE establishment may sponsor. Link the user to NER to confirm the employer's trade licence exists; tell users to verify any offer letter's MOHRE serial number/barcode on the MOHRE website/app or call 600590000. No bulk download found, so no automatic name matching.",
+    "verified": false
+  },
+  "sponsorship_phrases": {
+    "positive": [
+      "visa provided",
+      "employment visa will be provided",
+      "company visa",
+      "company sponsorship",
+      "relocation package",
+      "air ticket",
+      "annual air ticket",
+      "family status",
+      "overseas candidates considered",
+      "تأشيرة عمل",
+      "الشركة توفر التأشيرة",
+      "توفير التأشيرة",
+      "على كفالة الشركة",
+      "تذاكر سفر",
+      "بدل سكن",
+      "سكن مجاني",
+      "التوظيف من الخارج",
+      "استقدام"
+    ],
+    "negative": [
+      "nationals only",
+      "candidates currently in the country only",
+      "must be in the country",
+      "must have own visa",
+      "own visa",
+      "visit visa candidates",
+      "transferable visa",
+      "transferable iqama",
+      "NOC required",
+      "immediate joiner (local)",
+      "local candidates only",
+      "للمواطنين فقط",
+      "نقل كفالة",
+      "إقامة قابلة للتحويل",
+      "إقامة قابلة للنقل",
+      "مقيم داخل الدولة",
+      "متواجد داخل الدولة",
+      "تأشيرة زيارة",
+      "UAE nationals only",
+      "Emiratis only",
+      "Emiratisation role",
+      "للإماراتيين فقط",
+      "candidates in UAE only"
+    ]
+  },
+  "ease_for_indian_nationals": {
+    "score": 4,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "Largest Gulf tech job market with English-speaking teams and a very large Indian workforce; all hiring is employer-sponsored but that is routine. Green Visa (AED 15k) and Golden Visa (AED 30k) give employer-independent options for well-paid seniors. Main friction is degree attestation and confirming a 3-year BCA is classified as bachelor's-level.",
+    "factors": {
+      "degree_recognition": "Bachelor's or equivalent required for MOHRE skill levels 1-3; attestation needed; 3-year degree treatment not confirmed.",
+      "language_barrier": "Low; English-only tech jobs common.",
+      "processing_speed": "Fast for long-term visas (Green Visa 48h per GDRFA); standard work visa time not confirmed.",
+      "quota_or_lottery": "No lottery; Emiratisation targets apply to firms with 50+ (and some 20-49) staff but do not block foreign hires.",
+      "employer_willingness": "High; employer sponsorship is the norm for expatriate hiring (general observation).",
+      "attestation_or_paperwork": "Degree attestation chain (state/university -> MEA -> UAE embassy -> UAE MOFA) required for skilled classification."
+    }
+  },
+  "relocation_norms": "Employer sponsorship of the visa is standard and employers bear recruitment/visa costs (MOHRE). Packages commonly quote basic salary plus housing and transport allowances; flights, schooling and family sponsorship vary by employer and seniority - not sourced in this research.",
+  "job_sites": [
+    {
+      "id": "bayt-ae",
+      "name": "Bayt.com",
+      "url": "https://www.bayt.com/en/uae/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "One of the two largest Gulf-wide job boards. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-agent * disallows /en/jobs/?, /en/jobs/*-jobs/ (search and listing pages) and filter params; IndeedBot/LinkedInBot fully blocked. Use deep links only."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "gulftalent-ae",
+      "name": "GulfTalent",
+      "url": "https://www.gulftalent.com/uae/jobs",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Major Gulf professional job board. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-agent * Allow: / but Disallow: /jobs/search and /api/jobs/search; Content-Signal search=yes, ai-train=no, use=reference; AI crawlers (incl. ClaudeBot) blocked. Country/category listing pages (not search) appear allowed for generic agents; low-rate polling only, and check ToS before enabling."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "naukrigulf-ae",
+      "name": "Naukrigulf",
+      "url": "https://www.naukrigulf.com",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Info Edge (Naukri.com) Gulf board; very widely used by Indian job seekers. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt and pages could not be fetched (connections from non-browser clients timed out/refused on 2026-11-22), so automated access is treated as not possible."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "dubizzle-ae",
+      "name": "Dubizzle Jobs",
+      "url": "https://www.dubizzle.com/jobs/",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Large UAE classifieds site with a jobs section; classifieds carry higher scam risk. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt (dubai.dubizzle.com / www.dubizzle.com) read 2026-11-22: User-agent * disallows /api/, /profile/, /accounts/, /sitemap-* etc., but not job listing paths. ToS not reviewed; verify before enabling."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "indeed-ae",
+      "name": "Indeed (AE)",
+      "url": "https://ae.indeed.com",
+      "kind": "aggregator",
+      "reputation": "high",
+      "reputation_note": "Global aggregator; Gulf coverage includes many agency reposts. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. Disallows /rss, /*?rss, /m/viewjob and /jobs/<CC>/ paths, so the logged-out RSS feed is off-limits. Use link-out search URLs only."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "linkedin-ae",
+      "name": "LinkedIn Jobs",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Widely used for Gulf tech hiring and recruiter outreach. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt (120 KB) read 2026-11-22; generic crawlers are restricted. Link-out only."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "drjob-ae",
+      "name": "DrJob (drjobpro.com)",
+      "url": "https://www.drjobpro.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Gulf-focused aggregator; quality of listings not independently assessed. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-agent * Allow: / (only utm/refineParams disallowed); job-listing sitemaps published (sitemap-job-listings*.xml, sitemap-all-countries-index.xml), which suits polite polling."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "tanqeeb-ae",
+      "name": "Tanqeeb",
+      "url": "https://www.tanqeeb.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Arabic/English MENA aggregator; many reposted listings. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. Disallows /*?keywords, /*?countries, /*?job_id; sitemap at https://www.tanqeeb.com/sitemap.xml can be used for discovery. Site answered 202 (bot challenge likely) to curl."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "some",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "laimoon-ae",
+      "name": "Laimoon",
+      "url": "https://www.laimoon.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "MENA jobs/courses aggregator. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt returned an empty body/redirect on 2026-11-22; homepage reachable. Treat as link-only until robots/ToS are confirmed."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "akhtaboot-ae",
+      "name": "Akhtaboot",
+      "url": "https://www.akhtaboot.com",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Jordan-based MENA board with Gulf listings. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. Only named search engines allowed; 'User-agent: *' Disallow: /."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    {
+      "name": "Glassdoor",
+      "url": "https://www.glassdoor.com",
+      "access": "link_only",
+      "note": "Employer reviews; automated access restricted."
+    },
+    {
+      "name": "Indeed company reviews",
+      "url": "https://ae.indeed.com/companies",
+      "access": "link_only",
+      "note": "robots disallows /cmp/*/write-review etc.; link only."
+    }
+  ],
+  "communities": [
+    {
+      "name": "r/dubai",
+      "url": "https://www.reddit.com/r/dubai/",
+      "note": "Job-offer sanity checks, salary/housing threads."
+    },
+    {
+      "name": "r/UAE",
+      "url": "https://www.reddit.com/r/UAE/",
+      "note": "Visa and labour-law questions."
+    },
+    {
+      "name": "expat.com Middle East forum",
+      "url": "https://www.expat.com/en/forum/middle-east/",
+      "note": "Expat forum; reachable 2026-11-22."
+    },
+    {
+      "name": "Embassy of India, Abu Dhabi",
+      "url": "https://www.indembassyuae.gov.in",
+      "note": "Community welfare, attestation, labour complaints."
+    },
+    {
+      "name": "Consulate General of India, Dubai",
+      "url": "https://www.cgidubai.gov.in",
+      "note": "Attestation and welfare services for northern emirates."
+    },
+    {
+      "name": "MADAD (MEA grievance portal)",
+      "url": "https://www.madad.gov.in",
+      "note": "Lodge complaints about employers/agents."
+    }
+  ],
+  "scam_warnings": [
+    "MOHRE: genuine offers use the ministry's approved job-offer form with a unique serial number and barcode; verify on the MOHRE website/app or call 600590000 before accepting.",
+    "Never work on a visit visa: UAE authorities state visit visas do not permit work; wait for an approved work visa.",
+    "Confirm the employer is licensed via the National Economic Register; report fraud to police (e.g. Dubai Police e-crime platform or 999).",
+    "Any request for money (visa fee, processing fee, 'deposit', medical or 'security' fee) before or after an offer is a red flag; MOHRE states genuine employers cover all recruitment costs.",
+    "Offers that ask you to travel or start work on a visit/tourist visa: visit visas do not permit work; India's MEA says a genuine offer must allow emigration on an employment/work visa.",
+    "Unregistered Indian recruiting agents: MEA advisories report job seekers cheated by unregistered agents, with overcharging of roughly Rs 2-5 lakh; check the agent's licence number on the eMigrate 'List of active RA' (https://emigrate.gov.in/ext/raList.action).",
+    "A genuine overseas offer (per MEA) carries an employment contract signed by the foreign employer, the recruitment agent and the worker.",
+    "MEA (Aug 2023) warned that some agents misused foreign employers' eMigrate logins to generate fake offers, so an eMigrate-looking document alone is not proof.",
+    "App-detectable signals: fee/deposit keywords ('processing fee', 'visa charges', 'refundable deposit'), free-mail recruiter domains (gmail/yahoo/outlook) claiming to be a large company, WhatsApp/Telegram-only contact, no company name or address, salary far above market, 'immediate hiring, no interview', early requests for passport scans or bank details, and 'free visa' / 'visa for sale' wording ('فيزا حرة', 'إقامة حرة')."
+  ],
+  "sources": [
+    {
+      "url": "https://www.gdrfad.gov.ae/en/node/13903",
+      "title": "GDRFA Dubai - Issuance of a green visa (high-level skilled worker)",
+      "used_for": "Green Visa criteria, fees, 48h processing",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.added.gov.ae/en/live/long-term-residency/abu-dhabi-golden-visa/for-specialists/for-skilled-professionals",
+      "title": "Abu Dhabi ADDED - Golden visa for skilled professionals",
+      "used_for": "Golden Visa criteria (MOHRE L1/L2, bachelor's, AED 30k, documents)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://u.ae/en/information-and-services/visa-and-emirates-id/residence-visas/golden-visa",
+      "title": "u.ae - Golden visa (updated 2026-07-28)",
+      "used_for": "Golden Visa overview; page lacks salary details",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://vialtopartners.com/regional-alerts/united-arab-emirates-immigration-further-developments-to-uae-golden-visa-eligibility-criteria",
+      "title": "Vialto Partners alert 2026-06-12 - further developments to UAE Golden Visa criteria",
+      "used_for": "Dubai basic-salary rule and 2-year employment requirement",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.wam.ae/en/article/c03cqiu-june-deadline-for-achieving-emiratisation-targets",
+      "title": "WAM - 30 June deadline for Emiratisation targets H1 2026",
+      "used_for": "Emiratisation deadlines (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://knowledge.dlapiper.com/dlapiperknowledge/globalemploymentlatestdevelopments/uae-emiratisation-targets-expanded-to-smaller-establishments",
+      "title": "DLA Piper - Emiratisation targets expanded to smaller establishments",
+      "used_for": "20-49 employee firms in 14 activities incl. ICT (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://gulfnews.com/uae/high-paying-uae-job-offer-mohre-warns-job-seekers-about-recruitment-scams-1.500634931",
+      "title": "Gulf News - MOHRE warns job seekers about recruitment scams",
+      "used_for": "Offer barcode verification, employers cover costs (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.gulftoday.ae/news/2026/10/02/uae-ministry-warns-job-seekers-against-fake-employment-offers",
+      "title": "Gulf Today 2026-10-02 - UAE ministry warns against fake employment offers",
+      "used_for": "Recency of MOHRE warning",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://ae.indeed.com/career/software-engineer/salaries",
+      "title": "Indeed UAE - software engineer salaries",
+      "used_for": "Salary low bound (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.payscale.com/research/AE/Job=Senior_Software_Engineer/Salary",
+      "title": "PayScale - Senior Software Engineer salary UAE",
+      "used_for": "Salary high bound (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://ae.jooble.org/salary/senior-software-engineer",
+      "title": "Jooble UAE - senior software engineer salary",
+      "used_for": "Higher posting-based estimate (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.dubizzle.com/robots.txt",
+      "title": "www.dubizzle.com robots.txt",
+      "used_for": "Dubizzle access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://ae.indeed.com/robots.txt",
+      "title": "ae.indeed.com robots.txt",
+      "used_for": "Indeed access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.mea.gov.in/overseas-employment.htm",
+      "title": "MEA - Overseas employment / advisories on fake job offers",
+      "used_for": "scam warnings, RA check, genuine-offer criteria (via search summaries of MEA advisories)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.hcigaborone.gov.in/docs/1703063160Advisory on overcharging by agents for overseas recruitment.pdf",
+      "title": "MEA advisory on overcharging by agents offering fake overseas jobs (Dec 2023, mission copy)",
+      "used_for": "Rs 2-5 lakh overcharging, unregistered agents",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://emigrate.gov.in/ext/raList.action",
+      "title": "eMigrate - List of active Recruiting Agents",
+      "used_for": "RA verification link (URL reachable 2026-11-22; redirects to SPA)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://gulfnews.com/going-out/society/agents-misuse-uae-employers-login-details-to-issue-fake-job-offers-1.1878795",
+      "title": "Gulf News - agents misuse employers' eMigrate login details to issue fake job offers",
+      "used_for": "scam warning",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.bayt.com/robots.txt",
+      "title": "www.bayt.com robots.txt",
+      "used_for": "Bayt access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.gulftalent.com/robots.txt",
+      "title": "www.gulftalent.com robots.txt",
+      "used_for": "GulfTalent access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.tanqeeb.com/robots.txt",
+      "title": "www.tanqeeb.com robots.txt",
+      "used_for": "Tanqeeb access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.akhtaboot.com/robots.txt",
+      "title": "www.akhtaboot.com robots.txt",
+      "used_for": "Akhtaboot access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.drjobpro.com/robots.txt",
+      "title": "www.drjobpro.com robots.txt",
+      "used_for": "DrJob access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.linkedin.com/robots.txt",
+      "title": "www.linkedin.com robots.txt",
+      "used_for": "LinkedIn access stance",
+      "accessed": "2026-11-22"
+    }
+  ]
+}

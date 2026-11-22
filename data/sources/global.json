@@ -1,0 +1,1150 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred. Most endpoints were verified by live logged-out HTTP probes (curl, identifying User-Agent, single requests) on 2026-11-22. 'verified: true' means the endpoint returned the described data that day or the fact was read on the vendor's own page."
+    },
+    "searches_run": 7,
+    "pages_read": 8,
+    "http_probes_note": "About 90 more single logged-out HTTP requests (curl) went to API endpoints, docs pages and robots.txt files. They are not counted in pages_read.",
+    "confidence": "medium",
+    "open_questions": [
+      "Adzuna: official list of supported country codes is not on the docs pages read; probing returns AUTH_FAIL for any code (even 'xx') without a key, so the list could not be confirmed. Also unconfirmed: free-tier rate limits and whether max_days_old / sort_by=date are accepted (third-party wrappers say yes).",
+      "Jooble: free-key request quota (a third-party page claims 500 lifetime requests per key; unconfirmed). jooble.org/api/about returned a Cloudflare challenge to curl.",
+      "Careerjet v4: list of supported locale_code values and any rate limits (docs page read, list not captured). Requires publisher account key.",
+      "The Muse public API: https://www.themuse.com/api/public/jobs returned 404 on 2026-11-22; the developers page loads but no API text could be extracted. Status (moved/discontinued) unknown.",
+      "BambooHR careers JSON (https://{sub}.bamboohr.com/careers/list): not verified; test subdomains redirected to bamboohr.com marketing page. Needs a known customer subdomain to test.",
+      "JazzHR: no public no-auth job-list endpoint was found or verified; the official API needs an employer API key.",
+      "Workday cxs: the date field is relative text ('Posted Today' verified; other phrasings unverified). Whether the job-detail endpoint returns an absolute date was not verified.",
+      "Greenhouse/Lever/Ashby/Workable/Recruitee/SmartRecruiters: no numeric rate limits are published for public GET endpoints (Greenhouse says only 'Requests may be rate limited').",
+      "Lever createdAt: present in live responses (epoch ms) but not in the documented field table.",
+      "Ashby publishedAt is documented as 'when the job was last published', so a re-published job looks new.",
+      "Indeed: exact current anti-scraping clause text was not reached (legal page truncated at 100k chars); robots.txt only partly reviewed.",
+      "Meta v. Bright Data (2024) and other post-hiQ logged-out scraping decisions were not researched here.",
+      "Relocate.me, Japan Dev, Welcome to the Jungle (Otta), Wellfound, Built In, Levels.fyi jobs: no public job API found; terms pages not read.",
+      "Arbeitnow UK variant of the API: the blog says it launched in 2026, but its URL was not captured.",
+      "Landing.jobs /api/v1/jobs returned JSON, but robots.txt disallows /api/ and no public docs were found; ordering and pagination semantics unclear (first 50 results' newest published_at was 2026-11-04).",
+      "Datasets of ATS company slugs: only LastRound AI ATS directory (DataHub) and ConorsCode/open-jobs-data companies.json were surfaced; neither was opened or checked for license/freshness.",
+      "Common Crawl CDX index (CC-MAIN-2026-43) timed out (504) for a wildcard query on jobs.ashbyhq.com/*; feasibility for slug discovery unconfirmed."
+    ],
+    "review_by": "2027-05-22"
+  },
+
+  "sources": [
+    {
+      "id": "greenhouse",
+      "name": "Greenhouse Job Board API",
+      "url": "https://boards.greenhouse.io",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Employer-owned postings direct from the ATS; widely used by tech companies in US/EU/UK. Scams are rare because only paying customers post.",
+      "endpoint_template": "https://boards-api.greenhouse.io/v1/boards/{token}/jobs?content=true",
+      "endpoint_extras": {
+        "single_job": "https://boards-api.greenhouse.io/v1/boards/{token}/jobs/{job_id}",
+        "offices": "https://boards-api.greenhouse.io/v1/boards/{token}/offices",
+        "departments": "https://boards-api.greenhouse.io/v1/boards/{token}/departments"
+      },
+      "fields": {
+        "posted_date": "first_published (ISO 8601, present in live list response) ; updated_at (ISO 8601)",
+        "location": "location.name (free text); offices[] with content=true",
+        "other": "absolute_url, title, company_name, application_deadline, metadata; meta.total"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": "https://docs.greenhouse.io/job-board.html",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "GET endpoints need no auth (only application POST needs Basic Auth). Docs: 'Requests may be rate limited for security and traffic reasons' (no number). boards.greenhouse.io robots.txt has no Disallow for User-agent *. One call returns all jobs (no pagination; stripe = 777 jobs, ~485 KB without content=true). Fetch without content=true for the daily scan; fetch single job with content for description/visa keyword matching."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "company_discovery": "Token = slug in boards.greenhouse.io/{token} or job-boards.greenhouse.io/{token}, or the gh_jid links on company career pages. Sources: (1) match company names from government sponsor registers (UK Register of Licensed Sponsors, NL IND recognised sponsors, etc.) and probe candidate slugs (lowercased name with spaces/punctuation removed); a 404 means no board. (2) Public slug lists such as LastRound AI ATS directory (DataHub) and ConorsCode/open-jobs-data companies.json (unverified). (3) HN 'Who is hiring' comments often link Greenhouse boards (parse URLs). (4) Common Crawl CDX index for boards.greenhouse.io/* (unconfirmed, timed out in test). Tokens are case-insensitive.",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "lever",
+      "name": "Lever Postings API",
+      "url": "https://jobs.lever.co",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Employer-owned ATS postings. Lever's own README says published postings are publicly viewable and 'may be scraped by third parties'.",
+      "endpoint_template": "https://api.lever.co/v0/postings/{company}?mode=json",
+      "endpoint_extras": {
+        "eu_instance": "https://api.eu.lever.co/v0/postings/{company}?mode=json",
+        "pagination": "&skip={n}&limit={n}",
+        "filters": "&location=&commitment=&team=&department=&level= (case-sensitive, OR'ed)"
+      },
+      "fields": {
+        "posted_date": "createdAt (epoch milliseconds; in live responses but not in documented field table)",
+        "location": "categories.location, categories.allLocations[], country (ISO2), workplaceType (onsite|remote|hybrid)",
+        "other": "hostedUrl, applyUrl, text (title), categories.commitment/team/department, descriptionPlain, lists[], additionalPlain"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": "https://github.com/lever/postings-api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "No listing rate limit documented (only application POST: >2 req/s returns 429). Unknown slug returns {\"ok\":false,\"error\":\"Document not found\"} with 404. EU-hosted customers live on api.eu.lever.co; try global, then EU, on 404. Note jobs.lever.co (HTML) robots.txt disallows / for *, so use the API host, not HTML pages."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "company_discovery": "Slug = path in jobs.lever.co/{company}. Slugs are case-sensitive per third-party notes. Same discovery pipeline as Greenhouse (sponsor-register name to probe; HN 'Who is hiring' links; public slug lists).",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "ashby",
+      "name": "Ashby Public Job Posting API",
+      "url": "https://jobs.ashbyhq.com",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "ATS widely used by startups and scale-ups (2023-2026). Official documented public API.",
+      "endpoint_template": "https://api.ashbyhq.com/posting-api/job-board/{job_board_name}?includeCompensation=true",
+      "fields": {
+        "posted_date": "publishedAt (ISO; documented as 'when the job was last published')",
+        "location": "location (text), secondaryLocations[].address.postalAddress.addressCountry, address.postalAddress, isRemote, workplaceType (OnSite|Remote|Hybrid)",
+        "other": "title, department, team, employmentType, jobUrl, applyUrl, descriptionPlain/Html, compensation"
+      },
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://developers.ashbyhq.com/docs/public-job-posting-api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Documented public API. Responses can be large because full descriptions are always included (ramp: ~3.4 MB), so fetch at most daily per company and cache. jobs.ashbyhq.com robots.txt disallows /api/ on that host, but the documented API is on api.ashbyhq.com."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "company_discovery": "job_board_name = path in jobs.ashbyhq.com/{name} (case-insensitive per third-party notes). Same pipeline: register-name probing, HN links, public slug lists.",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "smartrecruiters",
+      "name": "SmartRecruiters Posting API",
+      "url": "https://jobs.smartrecruiters.com",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Enterprise ATS; strong in Europe (e.g. Poland, Germany) and large multinationals.",
+      "endpoint_template": "https://api.smartrecruiters.com/v1/companies/{company_identifier}/postings?limit=100&offset=0",
+      "endpoint_extras": { "single_posting": "https://api.smartrecruiters.com/v1/companies/{company_identifier}/postings/{posting_id}" },
+      "fields": {
+        "posted_date": "releasedDate (ISO 8601)",
+        "location": "location.city, location.region, location.country (ISO2 lowercase), location.remote, location.hybrid, location.fullLocation",
+        "other": "name (title), company.identifier, refNumber, totalFound"
+      },
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://developers.smartrecruiters.com/docs/posting-api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Docs say the Public Posting API 'supports both API Key and OAuth', but the list endpoint returned data with no auth on 2026-11-22. A wrong identifier returns 200 with totalFound 0 (no 404), so check totalFound when probing. Identifier is case-sensitive in practice ('Visa' returned 0)."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "some",
+      "company_discovery": "Identifier = path segment in jobs.smartrecruiters.com/{Identifier}/... or careers.smartrecruiters.com/{Identifier}. Use register-name probing (accept only totalFound>0 and company.name match).",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "workable",
+      "name": "Workable public job endpoints",
+      "url": "https://apply.workable.com",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "SMB/mid-market ATS, popular in Europe (Greece, UK, NL) and globally.",
+      "endpoint_template": "https://apply.workable.com/api/v1/widget/accounts/{subdomain}",
+      "endpoint_extras": {
+        "legacy_get": "https://www.workable.com/api/accounts/{subdomain}?details=true",
+        "v3_post": "POST https://apply.workable.com/api/v3/accounts/{subdomain}/jobs  body {\"query\":\"\",\"location\":[],\"department\":[],\"worktype\":[],\"remote\":[]}  (paginate with nextPage token)"
+      },
+      "fields": {
+        "posted_date": "v1 widget: published_on and created_at (YYYY-MM-DD); v3: published (ISO)",
+        "location": "v1: country, city, state, telecommuting, locations[]; v3: location.countryCode, locations[], remote, workplace",
+        "other": "title, shortcode, url, application_url, employment_type, department, function, industry"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": "https://help.workable.com/hc/en-us/articles/115012771647",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "These widget/careers-page endpoints are not a formally documented developer API (the official Workable API needs an account token). The widget endpoint is what Workable's own embeddable job widget uses. Unknown subdomain returns 404 'Not Found'. Prefer v1 widget GET (one call, all jobs)."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "company_discovery": "Subdomain = path in apply.workable.com/{subdomain}/ or legacy {subdomain}.workable.com. Use register-name probing (404 = none).",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "recruitee",
+      "name": "Recruitee careers-site API",
+      "url": "https://recruitee.com",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Popular with Dutch/EU companies (e.g. bunq). Good fit for NL sponsor-register matching.",
+      "endpoint_template": "https://{company}.recruitee.com/api/offers/",
+      "fields": {
+        "posted_date": "published_at and created_at ('YYYY-MM-DD HH:MM:SS UTC'), updated_at, close_at",
+        "location": "locations[].country_code / city / country, country_code, city, remote, hybrid, on_site",
+        "other": "title, careers_url, careers_apply_url, department, employment_type_code, experience_code, salary, tags, description, requirements"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Public careers-site endpoint (no key). Response includes full descriptions (bunq ~666 KB). Docs URL not confirmed in this research."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "company_discovery": "Subdomain of {company}.recruitee.com (custom career domains often still expose the subdomain). Probe from NL/EU sponsor register names.",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "personio",
+      "name": "Personio XML job feed",
+      "url": "https://www.personio.com",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "HR/ATS suite dominant among German/DACH SMEs and startups; relevant for DE Blue Card and Chancenkarte searches.",
+      "endpoint_template": "https://{company}.jobs.personio.de/xml?language=en",
+      "endpoint_extras": { "alt_domain": "https://{company}.jobs.personio.com/xml?language=en (pattern seen in the wild; not verified here)" },
+      "fields": {
+        "posted_date": "createdAt (ISO 8601)",
+        "location": "office, additionalOffices (city names; no country code)",
+        "other": "id, name (title), department, recruitingCategory, employmentType, seniority, schedule, yearsOfExperience, jobDescriptions"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "XML (root <workzag-jobs>), not JSON. Verified with company 'personio'. Location is city-only; map to country by city lookup. Docs URL not confirmed."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "some",
+      "company_discovery": "Subdomain of {company}.jobs.personio.de. Probe from German company names (Handelsregister / sponsor-like lists) and links on career pages.",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "teamtailor",
+      "name": "Teamtailor career-site RSS",
+      "url": "https://www.teamtailor.com",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Employer-branding ATS popular in the Nordics (SE/NO/DK/FI) and wider Europe.",
+      "endpoint_template": "https://{company}.teamtailor.com/jobs.rss",
+      "fields": {
+        "posted_date": "pubDate (RFC 822)",
+        "location": "tt:locations/tt:location with tt:city, tt:country, tt:address, tt:zip; remoteStatus (e.g. hybrid)",
+        "other": "title, link, guid, description (HTML), tt:department, tt:role"
+      },
+      "access": {
+        "method": "rss",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Verified with tibber.teamtailor.com. The official Teamtailor JSON API needs a company API key, so it is not usable. Custom career domains (e.g. jobs.tibber.com) appear in item links."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "some",
+      "company_discovery": "Subdomain of {company}.teamtailor.com. Probe from Nordic/EU company names; detect Teamtailor on career pages by teamtailor CDN/asset references.",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "breezy",
+      "name": "Breezy HR public JSON",
+      "url": "https://breezy.hr",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "medium",
+      "reputation_note": "SMB ATS, mostly US; few visa-sponsoring tech employers.",
+      "endpoint_template": "https://{company}.breezy.hr/json",
+      "fields": {
+        "posted_date": "published_date (ISO 8601)",
+        "location": "location.country.id (ISO2), location.city, location.is_remote, locations[]",
+        "other": "name (title), url, department, type, salary, company.name"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Verified with breezy.breezy.hr (a vendor demo board). Undocumented public endpoint."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "company_discovery": "Subdomain of {company}.breezy.hr; register-name probing.",
+      "priority": 4,
+      "verified": true
+    },
+    {
+      "id": "workday",
+      "name": "Workday career sites (cxs JSON)",
+      "url": "https://www.myworkdayjobs.com",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Used by very large employers (e.g. NVIDIA) that commonly sponsor visas. Big volume per tenant.",
+      "endpoint_template": "POST https://{tenant}.wd{N}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs  body {\"appliedFacets\":{},\"limit\":20,\"offset\":0,\"searchText\":\"\"}",
+      "endpoint_extras": {
+        "job_detail": "GET https://{tenant}.wd{N}.myworkdayjobs.com/wday/cxs/{tenant}/{site}{externalPath} (pattern; not verified here)",
+        "note": "GET on the /jobs endpoint returns HTTP 400; it must be POST with Content-Type: application/json."
+      },
+      "fields": {
+        "posted_date": "postedOn: relative text only (e.g. 'Posted Today'); parse to approximate age",
+        "location": "locationsText (free text, e.g. 'Israel, Yokneam'); facets include location filters",
+        "other": "title, externalPath, bulletFields[] (req id); total; facets (jobFamilyGroup etc.)"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Undocumented internal endpoint used by Workday's own career-site front end. Verified with nvidia / wd5 / NVIDIAExternalCareerSite (total 2000). Keep limit<=20 per page. Use searchText to narrow (e.g. 'software') rather than paging all jobs. Higher breakage risk than documented APIs."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "company_discovery": "Need the triple (tenant, wd number, site) from the career URL https://{tenant}.wd{N}.myworkdayjobs.com/{site} (or /en-US/{site}). Collect from big employers' career pages (manual curated list of top sponsors per country, e.g. from UK/NL/US sponsor data).",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "bamboohr",
+      "name": "BambooHR careers list",
+      "url": "https://www.bamboohr.com",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["*"],
+      "reputation": "medium",
+      "reputation_note": "SMB HR suite, mostly US; low value for visa-sponsored roles.",
+      "endpoint_template": null,
+      "fields": { "posted_date": null, "location": null, "other": null },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "A commonly cited pattern https://{sub}.bamboohr.com/careers/list could NOT be verified: test subdomains redirected to the bamboohr.com marketing page. Treat as unverified until tested against a known customer."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "company_discovery": "Subdomain of {sub}.bamboohr.com/careers.",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "jazzhr",
+      "name": "JazzHR (applytojob.com)",
+      "url": "https://www.jazzhr.com",
+      "kind": "job_board",
+      "category": "ats_api",
+      "countries": ["US"],
+      "reputation": "medium",
+      "reputation_note": "US SMB ATS; very low relevance to visa-sponsored jobs abroad.",
+      "endpoint_template": null,
+      "fields": { "posted_date": null, "location": null, "other": null },
+      "access": {
+        "method": "link_only",
+        "auth": "account_required",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "No public no-auth list endpoint was found. The official API needs the employer's API key. Skip."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "company_discovery": null,
+      "priority": 5,
+      "verified": false
+    },
+
+    {
+      "id": "adzuna",
+      "name": "Adzuna API",
+      "url": "https://developer.adzuna.com",
+      "kind": "aggregator",
+      "category": "aggregator",
+      "countries": ["GB", "US", "DE", "FR", "AU", "NZ", "CA", "IN", "PL", "BR", "AT", "ZA"],
+      "countries_note": "Country list is from a third-party wrapper (12 codes); another third-party source claims 19. Official list not confirmed (see open_questions). Verify by calling with a real key.",
+      "reputation": "high",
+      "reputation_note": "Large established aggregator with official developer API.",
+      "endpoint_template": "https://api.adzuna.com/v1/api/jobs/{country}/search/{page}?app_id={app_id}&app_key={app_key}&what={keywords}&where={location}&results_per_page=50&sort_by=date&max_days_old=7&content-type=application/json",
+      "fields": {
+        "posted_date": "created (ISO 8601, documented in example response)",
+        "location": "location.display_name, location.area[]",
+        "other": "title, description (snippet), redirect_url, company.display_name, category.label/tag, salary_min/max"
+      },
+      "access": {
+        "method": "official_api",
+        "auth": "free_key",
+        "docs_url": "https://developer.adzuna.com/docs/search",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Needs app_id + app_key (free registration). Documented params: what, what_exclude, where, sort_by, results_per_page, salary_min, full_time, permanent. max_days_old and sort_by=date are reported by third-party wrappers but not on the docs page read. Without a key every country code returns AUTH_FAIL. Terms page linked from developer site not read."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": true },
+      "english_listings": "some",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "careerjet",
+      "name": "Careerjet API v4",
+      "url": "https://www.careerjet.com/partners/api",
+      "kind": "aggregator",
+      "category": "aggregator",
+      "countries": ["*"],
+      "countries_note": "Locale-based (locale_code like en_GB); supported list not captured.",
+      "reputation": "medium",
+      "reputation_note": "Long-running global aggregator; listings are re-aggregated, so check for duplicates.",
+      "endpoint_template": "https://search.api.careerjet.net/v4/query?locale_code={ll_CC}&keywords={keywords}&location={location}&sort=date&page_size=100&page={1..10}&user_ip={end_user_ip}&user_agent={end_user_ua}",
+      "fields": { "posted_date": null, "location": null, "other": "Response: type, hits, pages, jobs[] (job fields not captured)" },
+      "access": {
+        "method": "official_api",
+        "auth": "free_key",
+        "docs_url": "https://www.careerjet.com/partners/api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "HTTP Basic auth: API key as username, empty password (no key returns 401 with that message). Requires user_ip and user_agent of the end user (403 if missing). sort=date supported. page 1-10, page_size 1-100. Key comes from a free publisher account."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "some",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "jooble",
+      "name": "Jooble REST API",
+      "url": "https://jooble.org/api/about",
+      "kind": "aggregator",
+      "category": "aggregator",
+      "countries": ["*"],
+      "reputation": "medium",
+      "reputation_note": "Large meta-aggregator in ~70 country sites; heavy re-aggregation (Remotive explicitly forbids feeding its jobs to Jooble).",
+      "endpoint_template": "POST https://jooble.org/api/{api_key}  body {\"keywords\":\"...\",\"location\":\"...\",\"page\":1}",
+      "fields": { "posted_date": null, "location": null, "other": null },
+      "access": {
+        "method": "official_api",
+        "auth": "free_key",
+        "docs_url": "https://jooblehelpcenter.freshdesk.com/en/support/solutions/articles/60001448238-rest-api-documentation",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Key obtained by registering at jooble.org/api/about (page returned Cloudflare challenge to curl). Quota unconfirmed: a third-party page claims 500 lifetime requests per key. Endpoint format comes from third-party descriptions of the official docs (help-center page not opened)."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "some",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "arbeitnow",
+      "name": "Arbeitnow Job Board API",
+      "url": "https://www.arbeitnow.com",
+      "kind": "relocation_niche",
+      "category": "relocation_board",
+      "countries": ["DE", "*"],
+      "countries_note": "Mostly Germany/Europe; blog says a UK variant launched in 2026 (URL not captured).",
+      "reputation": "medium",
+      "reputation_note": "Indie board that aggregates ATS postings direct from employers; has a visa sponsorship filter.",
+      "endpoint_template": "https://www.arbeitnow.com/api/job-board-api?visa_sponsorship=true&page={n}",
+      "fields": {
+        "posted_date": "created_at (unix seconds)",
+        "location": "location (text), remote (bool)",
+        "other": "slug, company_name, title, description (HTML), tags[], job_types[], url"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": "https://www.arbeitnow.com/blog/job-board-api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Meta terms: 'free public API for jobs, please do not abuse. I would appreciate linking back... By using the API, you agree to the terms of service present on Arbeitnow.com'. 'Jobs are updated every hour and order by the created_at timestamp.' 300 per page. visa_sponsorship=true|false is documented on the blog (no visa field in items; the filter is server-side: 275 vs 300 on page 1)."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": true, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "some",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "landing-jobs",
+      "name": "Landing.jobs",
+      "url": "https://landing.jobs",
+      "kind": "relocation_niche",
+      "category": "relocation_board",
+      "countries": ["PT", "*"],
+      "reputation": "medium",
+      "reputation_note": "Portugal-based tech board known for relocation to Lisbon/Porto and EU.",
+      "endpoint_template": "https://landing.jobs/api/v1/jobs?offset={n}&limit=50",
+      "fields": {
+        "posted_date": "published_at, created_at, updated_at (ISO), expires_at",
+        "location": "locations[].city, locations[].country_code, remote",
+        "other": "relocation_paid (bool), title, url, gross_salary_low/high, currency_code, tags"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "Endpoint returns JSON with a useful relocation_paid field, but landing.jobs robots.txt has 'Disallow: /api/' and no public docs were found. Recommend asking Landing.jobs for permission, or link_only. Tagged 'prohibits' because of robots.txt."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": true, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": true
+    },
+    {
+      "id": "relocate-me",
+      "name": "Relocate.me",
+      "url": "https://relocate.me",
+      "kind": "relocation_niche",
+      "category": "relocation_board",
+      "countries": ["*"],
+      "reputation": "medium",
+      "reputation_note": "Curated board of tech jobs with relocation packages (Europe-heavy).",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "No API or RSS found (/rss returns 404). robots.txt has no Disallow for * and lists sitemap.xml. Sitemap + JSON-LD extraction may be possible but terms were not read; default to link_only."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": true, "relocation": true, "english": true, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "japan-dev",
+      "name": "Japan Dev",
+      "url": "https://japan-dev.com",
+      "kind": "relocation_niche",
+      "category": "relocation_board",
+      "countries": ["JP"],
+      "reputation": "medium",
+      "reputation_note": "English-language curated board of Japan tech jobs; many list visa sponsorship / relocation.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "No API found. robots.txt has no Disallow for * and lists sitemap.xml; /jobs page includes application/ld+json blocks. JSON-LD extraction from sitemap URLs is technically possible; terms not read."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": true, "relocation": true, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": false
+    },
+
+    {
+      "id": "remotive",
+      "name": "Remotive API",
+      "url": "https://remotive.com",
+      "kind": "tech_niche",
+      "category": "remote_board",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Long-running curated remote board.",
+      "endpoint_template": "https://remotive.com/api/remote-jobs?category=software-dev&limit=100",
+      "fields": {
+        "posted_date": "publication_date (ISO)",
+        "location": "candidate_required_location (text)",
+        "other": "title, company_name, url, job_type, salary, tags, description"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": "https://remotive.com/api-documentation",
+        "rate_limit": "Advises max 4 requests per day; 'excessive requests will be blocked'",
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Legal notice in the response: must link back to the Remotive URL and name Remotive as source; do not submit jobs to third-party sites (Jooble, Google Jobs, LinkedIn); jobs are delayed by 24 hours; using jobs to collect signups/emails is a breach. robots.txt disallows /api/* for crawlers, while the API itself is published for developers. Fine for a personal local app that links back; small volume (16 software-dev jobs returned)."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "remoteok",
+      "name": "Remote OK API",
+      "url": "https://remoteok.com",
+      "kind": "tech_niche",
+      "category": "remote_board",
+      "countries": ["*"],
+      "reputation": "medium",
+      "reputation_note": "Large remote board; quality varies.",
+      "endpoint_template": "https://remoteok.com/api",
+      "fields": {
+        "posted_date": "date (ISO), epoch (unix)",
+        "location": "location (text)",
+        "other": "position, company, url, apply_url, tags, salary_min/max, description"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "First array element is a legal notice: 'Please link back (with follow, and without nofollow!) to the URL on Remote OK and mention Remote OK as a source... If you do not we'll have to suspend API access.' robots.txt says 'User-agent: * Disallow: /' with Content-Signal notes, which conflicts with the published API. Fetch at most a few times a day. ~100 jobs per call."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "weworkremotely",
+      "name": "We Work Remotely RSS",
+      "url": "https://weworkremotely.com",
+      "kind": "tech_niche",
+      "category": "remote_board",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Established paid-posting remote board (paid posting reduces spam).",
+      "endpoint_template": "https://weworkremotely.com/categories/remote-programming-jobs.rss",
+      "endpoint_extras": { "all_jobs": "https://weworkremotely.com/remote-jobs.rss" },
+      "fields": {
+        "posted_date": "pubDate (RSS)",
+        "location": "region (e.g. 'USA Only', 'Anywhere in the World')",
+        "other": "title ('Company: Role'), link, description"
+      },
+      "access": {
+        "method": "rss",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": "Feed declares <ttl>60</ttl> (minutes)",
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "robots.txt has no Disallow for *. Honour ttl=60: poll at most hourly, once or twice daily is enough."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "himalayas",
+      "name": "Himalayas Remote Jobs API",
+      "url": "https://himalayas.app",
+      "kind": "tech_niche",
+      "category": "remote_board",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Large remote board (totalCount 120,274 on 2026-11-22) with structured location and timezone restrictions.",
+      "endpoint_template": "https://himalayas.app/jobs/api/search?q={keywords}&country={ISO2}&sort=recent&page={n}",
+      "endpoint_extras": {
+        "browse_feed": "https://himalayas.app/jobs/api?limit=20&cursor={nextCursor}",
+        "check_one_job": "https://himalayas.app/jobs/api/companies/{company}/jobs/{slug}"
+      },
+      "fields": {
+        "posted_date": "pubDate (unix), expiryDate",
+        "location": "locationRestrictions[], timezoneRestrictions[]",
+        "other": "title, companyName, companySlug, applicationLink, guid, seniority, employmentType, minSalary/maxSalary, currency, categories"
+      },
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://himalayas.app/api",
+        "rate_limit": "No key: lower (unspecified) limits. Free key: 60 requests/min and 10,000/day; cached responses don't count.",
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Covered by Himalayas API terms. Browse limit max 20 per page; offset is deprecated, use cursor. Docs ask you to remove jobs once they expire and to re-check jobs before showing them."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "jobicy",
+      "name": "Jobicy Remote Jobs API",
+      "url": "https://jobicy.com",
+      "kind": "tech_niche",
+      "category": "remote_board",
+      "countries": ["*"],
+      "reputation": "medium",
+      "reputation_note": "Remote board with geo/industry filters.",
+      "endpoint_template": "https://jobicy.com/api/jobs?count=100&geo={geo}&industry=engineering",
+      "endpoint_extras": { "legacy_v2": "https://jobicy.com/api/v2/remote-jobs?count=50 (still answering, apiVersion 2.2.22)" },
+      "fields": {
+        "posted_date": "pubDate",
+        "location": "jobGeo",
+        "other": "jobTitle, companyName, url, jobType, jobLevel, jobIndustry, salaryMin/Max, jobExcerpt"
+      },
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://jobicy.com/jobs-rss-feed",
+        "rate_limit": "At least 1 second between requests from the same IP (including cursor pages); on 429 honour Retry-After",
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Public API returns only listings from the last 7 days; new listings appear 3 hours after publication. Must credit Jobicy with a link and keep the Jobicy listing URL; direct ATS apply links need the paid commercial tier ($0.01/job), so use the Jobicy URL. Paginate with nextCursor."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "workingnomads",
+      "name": "Working Nomads exposed jobs",
+      "url": "https://www.workingnomads.com",
+      "kind": "tech_niche",
+      "category": "remote_board",
+      "countries": ["*"],
+      "reputation": "medium",
+      "reputation_note": "Remote job curator.",
+      "endpoint_template": "https://www.workingnomads.com/api/exposed_jobs/",
+      "fields": {
+        "posted_date": "pub_date",
+        "location": "location (text)",
+        "other": "url, title, company_name, category_name, tags, description"
+      },
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Returns a JSON array (~172 KB). No docs/terms found. Poll daily."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": true
+    },
+    {
+      "id": "themuse",
+      "name": "The Muse public API",
+      "url": "https://www.themuse.com/developers/api/v2",
+      "kind": "job_board",
+      "category": "aggregator",
+      "countries": ["US", "*"],
+      "reputation": "medium",
+      "reputation_note": "US-centric career site.",
+      "endpoint_template": null,
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://www.themuse.com/developers/api/v2",
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "Historically https://www.themuse.com/api/public/jobs?page=N; on 2026-11-22 that path and /api/public/v2/jobs both returned 404. Treat as broken/possibly discontinued."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": false
+    },
+
+    {
+      "id": "hn-whoishiring",
+      "name": "Hacker News 'Ask HN: Who is hiring?' via Algolia HN Search API",
+      "url": "https://hn.algolia.com/api",
+      "kind": "community",
+      "category": "community",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Monthly thread; rules say posters must be part of the hiring company (no recruiters/job boards). Convention: include VISA / RELOCATION / REMOTE / ONSITE tags.",
+      "endpoint_template": "https://hn.algolia.com/api/v1/search_by_date?tags=comment,story_{story_id}&query=VISA&hitsPerPage=100&page={n}",
+      "endpoint_extras": {
+        "find_thread": "https://hn.algolia.com/api/v1/search_by_date?tags=story,author_whoishiring&hitsPerPage=3  (pick title starting 'Ask HN: Who is hiring?')",
+        "since_filter": "&numericFilters=created_at_i>{unix_ts}"
+      },
+      "fields": {
+        "posted_date": "created_at (ISO) / created_at_i (unix) per comment",
+        "location": "free text in first line of comment_text ('Company | Role | Location | REMOTE/ONSITE | VISA')",
+        "other": "comment_text (HTML), objectID (link https://news.ycombinator.com/item?id={objectID}), author"
+      },
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://hn.algolia.com/api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "November 2026 thread story_id 50338728 (posted 2026-11-02): 381 indexed comments, 35 matching 'visa'. Text search matches mentions of 'visa' including negative ones ('no visa sponsorship'), so classify text. Thread is monthly: 'last 7 days' means comments with created_at_i in the window."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": true, "relocation": true, "english": true, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": true
+    },
+
+    {
+      "id": "linkedin-guest",
+      "name": "LinkedIn logged-out (guest) job search",
+      "url": "https://www.linkedin.com/jobs/search",
+      "kind": "job_board",
+      "category": "search",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Biggest volume, but many reposts and agency listings.",
+      "endpoint_template": "https://www.linkedin.com/jobs/search/?keywords={keywords}&location={country}&f_TPR=r604800",
+      "endpoint_template_note": "This is a deep link for the USER's browser (link_only). The guest HTML-fragment endpoint https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=&location=&f_TPR=r604800&start={0,25,..} answered 200 logged-out with job cards (each with <time class=job-search-card__listdate datetime=YYYY-MM-DD>), but robots.txt disallows /jobs-guest/. Do NOT call it from the app.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": "JobSpy README: LinkedIn rate-limits bursts with HTTP 429 that clears in about a minute",
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt: 'The use of robots or other automated means to access LinkedIn without the express permission of LinkedIn is strictly prohibited' with Disallow: /jobs-guest/ and Disallow: / for unlisted agents. User Agreement (effective 2025-11-03) s.8.2 bans scraping/bots and applies to Members and Visitors (s.1.2). hiQ v. LinkedIn ended Dec 2022 with a consent judgment against hiQ ($500k, permanent injunction), after a Nov 2022 ruling that the anti-scraping user-agreement terms are enforceable as contract. f_TPR=r604800 = past 7 days (seconds); r86400 = 24h."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "indeed",
+      "name": "Indeed (country sites)",
+      "url": "https://www.indeed.com",
+      "kind": "job_board",
+      "category": "search",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Huge volume across ~60 country sites; mixed quality, scams present.",
+      "endpoint_template": "https://{cc}.indeed.com/jobs?q={keywords}&l={location}&fromage=7&sort=date",
+      "endpoint_template_note": "Deep link for the user's browser (link_only). fromage=7 = posted within 7 days (logged-out search page returned 200 to curl). Country hosts vary (www.indeed.com for US, uk.indeed.com, de.indeed.com, etc.).",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "Indeed terms (Last Updated 2026-09-29) say they bind anyone accessing any part of the Site 'including via an API' and ban bots to automate Indeed Apply. A third-party tracker reports a high-severity 'Prohibition on Scraping, Automated Access and Bot Activity' clause (exact text not read). Anti-bot: a scraping vendor claims IP rate limiting rather than DataDome/Cloudflare (unverified). JobSpy says Indeed currently has 'no rate limiting' for its scraper; that is a technical observation, not permission."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "jobspy",
+      "name": "JobSpy (python-jobspy) library",
+      "url": "https://github.com/speedyapply/JobSpy",
+      "kind": "aggregator",
+      "category": "search",
+      "countries": ["*"],
+      "reputation": "medium",
+      "reputation_note": "Popular open-source scraper (MIT). Sites: linkedin, indeed, zip_recruiter, glassdoor, seek, naukri, hellowork, bayt, bdjobs, google (README FAQ says Google Jobs currently unavailable). Indeed: 58 countries via country_indeed. Glassdoor: AR, AU, AT, BE, BR, CA, FR, DE, HK, IN, IE, IT, MX, NL, NZ, SG, ES, CH, GB, US. ZipRecruiter: US/CA. Returns date_posted; hours_old filter. ~1000 results cap per search.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": "https://github.com/speedyapply/JobSpy",
+        "rate_limit": "LinkedIn 429 on bursts (clears ~1 min); Glassdoor limits above ~2 req/s (per README)",
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "Wraps sites whose robots/terms prohibit scraping (LinkedIn, Indeed). README suggests proxies to get around 429 blocks; using proxies to evade blocks goes against the polite defaults. Maintenance: 403 commits, 20 open issues, 17 open PRs, no GitHub releases listed; last commit date not captured. Not recommended as a default; at most an opt-in, user-run, low-volume plugin."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 5,
+      "verified": true
+    },
+    {
+      "id": "schema-jobposting",
+      "name": "schema.org JobPosting JSON-LD on employer/ATS pages",
+      "url": "https://developers.google.com/search/docs/appearance/structured-data/job-posting",
+      "kind": "aggregator",
+      "category": "search",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Google requires datePosted, description, hiringOrganization, jobLocation (or applicantLocationRequirements), title; recommends validThrough, employmentType, jobLocationType=TELECOMMUTE, applicantLocationRequirements, baseSalary, directApply, identifier.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": "https://developers.google.com/search/docs/appearance/structured-data/job-posting",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Use as an ENRICHMENT/parser for job URLs already found (company career pages, Japan Dev, Relocate.me after permission). Parse <script type=application/ld+json> with @type JobPosting to get datePosted, validThrough, jobLocation.address.addressCountry, employmentType. Google offers no free API to search JobPostings (docs only cover Indexing API/sitemaps for publishers). Discovery route: site sitemaps listed in robots.txt (e.g. relocate.me, japan-dev.com, himalayas.app, builtin.com publish sitemaps). Respect robots.txt per site."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "wellfound",
+      "name": "Wellfound (ex-AngelList Talent)",
+      "url": "https://wellfound.com",
+      "kind": "tech_niche",
+      "category": "search",
+      "countries": ["*"],
+      "reputation": "medium",
+      "reputation_note": "Startup jobs; has visa-sponsorship info on some listings.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "No public API found. robots.txt disallows /_jobs/ and jobSlug query URLs, publishes sitemap.xml.gz. Link only."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "wttj-otta",
+      "name": "Welcome to the Jungle (incl. former Otta)",
+      "url": "https://www.welcometothejungle.com",
+      "kind": "tech_niche",
+      "category": "search",
+      "countries": ["FR", "GB", "US", "*"],
+      "reputation": "medium",
+      "reputation_note": "Otta merged into Welcome to the Jungle; curated tech jobs with visa-sponsorship filter historically on Otta.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "No public API found. robots.txt disallows */jobs?query=* and publishes a sitemap index. Link only."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "some",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "builtin",
+      "name": "Built In",
+      "url": "https://builtin.com",
+      "kind": "tech_niche",
+      "category": "search",
+      "countries": ["US"],
+      "reputation": "medium",
+      "reputation_note": "US tech job site.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "No public API found; robots.txt lists job-board-sitemap.xml and many sitemaps. US-only, low priority."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "levelsfyi-jobs",
+      "name": "Levels.fyi Jobs",
+      "url": "https://www.levels.fyi/jobs",
+      "kind": "tech_niche",
+      "category": "search",
+      "countries": ["*"],
+      "reputation": "high",
+      "reputation_note": "Strong for compensation context; jobs board is secondary.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": "https://www.levels.fyi/api-access/",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt points to sitemaps and an official (compensation-data) API access page; it says .md can be appended to routes for LLM-readable markdown. No free jobs API confirmed. Link only."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": false
+    }
+  ],
+
+  "recommendations": {
+    "tier_1_build_first": [
+      {
+        "id": "ats-direct",
+        "what": "Greenhouse + Lever + Ashby public APIs (then Workable, SmartRecruiters, Recruitee, Personio, Teamtailor)",
+        "why": "Employer-owned, no auth, stable JSON with posting dates and locations, permissive or documented public use. Best trust signal. Filter newest-first on first_published / createdAt / publishedAt within 7 days."
+      },
+      {
+        "id": "company-discovery",
+        "what": "Seed company list = government sponsor registers (UK licensed sponsors, NL IND recognised sponsors, etc.) joined to ATS slugs by probing",
+        "why": "Turns the sponsor register into both a discovery list and a sponsorship-confidence signal. Probe each candidate slug once, cache hits AND misses for 30 days, re-scan hits daily."
+      },
+      {
+        "id": "arbeitnow",
+        "what": "Arbeitnow API with visa_sponsorship=true",
+        "why": "Only free no-key API found with a server-side visa-sponsorship filter (Germany/EU focus)."
+      },
+      {
+        "id": "hn-whoishiring",
+        "what": "HN 'Who is hiring?' via Algolia, filtered for VISA/RELOCATION and created_at_i in last 7 days",
+        "why": "Free official API, direct-from-employer posts, explicit VISA tag convention."
+      },
+      {
+        "id": "adzuna",
+        "what": "Adzuna API (free key), sort_by=date, max_days_old=7, keywords incl. 'visa sponsorship'",
+        "why": "Multi-country aggregator with created date; covers the main destination markets. Confirm country list and parameters with a key."
+      }
+    ],
+    "tier_2": ["himalayas", "weworkremotely", "remotive", "remoteok", "jobicy", "workingnomads", "careerjet", "workday (curated big sponsors)", "japan-dev / relocate-me via link_only", "schema.org JSON-LD enrichment"],
+    "linkedin_indeed_stance": {
+      "decision": "link_only by default; never automate",
+      "detail": "Do not call LinkedIn's /jobs-guest/ endpoints or scrape Indeed from the app, even logged-out. LinkedIn's robots.txt explicitly disallows /jobs-guest/ and prohibits automated access without permission. Its User Agreement s.8.2 bans scraping and bots and covers Visitors. hiQ lost in the end (Dec 2022 consent judgment, $500k, injunction) after the court upheld the contract claim. Indeed's terms bind API/automated access and ban bots on Indeed Apply. Instead, generate pre-filled search deep links the user opens in their own browser: LinkedIn f_TPR=r604800 (7 days) with keywords like 'visa sponsorship' plus country; Indeed fromage=7&sort=date on the country host. Optionally, the user may paste or import job URLs, and the app enriches them from JSON-LD when it is present.",
+      "jobspy": "Do not ship JobSpy enabled. If offered at all: an opt-in, user-initiated, low-volume plugin with no proxies and clear ToS warnings, sites limited to those not prohibiting it. MIT licensed. Sites/countries are listed in the jobspy entry."
+    },
+    "polite_scraping_defaults": {
+      "user_agent": "Shorebound/<version> (+https://<project-url>; personal job-search tool) — identify honestly, never spoof browsers",
+      "robots_txt": "Fetch and cache robots.txt per host (24h). Obey Disallow for HTML/crawl paths. Where a vendor publishes an API but robots.txt disallows /api/ (Remotive, RemoteOK), use the API only as the vendor documents it, at the documented cadence.",
+      "rate": "One in-flight request per host. At most 1 request/second per host (Jobicy requires >=1s). Add jitter. Aggregators: Remotive max 4/day; WWR at most hourly (ttl 60); others 1-4/day. ATS boards: once per company per day.",
+      "caching": "Store responses with ETag/Last-Modified and send If-None-Match/If-Modified-Since. Keep a local job store keyed by source+id so only new IDs are processed. Cache negative slug probes (404 / totalFound=0) for 30 days.",
+      "backoff": "On 429/503, honour Retry-After, else exponential backoff (e.g. 1m, 5m, 30m) and pause that host for the run. Stop on 403 or captcha pages; do not retry with new IPs or proxies.",
+      "attribution": "Always link to the original listing URL. Credit Remotive, Remote OK and Jobicy as their terms require. Do not republish their data to third parties.",
+      "scope": "Logged-out only, public data only, no personal data collection; local single-user use."
+    }
+  },
+
+  "sources_cited": [
+    { "url": "https://docs.greenhouse.io/job-board.html", "title": "Greenhouse Job Board API", "used_for": "endpoints, auth, rate-limit statement", "accessed": "2026-11-22" },
+    { "url": "https://boards-api.greenhouse.io/v1/boards/stripe/jobs", "title": "Greenhouse live probe", "used_for": "fields first_published/updated_at/location", "accessed": "2026-11-22" },
+    { "url": "https://github.com/lever/postings-api", "title": "Lever Postings API README", "used_for": "endpoints, EU host, params, 'may be scraped by third parties'", "accessed": "2026-11-22" },
+    { "url": "https://api.lever.co/v0/postings/spotify?mode=json&limit=1", "title": "Lever live probe", "used_for": "createdAt, country, workplaceType", "accessed": "2026-11-22" },
+    { "url": "https://developers.ashbyhq.com/docs/public-job-posting-api", "title": "Ashby public job posting API", "used_for": "endpoint, publishedAt definition", "accessed": "2026-11-22" },
+    { "url": "https://developers.smartrecruiters.com/docs/posting-api", "title": "SmartRecruiters Posting API", "used_for": "API purpose, auth statement", "accessed": "2026-11-22" },
+    { "url": "https://api.smartrecruiters.com/v1/companies/smartrecruiters/postings?limit=1", "title": "SmartRecruiters live probe", "used_for": "releasedDate, location fields, no-auth works", "accessed": "2026-11-22" },
+    { "url": "https://help.workable.com/hc/en-us/articles/115012771647", "title": "Workable help center (from search)", "used_for": "www.workable.com/api/accounts pattern", "accessed": "2026-11-22" },
+    { "url": "https://apply.workable.com/api/v1/widget/accounts/huggingface", "title": "Workable widget live probe", "used_for": "published_on, country, telecommuting", "accessed": "2026-11-22" },
+    { "url": "https://bunq.recruitee.com/api/offers/", "title": "Recruitee live probe", "used_for": "fields", "accessed": "2026-11-22" },
+    { "url": "https://personio.jobs.personio.de/xml?language=en", "title": "Personio XML live probe", "used_for": "createdAt, office fields", "accessed": "2026-11-22" },
+    { "url": "https://tibber.teamtailor.com/jobs.rss", "title": "Teamtailor RSS live probe", "used_for": "pubDate, tt:location fields", "accessed": "2026-11-22" },
+    { "url": "https://breezy.breezy.hr/json", "title": "Breezy live probe", "used_for": "published_date, location fields", "accessed": "2026-11-22" },
+    { "url": "https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSite/jobs", "title": "Workday cxs live probe (POST)", "used_for": "request shape, postedOn", "accessed": "2026-11-22" },
+    { "url": "https://developer.adzuna.com/overview", "title": "Adzuna API overview", "used_for": "auth model", "accessed": "2026-11-22" },
+    { "url": "https://developer.adzuna.com/docs/search", "title": "Adzuna search docs", "used_for": "params, created field", "accessed": "2026-11-22" },
+    { "url": "https://glama.ai/mcp/servers/@folathecoder/adzuna-job-search-mcp/blob/2a1dccf28f89db8e9b261456bd103b5108fd6ded/server.py", "title": "Third-party Adzuna MCP wrapper (search result)", "used_for": "unconfirmed country list, max_days_old, sort_by", "accessed": "2026-11-22" },
+    { "url": "https://www.careerjet.com/partners/api", "title": "Careerjet API v4 docs", "used_for": "endpoint, auth, params", "accessed": "2026-11-22" },
+    { "url": "https://jooblehelpcenter.freshdesk.com/en/support/solutions/articles/60001448238-rest-api-documentation", "title": "Jooble REST API documentation (search result; not opened)", "used_for": "endpoint pattern", "accessed": "2026-11-22" },
+    { "url": "https://www.arbeitnow.com/blog/job-board-api", "title": "Arbeitnow job board API blog", "used_for": "visa_sponsorship parameter, UK API mention", "accessed": "2026-11-22" },
+    { "url": "https://www.arbeitnow.com/api/job-board-api", "title": "Arbeitnow API live probe", "used_for": "fields, terms text, ordering, 300 per page", "accessed": "2026-11-22" },
+    { "url": "https://landing.jobs/api/v1/jobs?limit=1", "title": "Landing.jobs API probe", "used_for": "relocation_paid field", "accessed": "2026-11-22" },
+    { "url": "https://remotive.com/api/remote-jobs", "title": "Remotive API live probe", "used_for": "legal notice, 4/day guidance, 24h delay", "accessed": "2026-11-22" },
+    { "url": "https://remoteok.com/api", "title": "Remote OK API live probe", "used_for": "API terms, fields", "accessed": "2026-11-22" },
+    { "url": "https://weworkremotely.com/categories/remote-programming-jobs.rss", "title": "WWR RSS probe", "used_for": "ttl 60, fields", "accessed": "2026-11-22" },
+    { "url": "https://himalayas.app/api", "title": "Himalayas Remote Jobs API docs", "used_for": "endpoints, rate limits, cursor", "accessed": "2026-11-22" },
+    { "url": "https://jobicy.com/jobs-rss-feed", "title": "Jobicy API docs", "used_for": "7-day window, 1s spacing, attribution, commercial tier", "accessed": "2026-11-22" },
+    { "url": "https://www.workingnomads.com/api/exposed_jobs/", "title": "Working Nomads probe", "used_for": "fields", "accessed": "2026-11-22" },
+    { "url": "https://hn.algolia.com/api/v1/search_by_date?tags=story,author_whoishiring&hitsPerPage=3", "title": "HN Algolia probe", "used_for": "thread discovery, Nov 2026 story id, comment counts", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt", "used_for": "Disallow /jobs-guest/, automated access notice", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/legal/user-agreement", "title": "LinkedIn User Agreement (effective 2025-11-03)", "used_for": "s.8.2 don'ts, s.1.2 visitors", "accessed": "2026-11-22" },
+    { "url": "https://newmedialaw.proskauer.com/2022/12/08/hiq-and-linkedin-reach-proposed-settlement-in-landmark-scraping-case/", "title": "Proskauer: hiQ and LinkedIn settlement", "used_for": "consent judgment, $500k, injunction (search-result summary)", "accessed": "2026-11-22" },
+    { "url": "https://www.morganlewis.com/blogs/sourcingatmorganlewis/2022/12/linkedin-v-hiq-landmark-data-scraping-suit-provides-guidance-to-data-scrapers-and-web-operators", "title": "Morgan Lewis: LinkedIn v hiQ guidance", "used_for": "Nov 2022 user-agreement enforceability (search-result summary)", "accessed": "2026-11-22" },
+    { "url": "https://www.indeed.com/legal", "title": "Indeed Terms (Last Updated 2026-09-29)", "used_for": "API/automation clauses (partial read)", "accessed": "2026-11-22" },
+    { "url": "https://conductatlas.com/platform/indeed/indeed-terms-of-service/provision/CA-P-028619/prohibition-on-scraping-automated-access-and-bot-activity/", "title": "ConductAtlas Indeed provision record (third-party)", "used_for": "scraping prohibition existence", "accessed": "2026-11-22" },
+    { "url": "https://scrapeops.io/websites/indeed", "title": "ScrapeOps Indeed page (vendor)", "used_for": "anti-bot claims (unverified)", "accessed": "2026-11-22" },
+    { "url": "https://github.com/speedyapply/JobSpy", "title": "JobSpy README", "used_for": "sites, countries, license, rate-limit notes", "accessed": "2026-11-22" },
+    { "url": "https://developers.google.com/search/docs/appearance/structured-data/job-posting", "title": "Google JobPosting structured data", "used_for": "required/recommended properties, no search API", "accessed": "2026-11-22" },
+    { "url": "https://datahub.io/lastroundai-hiring-data/lastroundai-hiring-data/ats-directory", "title": "LastRound AI ATS directory (search result; not opened)", "used_for": "possible slug dataset", "accessed": "2026-11-22" },
+    { "url": "https://github.com/ConorsCode/open-jobs-data", "title": "open-jobs-data (search result; not opened)", "used_for": "possible slug list companies.json", "accessed": "2026-11-22" },
+    { "url": "https://index.commoncrawl.org/collinfo.json", "title": "Common Crawl index list", "used_for": "latest crawl CC-MAIN-2026-43; CDX wildcard timed out", "accessed": "2026-11-22" }
+  ]
+}

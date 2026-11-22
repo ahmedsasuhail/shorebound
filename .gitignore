@@ -1,0 +1,31 @@
+# --- secrets & personal data: never commit ---
+.env
+.env.*
+!.env.example
+*.key
+user-data/
+**/resumes/
+*.pdf
+*.docx
+
+# --- local reference material ---
+archive/
+
+# --- build / deps ---
+node_modules/
+dist/
+build/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.sqlite
+*.sqlite3
+*.db
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/

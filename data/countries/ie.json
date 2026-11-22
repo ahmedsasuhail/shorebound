@@ -1,0 +1,282 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred; robots.txt fetched directly with curl for job sites"
+    },
+    "searches_run": 19,
+    "pages_read": 25,
+    "confidence": "medium",
+    "open_questions": [
+      "Whether a 3-year Indian bachelor's (QQI Level 7-equivalent ordinary degree) counts as a 'relevant degree' for the €40,904 CSEP tier: no official statement found; DETE assesses case by case. The >€68,911 no-degree tier avoids the question.",
+      "Threshold figure discrepancy: DETE news release and CSEP page say €40,904 / graduate €36,848; one secondary report cites the MAR page as €40,909 / €36,849 (MAR page returned 404 when fetched).",
+      "Future MAR increases are phased to 2030 and indexed to CSO earnings; exact 2027 figures not published in text form.",
+      "General Employment Permit degree/experience rules and Labour Market Needs Test details not re-read this session.",
+      "Intra-Company Transfer permit thresholds not researched.",
+      "JobsIreland.ie serves a JavaScript single-page app whose HTML meta tags reference a third-party platform (Malaysian 'MyFutureJobs' app links); official status confirmed only by reputation. Verify domain before linking.",
+      "IrishJobs.ie and Jobs.ie block automated requests (403); ToS not read.",
+      "Adzuna country list could not be confirmed to include Ireland.",
+      "Tax rates and relocation norms not verified."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "IE",
+  "name": "Ireland",
+  "region": "europe",
+  "tier": "high_pay",
+  "default_enabled": true,
+  "currency": "EUR",
+  "languages": {
+    "official": ["Irish", "English"],
+    "english_only_tech_jobs": "common",
+    "note": "Tech industry operates in English; many multinationals' EMEA HQs in Dublin."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 105613, "high": 170900, "currency": "EUR", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://www.levels.fyi/t/software-engineer/locations/ireland"],
+    "note": "Levels.fyi all-levels TOTAL compensation: 25th €77,920, median €105,613, 75th €142,773, 90th €170,900; Dublin median €116,132. Skewed to big tech; range = median→90th as rough senior proxy. Base pay at Irish SMEs is lower."
+  },
+  "income_tax_note": "Income tax at a standard and higher rate plus USC and PRSI; rates and bands not re-verified in this session.",
+  "cost_of_living_note": "Dublin rental housing is scarce and expensive; not quantified here.",
+  "visa_routes": [
+    {
+      "id": "ie-csep",
+      "name": "Critical Skills Employment Permit (CSEP)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 40904, "currency": "EUR", "period": "year", "as_of": "2026-03", "note": "From 2026-03-01: €40,904 for Critical Skills Occupations List roles (incl. ICT professionals) with a relevant degree; €36,848 if qualification obtained within previous 12 months; over €68,911 for any occupation not on the Ineligible List where the applicant has no degree but the necessary experience. Previously €38,000 / €64,000. Job offer must be ≥2 years." },
+      "degree_requirement": "Relevant degree or higher for the €40,904 tier; no degree needed at €68,911+ with relevant experience.",
+      "three_year_indian_bachelors_note": "Unclear whether DETE treats a 3-year Indian bachelor's as a 'relevant degree' (no official statement found). For senior engineers paid €68,911+, the no-degree tier applies, so degree recognition is moot.",
+      "processing_time": "As of 2026-11-20 DETE was processing CSEP applications received 2026-10-23 (~4 weeks). Apply ≥12 weeks before start date per DETE.",
+      "lottery_or_quota": "No lottery or cap; no Labour Market Needs Test for CSEP.",
+      "path_to_pr": "Stamp 4 (no permit needed) after 21 months of employment in the State on the CSEP (irishimmigration.ie); long-term residence after 60 months of permission.",
+      "employer_cost_note": "€1,000 permit fee (90% refunded if refused); employer or employee may pay (not verified who must). No sponsor licence; Trusted Partner status speeds employer applications.",
+      "official_url": "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/permit-types/critical-skills-employment-permit/",
+      "verified": true
+    },
+    {
+      "id": "ie-gep",
+      "name": "General Employment Permit (GEP)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 36605, "currency": "EUR", "period": "year", "as_of": "2026-03", "note": "From 2026-03-01 (was €34,000), per DETE news release 2025-12-02." },
+      "degree_requirement": "Not re-read this session.",
+      "three_year_indian_bachelors_note": "Not researched; most software roles qualify for CSEP instead.",
+      "processing_time": "As of 2026-11-20 DETE processing new GEP applications received 2026-10-23.",
+      "lottery_or_quota": "No lottery; Labour Market Needs Test generally required (details not re-read).",
+      "path_to_pr": "Stamp 4 after 57 months of employment (per practitioner summaries; not read on official page).",
+      "employer_cost_note": "Permit fee not re-read for GEP.",
+      "official_url": "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/permit-types/general-employment-permit/",
+      "verified": false
+    },
+    {
+      "id": "ie-ict",
+      "name": "Intra-Company Transfer Employment Permit",
+      "type": "intra_company",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "EUR", "period": "year", "as_of": "2026-11", "note": "Not researched." },
+      "degree_requirement": "Not researched.",
+      "three_year_indian_bachelors_note": "Not researched.",
+      "processing_time": null,
+      "lottery_or_quota": "No lottery.",
+      "path_to_pr": "Not researched.",
+      "employer_cost_note": "Not researched.",
+      "official_url": "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/permit-types/intra-company-transfer-employment-permit/",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": true,
+    "name": "DETE 'Employment permits issued to companies' (annual statistics)",
+    "url": "https://enterprise.gov.ie/en/publications/employment-permit-statistics-2026.html",
+    "format": "xlsx",
+    "update_frequency": "Monthly refresh during the year; covers 1 January to the last day of the previous month (2026 file published 2026-11-09, covering to end Oct 2026). Yearly pages back to 2009.",
+    "how_to_use": "Download employment-permits-issued-to-companies-<year>.xlsx (current + previous year), normalise employer names (lowercase, strip Ltd/Limited/DAC/Teoranta/Unlimited Company/plc, punctuation) and fuzzy-match job companies; a company that received permits recently has hired non-EEA staff. It is not a licence register (Ireland has no sponsor licence) and does not break down by permit type per company.",
+    "verified": true
+  },
+  "sponsorship_phrases": {
+    "positive": ["Critical Skills Employment Permit", "employment permit sponsorship", "visa sponsorship available", "relocation package", "we can support work permits"],
+    "negative": ["must have Stamp 4", "Stamp 4 or EU passport required", "must have the right to work in Ireland", "EU/EEA work authorisation required", "no sponsorship available", "Stamp 1G holders only"]
+  },
+  "ease_for_indian_nationals": {
+    "score": 4,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "ICT professionals are on the Critical Skills list: no lottery, no labour market test, processing ~4 weeks, Stamp 4 (open work rights) after 21 months, and English is the working language. For senior pay above €68,911 no degree is needed, which avoids any 3-year-degree question. The downsides are a small market concentrated in Dublin, EU candidates often being preferred, and a housing shortage.",
+    "factors": {
+      "degree_recognition": "Relevant degree needed only for the €40,904 tier; unclear for 3-year degrees; not needed above €68,911.",
+      "language_barrier": "None.",
+      "processing_speed": "~4 weeks (DETE processing dates, Nov 2026).",
+      "quota_or_lottery": "None.",
+      "employer_willingness": "Multinationals in Dublin routinely use CSEP; SMEs less so.",
+      "attestation_or_paperwork": "Employer applies online (EPOS); after arrival register with immigration (IRP)."
+    }
+  },
+  "relocation_norms": "Not researched from a citable source in this session.",
+  "job_sites": [
+    {
+      "id": "jobsireland-ie",
+      "name": "JobsIreland (Department of Social Protection)",
+      "url": "https://jobsireland.ie",
+      "kind": "government",
+      "reputation": "medium",
+      "reputation_note": "Government public employment service portal; GEP labour market tests are advertised here. Low tech-job coverage.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "JavaScript single-page app; /robots.txt returns the app HTML, not a robots file. HTML meta tags reference a third-party platform's mobile app (MyFutureJobs). Verify domain before deep-linking."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "irishjobs-ie",
+      "name": "IrishJobs.ie",
+      "url": "https://www.irishjobs.ie",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Leading Irish general board (StepStone group).",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Homepage and robots.txt returned 403 to automated requests on 2026-11-22."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "jobs-ie",
+      "name": "Jobs.ie",
+      "url": "https://www.jobs.ie",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Irish general board.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt returned 403 on 2026-11-22."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 6,
+      "verified": false
+    },
+    {
+      "id": "linkedin-ie",
+      "name": "LinkedIn Jobs (Ireland)",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Main channel for multinational tech hiring in Dublin.",
+      "access": {
+        "method": "link_only",
+        "auth": "account_required",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": false,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt prohibits automated access without permission."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "indeed-ie",
+      "name": "Indeed Ireland",
+      "url": "https://ie.indeed.com",
+      "kind": "aggregator",
+      "reputation": "high",
+      "reputation_note": "Largest aggregator.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "indeed.com robots.txt disallows ?rss and many paths; ToS not read."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "glassdoor-ie",
+      "name": "Glassdoor Ireland",
+      "url": "https://www.glassdoor.ie",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Jobs plus company reviews.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "glassdoor.com robots.txt has extensive Disallow rules; login walls."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    { "name": "Glassdoor", "url": "https://www.glassdoor.ie", "access": "link_only", "note": "Employee reviews." },
+    { "name": "Levels.fyi", "url": "https://www.levels.fyi", "access": "link_only", "note": "Dublin compensation data." },
+    { "name": "CRO (Companies Registration Office)", "url": "https://core.cro.ie", "access": "link_only", "note": "Official company register for legitimacy checks (not verified this session)." }
+  ],
+  "communities": [
+    { "name": "r/DevelEire", "url": "https://www.reddit.com/r/DevelEire/", "note": "Irish software developers' subreddit (salaries, employers) – not verified this session." },
+    { "name": "r/ireland", "url": "https://www.reddit.com/r/ireland/", "note": "General; housing threads useful (not verified this session)." }
+  ],
+  "scam_warnings": [
+    "Agents charging fees for a 'guaranteed Critical Skills permit': the employer applies on DETE's EPOS system; check the employer on the DETE companies-issued-permits list and CRO.",
+    "Job offers that require you to pay the employment permit fee upfront to a third party or via crypto/money transfer.",
+    "Rental-deposit scams targeting newcomers in Dublin (pay only after viewing and verifying the landlord)."
+  ],
+  "sources": [
+    { "url": "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/permit-types/critical-skills-employment-permit/", "title": "DETE: Critical Skills Employment Permit", "used_for": "€40,904 / €36,848 / €68,911 thresholds, degree rules, €1,000 fee, no LMNT, 2-year offer", "accessed": "2026-11-22" },
+    { "url": "https://enterprise.gov.ie/en/news-and-events/department-news/2025/december/20251202.html", "title": "DETE news 2025-12-02: MAR roadmap", "used_for": "Effective 2026-03-01; GEP €36,605; phased to 2030", "accessed": "2026-11-22" },
+    { "url": "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/current-application-processing-dates/", "title": "DETE: Current application processing dates (as of 2026-11-20)", "used_for": "CSEP/GEP processing 2026-10-23 applications", "accessed": "2026-11-22" },
+    { "url": "https://enterprise.gov.ie/en/publications/employment-permit-statistics-2026.html", "title": "DETE Employment Permit Statistics 2026", "used_for": "Companies-issued-permits XLSX (published 2026-11-09)", "accessed": "2026-11-22" },
+    { "url": "https://www.irishimmigration.ie/registering-your-immigration-permission/how-to-renew-your-current-permission/information-on-stamp-4-upgrades/", "title": "Irish Immigration Service: Stamp 4 upgrades (search snippet)", "used_for": "Stamp 4 after 21 months of employment on CSEP", "accessed": "2026-11-22" },
+    { "url": "https://www.mhc.ie/latest/insights/immigration-permissions-of-employment-permit-holders", "title": "Mason Hayes & Curran: immigration permissions of employment permit holders (search snippet)", "used_for": "GEP Stamp 4 after 57 months", "accessed": "2026-11-22" },
+    { "url": "https://www.oireachtas.ie/en/debates/question/2023-09-11/582/", "title": "Oireachtas PQ 2023-09-11 (search snippet)", "used_for": "Relevant degree needed below the higher threshold", "accessed": "2026-11-22" },
+    { "url": "https://www.levels.fyi/t/software-engineer/locations/ireland", "title": "Levels.fyi Software Engineer salaries, Ireland", "used_for": "Salary percentiles", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://jobsireland.ie/", "title": "JobsIreland (fetched via curl)", "used_for": "Access method observation", "accessed": "2026-11-22" }
+  ]
+}

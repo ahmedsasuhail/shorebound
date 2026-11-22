@@ -1,0 +1,329 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred; robots.txt fetched directly with curl for job sites"
+    },
+    "searches_run": 19,
+    "pages_read": 25,
+    "confidence": "medium",
+    "open_questions": [
+      "Earned-settlement reform: Home Secretary announced on 2026-11-02 a 10-year default qualifying period for settlement, reducible to 5 years for earners over £50,271 and 3 years for earners of £125,141+; Immigration Rules and commencement date not yet published (per Faegre Drinker 2026-11-04). Current 5-year ILR may change for people already in the UK.",
+      "Skilled Worker visa application fee, Immigration Health Surcharge and certificate of sponsorship fee not re-read in this session.",
+      "Standard processing time from outside the UK not re-read on gov.uk.",
+      "Exact column names of the sponsor-register CSV not shown on the publication page (commonly: Organisation Name, Town/City, County, Type & Rating, Route).",
+      "Global Talent (digital technology) endorsing body and criteria not researched in this session.",
+      "Whether 'Find a job' (DWP) jobseeker search has a public API; api.gov.uk entry returned 503 and the site blocked curl with 403.",
+      "Reed API pricing/rate limits and whether results include posting date not stated on developer page.",
+      "Welcome to the Jungle / Otta relationship not confirmed on a primary page."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "GB",
+  "name": "United Kingdom",
+  "region": "europe",
+  "tier": "high_pay",
+  "default_enabled": true,
+  "currency": "GBP",
+  "languages": {
+    "official": ["English"],
+    "english_only_tech_jobs": "common",
+    "note": "Skilled Worker applicants new to the route from 2026-01-08 must prove English at CEFR B2 (was B1). India is not an exempt majority-English country, so a SELT or an English-taught degree confirmed by Ecctis is needed."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 92414, "high": 181179, "currency": "GBP", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://www.levels.fyi/t/software-engineer/locations/united-kingdom"],
+    "note": "Levels.fyi all-levels TOTAL compensation, 4,723 data points: 25th £61,733, median £92,414, 75th £133,081, 90th £181,179; London median £109,633. Range = median→90th as rough senior proxy; base pay outside London and at non-big-tech firms is markedly lower. Immigration going rate for SOC 2134 is £54,700 (official minimum, not market rate)."
+  },
+  "income_tax_note": "Progressive income tax plus National Insurance; Scotland has different bands. Rates not re-verified in this session.",
+  "cost_of_living_note": "London much more expensive than other cities. Applicant also pays the Immigration Health Surcharge (amount not read).",
+  "visa_routes": [
+    {
+      "id": "gb-skilled-worker",
+      "name": "Skilled Worker visa",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": true,
+      "salary_threshold": { "amount": 41700, "currency": "GBP", "period": "year", "as_of": "2025-07", "note": "Must be paid the HIGHER of £41,700 or the occupation going rate. SOC 2134 Programmers and software development professionals: £54,700 (£28.05/h, 37.5h week); 2133 IT business analysts/architects: £54,900; 2139 IT n.e.c.: £52,300; 2135 Cyber security: £48,500; 2136 IT quality and testing: £41,200. Lower rates (e.g. £33,400 tradeable points, new entrants) exist but rarely help a senior hire." },
+      "degree_requirement": "No degree required for the visa; the JOB must be at the higher-skilled level (RQF 6 occupations since 2025-07-22) and on the eligible occupation list.",
+      "three_year_indian_bachelors_note": "Degree not required for eligibility, so a 3-year BCA is not a barrier. A degree taught in English can be used to meet the B2 English requirement if Ecctis confirms it; otherwise take an approved SELT. A relevant PhD gives salary points (not applicable to a BCA).",
+      "processing_time": null,
+      "lottery_or_quota": "No cap or lottery; depends on finding a licensed sponsor.",
+      "path_to_pr": "Currently Indefinite Leave to Remain after 5 years. Announced 2026-11-02 'earned settlement' reform: 10-year default, 5 years if earning over £50,271, 3 years if earning £125,141+ for 3 years; rules and start date pending and expected to apply to people already in the UK.",
+      "employer_cost_note": "Employer needs a sponsor licence and pays the Immigration Skills Charge: £1,320 per year for medium/large sponsors (£660 per extra 6 months; max £6,600 for 5 years) or £480/year for small/charitable sponsors, plus certificate of sponsorship fee (amount not read).",
+      "official_url": "https://www.gov.uk/skilled-worker-visa/your-job",
+      "verified": true
+    },
+    {
+      "id": "gb-global-talent",
+      "name": "Global Talent visa (digital technology)",
+      "type": "talent",
+      "requires_job_offer": false,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "GBP", "period": "year", "as_of": "2026-11", "note": "No salary threshold; endorsement-based." },
+      "degree_requirement": "No degree requirement; needs endorsement as a leader/potential leader in digital technology (criteria not researched this session).",
+      "three_year_indian_bachelors_note": "Degree not relevant.",
+      "processing_time": null,
+      "lottery_or_quota": "No cap.",
+      "path_to_pr": "Announced earned-settlement plan keeps a 3-year pathway for eligible Global Talent holders (subject to final rules).",
+      "employer_cost_note": "No employer; applicant pays endorsement + visa fees.",
+      "official_url": "https://www.gov.uk/global-talent",
+      "verified": false
+    },
+    {
+      "id": "gb-gbm-senior-specialist",
+      "name": "Global Business Mobility: Senior or Specialist Worker (intra-company)",
+      "type": "intra_company",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": true,
+      "salary_threshold": { "amount": null, "currency": "GBP", "period": "year", "as_of": "2026-11", "note": "Not re-read this session." },
+      "degree_requirement": "Not researched; requires prior employment with the overseas linked entity.",
+      "three_year_indian_bachelors_note": "Not researched.",
+      "processing_time": null,
+      "lottery_or_quota": "No cap.",
+      "path_to_pr": "Does not lead to settlement by itself (not verified this session).",
+      "employer_cost_note": "Sponsor licence + Immigration Skills Charge (not verified for this route).",
+      "official_url": "https://www.gov.uk/senior-specialist-worker-visa",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": true,
+    "name": "Register of licensed sponsors: workers (Home Office / UKVI)",
+    "url": "https://www.gov.uk/government/publications/register-of-licensed-sponsors-workers",
+    "format": "csv",
+    "update_frequency": "Most working days (latest file 2026-11-19, ~10.4 MB); no schedule stated.",
+    "how_to_use": "Scrape the publication page for the current CSV link (filename changes each update, e.g. SP_-_Worker_and_Temporary_Worker_Web_Register_-_2026-11-19.csv). Keep rows whose Route is 'Skilled Worker' (also 'Global Business Mobility: Senior or Specialist Worker'), and whose rating is A. Normalise organisation names (lowercase, strip Ltd/Limited/PLC/LLP/UK, punctuation, 't/a' trading-as splits) and fuzzy-match against the job's company; also match on town for disambiguation. Being on the register means the company CAN sponsor, not that the specific job will.",
+    "verified": true
+  },
+  "sponsorship_phrases": {
+    "positive": ["visa sponsorship available", "Skilled Worker visa sponsorship", "we can sponsor", "sponsorship considered", "Certificate of Sponsorship", "relocation support"],
+    "negative": ["must have the right to work in the UK", "no sponsorship available", "we are unable to offer sponsorship", "unable to sponsor visas", "must already hold UK work authorisation", "SC/DV clearance required", "UK nationals only"]
+  },
+  "ease_for_indian_nationals": {
+    "score": 3,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "No degree requirement and no lottery, and there is a large public sponsor register that is updated almost daily. Against that, salary must reach £54,700 for software developers, the English requirement rose to B2 in January 2026, employer costs and sponsor compliance put some firms off, and settlement is moving from 5 to a default 10 years (5 for earners over £50,271).",
+    "factors": {
+      "degree_recognition": "Not required for Skilled Worker; 3-year degree fine.",
+      "language_barrier": "None, but proof of B2 English is required (SELT or Ecctis-confirmed English-taught degree).",
+      "processing_speed": "Not verified this session.",
+      "quota_or_lottery": "None.",
+      "employer_willingness": "Many tech firms hold licences; many postings still require existing right to work.",
+      "attestation_or_paperwork": "CoS from sponsor, English evidence, TB test certificate for India residents (not verified this session), IHS payment."
+    }
+  },
+  "relocation_norms": "Not researched from a citable source in this session; some sponsors pay visa costs/relocation, others recoup via clawback clauses (note: the Immigration Skills Charge itself may not be passed to the worker – not re-verified).",
+  "job_sites": [
+    {
+      "id": "findajob-gb",
+      "name": "Find a job (DWP, GOV.UK)",
+      "url": "https://findajob.dwp.gov.uk",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Official UK government job board; tech coverage weaker than commercial boards.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": "https://www.api.gov.uk/dwp/find-a-job/",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Automated requests (curl) got 403 from a WAF on 2026-11-22; an API is listed on api.gov.uk (page returned 503, purpose unconfirmed). Use deep links."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "reed-gb",
+      "name": "Reed.co.uk",
+      "url": "https://www.reed.co.uk",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Major UK board run by a recruitment group.",
+      "access": {
+        "method": "official_api",
+        "auth": "free_key",
+        "docs_url": "https://www.reed.co.uk/developers/jobseeker",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Jobseeker API: /api/1.0/search (keywords, locationName, minimumSalary, resultsToTake ≤100, resultsToSkip) and /api/1.0/jobs/{id}; API key as Basic-auth username. Key via registration; price/rate limits not stated. Do NOT scrape HTML: robots.txt disallows /api/ and sorted /jobs/ URLs for crawlers."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "adzuna-gb",
+      "name": "Adzuna (UK)",
+      "url": "https://www.adzuna.co.uk",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "UK-founded aggregator with public API.",
+      "access": {
+        "method": "official_api",
+        "auth": "free_key",
+        "docs_url": "https://developer.adzuna.com/overview",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "app_id/app_key; /jobs/gb/search/{page} shown in docs. Website blocks curl (403); use the API only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": true },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "linkedin-gb",
+      "name": "LinkedIn Jobs (UK)",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Dominant for tech hiring.",
+      "access": {
+        "method": "link_only",
+        "auth": "account_required",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": false,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt prohibits automated access without permission."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "cwjobs-gb",
+      "name": "CWJobs",
+      "url": "https://www.cwjobs.co.uk",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "IT-specialist board (StepStone group, sister of Totaljobs); many agency listings.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt request returned 403 (bot protection) on 2026-11-22."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "totaljobs-gb",
+      "name": "Totaljobs",
+      "url": "https://www.totaljobs.com",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Large general UK board.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt request returned 403 (bot protection) on 2026-11-22."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 6,
+      "verified": false
+    },
+    {
+      "id": "indeed-gb",
+      "name": "Indeed UK",
+      "url": "https://uk.indeed.com",
+      "kind": "aggregator",
+      "reputation": "high",
+      "reputation_note": "Largest aggregator.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "indeed.com robots.txt disallows ?rss and many paths; ToS not read."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 7,
+      "verified": true
+    },
+    {
+      "id": "wttj-gb",
+      "name": "Welcome to the Jungle (incl. former Otta)",
+      "url": "https://www.welcometothejungle.com",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Curated startup/scale-up roles; historically had a visa-sponsorship filter (not verified).",
+      "access": {
+        "method": "link_only",
+        "auth": "account_required",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt disallows '/*?' (all query URLs) and */jobs?query=*."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 8,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    { "name": "Glassdoor UK", "url": "https://www.glassdoor.co.uk", "access": "link_only", "note": "Employee reviews, salaries." },
+    { "name": "Levels.fyi", "url": "https://www.levels.fyi", "access": "link_only", "note": "Compensation by company (London data)." },
+    { "name": "Companies House", "url": "https://find-and-update.company-information.service.gov.uk", "access": "link_only", "note": "Official company registry (age, filings, officers) for legitimacy checks; free API exists (not verified this session)." }
+  ],
+  "communities": [
+    { "name": "r/ukvisa", "url": "https://www.reddit.com/r/ukvisa/", "note": "Skilled Worker / settlement questions (not verified this session)." },
+    { "name": "r/cscareerquestionsuk", "url": "https://www.reddit.com/r/cscareerquestionsuk/", "note": "UK tech careers (not verified this session)." },
+    { "name": "Free Movement", "url": "https://freemovement.org.uk", "note": "UK immigration law blog tracking rule changes (not verified this session)." }
+  ],
+  "scam_warnings": [
+    "Agents selling Certificates of Sponsorship or 'guaranteed sponsored jobs' for a fee; CoS sales led to many sponsor-licence revocations. Check the company on the official register and Companies House.",
+    "Companies recently added to the register with no trading history, offering jobs unrelated to their business.",
+    "Requests for the worker to pay the Immigration Skills Charge or sponsor-licence costs (employer cost).",
+    "Fake 'UKVI' calls or emails demanding payment; UKVI does not take payments by phone."
+  ],
+  "sources": [
+    { "url": "https://www.gov.uk/skilled-worker-visa/your-job", "title": "GOV.UK Skilled Worker visa: your job", "used_for": "£41,700 general threshold, higher-of rule, lower threshold £33,400", "accessed": "2026-11-22" },
+    { "url": "https://www.gov.uk/government/publications/skilled-worker-visa-going-rates-for-eligible-occupations/skilled-worker-visa-going-rates-for-eligible-occupation-codes", "title": "GOV.UK Skilled Worker going rates (updated 2025-07-22)", "used_for": "SOC 2133-2139 going rates", "accessed": "2026-11-22" },
+    { "url": "https://www.gov.uk/uk-visa-sponsorship-employers/immigration-skills-charge", "title": "GOV.UK Immigration Skills Charge", "used_for": "£1,320 / £480 per year", "accessed": "2026-11-22" },
+    { "url": "https://www.gov.uk/government/publications/register-of-licensed-sponsors-workers", "title": "GOV.UK Register of licensed sponsors: workers", "used_for": "Sponsor register CSV, latest 2026-11-19", "accessed": "2026-11-22" },
+    { "url": "https://www.gov.uk/government/publications/english-language-requirement-levels-for-immigration-applications/english-language-requirement-levels-for-immigration-applications", "title": "GOV.UK English language requirement levels (2026-01-08) (search snippet)", "used_for": "Skilled Worker B2 from 2026-01-08", "accessed": "2026-11-22" },
+    { "url": "https://www.faegredrinker.com/zh/insights/publications/2026/11/uk-home-office-updates-the-earned-settlement-framework", "title": "Faegre Drinker: UK Home Office updates the earned settlement framework (2026-11-04)", "used_for": "10-year default settlement, £50,271 / £125,141 reductions, no commencement date", "accessed": "2026-11-22" },
+    { "url": "https://www.levels.fyi/t/software-engineer/locations/united-kingdom", "title": "Levels.fyi Software Engineer salaries, UK", "used_for": "Salary percentiles", "accessed": "2026-11-22" },
+    { "url": "https://www.reed.co.uk/developers/jobseeker", "title": "Reed.co.uk Jobseeker API", "used_for": "API endpoints and auth", "accessed": "2026-11-22" },
+    { "url": "https://www.reed.co.uk/robots.txt", "title": "Reed robots.txt", "used_for": "Crawler restrictions", "accessed": "2026-11-22" },
+    { "url": "https://developer.adzuna.com/overview", "title": "Adzuna API overview", "used_for": "API auth; gb example", "accessed": "2026-11-22" },
+    { "url": "https://www.welcometothejungle.com/robots.txt", "title": "Welcome to the Jungle robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" }
+  ]
+}

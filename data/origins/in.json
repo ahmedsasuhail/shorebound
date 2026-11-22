@@ -1,0 +1,235 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred"
+    },
+    "searches_run": 20,
+    "pages_read": 8,
+    "confidence": "medium",
+    "open_questions": [
+      "ECR country count: MEA OE&PGE overview dated 21-04-2026 lists 19 (adds Iran); older MEA pages say 17 or 18. Re-check emigrate.gov.in before each release.",
+      "Overseas Mobility (Facilitation and Welfare) Bill, 2025: draft published Oct 2025, comments closed 2025-11-07; MEA page last updated 2026-03-19; a July-2026 Rajya Sabha reply still called it 'proposed'. No evidence found of introduction/passage in Parliament by 2026-11-22.",
+      "MEA apostille page (mea.gov.in/apostille.htm) returned 404; fees (Rs 50 MEA apostille; normal attestation free; outsourced agency Rs 84 service + Rs 3/page scanning) come from search snippets of MEA/embassy pages, not a full page read.",
+      "Older figures (Rs 22/18/16 agency fees) also appear on MEA FAQ/e-Sanad summaries; which set is current is unconfirmed.",
+      "PCC fee Rs 500 seen in Passport Seva FAQ snippet; processing time not published officially (secondary estimates range ~1-4 weeks, driven by police verification).",
+      "Hong Kong: not listed separately in HCCH status table; Apostille has historically applied to HK via extension - not verified this session.",
+      "UAE/Qatar/Kuwait/Malaysia embassy-attestation steps and fees (incl. destination MOFA step) not verified this session.",
+      "Credential evaluator fees and processing times not verified on official pages (ACS figures and ZAB ~EUR 208 are from secondary sources).",
+      "Income Tax: whether the Income-tax Act, 2025 (replacing the 1961 Act) changes section numbering/thresholds for residence from tax year 2026-27 not verified this session.",
+      "MADAD portal and 1930 cybercrime helpline URLs not re-verified this session.",
+      "Whether eMigrate publishes the active RA list and illegal-agent list in a downloadable/machine-readable form not confirmed."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "IN",
+  "name": "India",
+  "ecr_countries": {
+    "list": ["AF", "BH", "ID", "IQ", "JO", "KW", "LB", "LY", "MY", "OM", "QA", "SA", "IR", "SS", "SD", "SY", "TH", "AE", "YE"],
+    "count": 19,
+    "ec_suspended": ["LY", "YE"],
+    "as_of": "2026-04",
+    "note": "Per MEA OE & PGE Division overview dated 21-04-2026. Relevant Shorebound destinations in this list: AE, SA, QA, KW, BH, OM, MY, TH.",
+    "official_url": "https://www.mea.gov.in/images/pdf/01-Overview-of-work-of-Overseas-Employment-21-04-2026.pdf",
+    "verified": true
+  },
+  "requirements": [
+    {
+      "id": "in-passport-ecr-ecnr",
+      "name": "Passport category: ECR vs ECNR",
+      "applies_to_destinations": ["*"],
+      "description": "Indian passports are either ECR (Emigration Check Required, endorsed) or ECNR. Only ECR passport holders going for employment to an ECR country need Emigration Clearance. Most graduate software engineers hold ECNR passports (ECNR eligibility rules, e.g. by education level, not re-verified this session). App should ask the user's passport category once and only show EC steps for ECR holders.",
+      "official_url": "https://www.mea.gov.in/images/pdf/01-Overview-of-work-of-Overseas-Employment-21-04-2026.pdf",
+      "typical_time": null,
+      "typical_cost": null,
+      "verified": true
+    },
+    {
+      "id": "in-emigration-clearance",
+      "name": "Emigration Clearance (EC) via eMigrate - ECR passport holders only",
+      "applies_to_destinations": ["AF", "BH", "ID", "IQ", "JO", "KW", "LB", "LY", "MY", "OM", "QA", "SA", "IR", "SS", "SD", "SY", "TH", "AE", "YE"],
+      "description": "ECR passport holders need EC from a Protector of Emigrants (16 PoE offices) before going to any of the 19 ECR countries for employment, under the Emigration Act 1983. Processed through eMigrate (launched 2015), integrated with Passport Seva and Bureau of Immigration checks at airports. Foreign employers must register on eMigrate before recruiting from India. EC for Libya and Yemen currently suspended.",
+      "official_url": "https://emigrate.gov.in",
+      "typical_time": null,
+      "typical_cost": null,
+      "verified": true
+    },
+    {
+      "id": "in-emigrate-ecnr-voluntary",
+      "name": "eMigrate registration for ECNR holders (voluntary)",
+      "applies_to_destinations": ["AF", "BH", "ID", "IQ", "JO", "KW", "LB", "LY", "MY", "OM", "QA", "SA", "IR", "SS", "SD", "SY", "TH", "AE", "YE"],
+      "description": "ECNR holders going to ECR countries for employment may register voluntarily on eMigrate and avail PBBY insurance. A 2018 advisory making it mandatory from 2019-01-01 was put in abeyance. App: show as 'recommended, optional'.",
+      "official_url": "https://www.mea.gov.in/images/pdf/01-Overview-of-work-of-Overseas-Employment-21-04-2026.pdf",
+      "typical_time": null,
+      "typical_cost": null,
+      "verified": true
+    },
+    {
+      "id": "in-pbby",
+      "name": "Pravasi Bharatiya Bima Yojana (PBBY) insurance",
+      "applies_to_destinations": ["AF", "BH", "ID", "IQ", "JO", "KW", "LB", "LY", "MY", "OM", "QA", "SA", "IR", "SS", "SD", "SY", "TH", "AE", "YE"],
+      "description": "Mandatory for ECR workers going to ECR countries; optional for ECNR via voluntary eMigrate registration. Cover INR 10 lakh for accidental death/permanent disability plus hospitalisation (INR 1,00,000), repatriation, legal expenses (INR 45,000), etc.",
+      "official_url": "https://www.mea.gov.in/images/pdf/01-Overview-of-work-of-Overseas-Employment-21-04-2026.pdf",
+      "typical_time": null,
+      "typical_cost": [
+        { "amount": 275, "currency": "INR", "period": "two_years", "as_of": "2026-04" },
+        { "amount": 375, "currency": "INR", "period": "three_years", "as_of": "2026-04" }
+      ],
+      "verified": true
+    },
+    {
+      "id": "in-recruiting-agent-check",
+      "name": "Use only eMigrate-registered Recruiting Agents (RA)",
+      "applies_to_destinations": ["*"],
+      "description": "No person may act as a Recruiting Agent without a certificate from the PGE (Emigration Act 1983, s.10). Verify the RA licence number on eMigrate's 'List of active RA'. 3,505 illegal agents notified on eMigrate as of 2026-04-09. MEA advisory (Dec 2023) states RA service charge capped at Rs 30,000 + 18% GST. Direct-hire tech jobs usually involve no RA at all - any agent asking for money is a red flag.",
+      "official_url": "https://emigrate.gov.in",
+      "typical_time": null,
+      "typical_cost": { "amount": 30000, "currency": "INR", "period": "one_time", "as_of": "2023-12", "note": "legal maximum RA service charge, plus 18% GST; per MEA advisory as reported - not a fee the user must pay" },
+      "verified": false
+    },
+    {
+      "id": "in-apostille",
+      "name": "Apostille of documents by MEA (Hague Apostille Convention countries)",
+      "applies_to_destinations": ["US", "GB", "CA", "AU", "NZ", "DE", "NL", "IE", "FR", "SE", "CH", "SG", "JP", "KR", "CN", "SA", "BH", "OM", "ID", "IL", "PL", "ES", "PT", "DK", "NO", "FI", "AT", "BE", "LU", "EE"],
+      "description": "India is party to the Apostille Convention (in force for India 2005-07-14). For Convention countries, MEA apostille replaces embassy legalisation. Process: issuing authority / state verification (educational docs: state education dept or university; personal docs: state home/GAD) -> MEA apostille via MEA-authorised outsourced collection agencies or e-Sanad (for digitally available docs). Notable recent joiners: Saudi Arabia (2022-12-07), China (2023-11-07), Canada (2024-01-11). Thailand deposited accession 2026-06-30, effective 2027-02-28 - until then use attestation. Many destinations (e.g. DE, NL) often do not require apostille for a work visa at all; check the destination country file.",
+      "official_url": "https://www.mea.gov.in/apostille-menu.htm",
+      "typical_time": null,
+      "typical_cost": { "amount": 50, "currency": "INR", "period": "per_document", "as_of": "2026-11", "note": "MEA apostille fee per document (search snippet of MEA page). Outsourced agency charge reported as Rs 84 service + Rs 3/page scanning; e-Sanad ~Rs 90/doc (secondary). Plus university/state verification fees (vary)." },
+      "verified": false
+    },
+    {
+      "id": "in-embassy-attestation",
+      "name": "MEA attestation + embassy legalisation (non-Apostille countries)",
+      "applies_to_destinations": ["AE", "QA", "KW", "MY", "TH"],
+      "description": "For countries not party to the Apostille Convention (of Shorebound destinations: UAE, Qatar, Kuwait, Malaysia; Thailand until 2027-02-28), documents follow: state/issuing-authority verification -> MEA attestation (normal attestation is free at MEA) -> attestation by destination country's embassy/consulate in India -> often destination foreign ministry (e.g. UAE MOFA) after arrival. Gulf work-permit processing commonly requires attested degree certificates.",
+      "official_url": "https://www.mea.gov.in/attestation-and-apostille-matters.htm",
+      "typical_time": null,
+      "typical_cost": null,
+      "verified": false
+    },
+    {
+      "id": "in-police-clearance-certificate",
+      "name": "Police Clearance Certificate (PCC) via Passport Seva",
+      "applies_to_destinations": ["*"],
+      "description": "Apply on Passport Seva portal (register -> 'Apply for Police Clearance Certificate'), book PSK/POPSK appointment. Many work visas (e.g. Gulf, Canada PR, Australia, NZ) require it; check the destination file. Applicants already abroad apply via Indian Mission (e.g. VFS/consulate).",
+      "official_url": "https://www.passportindia.gov.in",
+      "typical_time": null,
+      "typical_cost": { "amount": 500, "currency": "INR", "period": "one_time", "as_of": "2025-12", "note": "Passport Seva FAQ snippet; processing time depends on police verification (secondary estimates ~1-4 weeks; not official)." },
+      "verified": false
+    },
+    {
+      "id": "in-overseas-mobility-bill",
+      "name": "Pending law: Overseas Mobility (Facilitation and Welfare) Bill, 2025",
+      "applies_to_destinations": ["*"],
+      "description": "Draft bill to replace the Emigration Act 1983: Overseas Mobility and Welfare Council, regulation of recruitment agencies with penalties, measures against irregular emigration and trafficking, mobility resource centres. Public comments closed 2025-11-07. As of 2026-11-22 no evidence found that it was introduced or passed; Emigration Act 1983 still governs. Re-check at review.",
+      "official_url": "https://www.mea.gov.in/overseasmobilitybill2025.htm",
+      "typical_time": null,
+      "typical_cost": null,
+      "verified": true
+    },
+    {
+      "id": "in-tax-residency",
+      "name": "Tax residency when leaving India (NRI basics)",
+      "applies_to_destinations": ["*"],
+      "description": "An Indian citizen leaving India in a financial year for employment abroad is resident only if in India >= 182 days that year (the general 60-day limb does not apply). Otherwise NRI: only India-sourced income taxable in India. Deemed-residence / RNOR rules can apply to citizens with Indian income > Rs 15 lakh (120-day limb; deemed resident if not liable to tax elsewhere). Leaving mid-year: year of departure often still 'resident' if >= 182 days already spent. Keep travel dates; check DTAA and foreign tax credit; convert savings accounts to NRO/NRE (FEMA). Not tax advice.",
+      "official_url": "https://incometaxindia.gov.in/Charts%20%20Tables/Residence-in-India-for-the-purpose-of-Income-Tax-Act.htm",
+      "typical_time": null,
+      "typical_cost": null,
+      "verified": false
+    }
+  ],
+  "scam_advisories": [
+    {
+      "id": "mea-fake-offers-dec-2023",
+      "issuer": "Ministry of External Affairs (via PIB) / Indian Missions",
+      "date": "2023-12",
+      "summary": "Rise in job seekers cheated by unregistered agents and overcharged Rs 2-5 lakh; fake offers targeting Canada, Israel, Europe. Red flags: WhatsApp-only communication, no contract signed by foreign employer/RA/emigrant, tourist visa instead of work visa. Verify RA licence on emigrate.gov.in 'List of active RA'. RA charge cap Rs 30,000 + GST. Contacts: pge@mea.gov.in, helpline@mea.gov.in.",
+      "url": "https://pib.gov.in/PressReleasePage.aspx?PRID=1985025",
+      "verified": false
+    },
+    {
+      "id": "mea-thailand-myanmar-2022",
+      "issuer": "Ministry of External Affairs",
+      "date": "2022-09",
+      "summary": "Fake IT/'digital marketing' jobs in Thailand used to take Indians illegally into Myanmar; verify foreign employers through Indian Missions and check recruiting agents' antecedents.",
+      "url": "https://theprint.in/india/verify-credentials-of-foreign-employers-mea-advisory-following-fake-job-offers-in-myanmar/1141182",
+      "verified": false
+    },
+    {
+      "id": "mea-cambodia-laos-2024",
+      "issuer": "Ministry of External Affairs / Embassies of India in Cambodia and Laos",
+      "date": "2024-05-17",
+      "summary": "Fake agents (with counterparts in India) lure people to Cambodia/Laos (often via Thailand) for 'Digital Sales and Marketing Executive' or 'Customer Support' roles at cyber-scam companies. Use only MEA-approved agents.",
+      "url": "https://www.newsonair.gov.in/government-issues-advisory-to-nationals-travelling-to-cambodia-for-jobs-to-be-wary-of-fake-agents",
+      "verified": false
+    },
+    {
+      "id": "govt-se-asia-rescues-2025",
+      "issuer": "Government of India (parliamentary reply, reported)",
+      "date": "2025-12",
+      "summary": "6,998 Indian nationals rescued from cybercrime centres in Cambodia, Myanmar and Laos 2022-2025; lures mostly via social media. Airports display warning posters.",
+      "url": "https://scroll.in/latest/1090539/scroll_in",
+      "verified": false
+    },
+    {
+      "id": "helpline-pbsk",
+      "issuer": "MEA - Pravasi Bhartiya Sahayata Kendra (PBSK)",
+      "date": "2026-04",
+      "summary": "24x7 toll-free 1800 11 3090; overseas (chargeable) +91-11-26885021; WhatsApp +91 74283 21144; email helpline@mea.gov.in; X @helplinePBSK; 11 languages. Grievances can also be logged on eMigrate. Walk-in Kshetriya PSKs: Delhi, Lucknow, Hyderabad, Chennai, Patna, Kochi.",
+      "url": "https://www.mea.gov.in/images/pdf/01-Overview-of-work-of-Overseas-Employment-21-04-2026.pdf",
+      "verified": true
+    },
+    {
+      "id": "helpline-madad",
+      "issuer": "MEA - MADAD consular grievance portal",
+      "date": null,
+      "summary": "Online consular grievance portal for Indians abroad (and families) - URL not re-verified this session.",
+      "url": "https://www.madad.gov.in",
+      "verified": false
+    },
+    {
+      "id": "helpline-cybercrime",
+      "issuer": "MHA - National Cyber Crime Reporting Portal",
+      "date": null,
+      "summary": "Report online job fraud / payment fraud: helpline 1930, cybercrime.gov.in - not re-verified this session.",
+      "url": "https://cybercrime.gov.in",
+      "verified": false
+    }
+  ],
+  "degree_evaluation": [
+    { "destination": "CA", "bodies": ["WES (World Education Services)", "ICAS", "IQAS", "CES (U of Toronto)", "ICES"], "purpose": "Educational Credential Assessment (ECA) for Express Entry / PR; not needed for an employer-sponsored work permit alone", "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/education-assessed.html", "typical_cost": null, "verified": false },
+    { "destination": "US", "bodies": ["WES", "ECE", "other NACES members"], "purpose": "Degree equivalency for H-1B specialty occupation (esp. 3-year degrees: evaluation combining education + experience)", "url": "https://www.naces.org", "typical_cost": null, "verified": false },
+    { "destination": "AU", "bodies": ["ACS (Australian Computer Society)"], "purpose": "Migration Skills Assessment for ICT occupations (skilled visas; some employer-sponsored streams)", "url": "https://www.acs.org.au/msa.html", "typical_cost": null, "note": "Secondary sources (post Nov-2025 revision) cite AUD 625 qualification-only / AUD 1,498 general skills - unverified", "verified": false },
+    { "destination": "NZ", "bodies": ["NZQA International Qualification Assessment"], "purpose": "Qualification recognition for skilled residence", "url": "https://www.nzqa.govt.nz", "typical_cost": null, "verified": false },
+    { "destination": "DE", "bodies": ["anabin database (KMK)", "ZAB Statement of Comparability"], "purpose": "Blue Card / skilled worker: degree must be recognised; if university is H+ but degree not listed in anabin, a ZAB Statement of Comparability is needed", "url": "https://www.make-it-in-germany.com/en/visa-recognition/recognition/evaluation-academic-degrees", "typical_cost": null, "note": "ZAB fee ~EUR 208, 2-3 months per secondary sources - unverified", "verified": false },
+    { "destination": "AT", "bodies": ["ENIC NARIC Austria"], "purpose": "Recognition/evaluation for Red-White-Red Card", "url": "https://www.aais.at", "typical_cost": null, "verified": false },
+    { "destination": "GB", "bodies": ["UK ENIC (Ecctis)"], "purpose": "Statement of Comparability, only needed where points require degree level (usually not for Skilled Worker with job offer)", "url": "https://www.enic.org.uk", "typical_cost": null, "verified": false },
+    { "destination": "IE", "bodies": ["QQI (NARIC Ireland)"], "purpose": "Foreign qualification comparison", "url": "https://www.qqi.ie", "typical_cost": null, "verified": false },
+    { "destination": "NL", "bodies": ["Nuffic (IDW)"], "purpose": "Diploma evaluation; Highly Skilled Migrant route generally needs no evaluation", "url": "https://www.nuffic.nl", "typical_cost": null, "verified": false },
+    { "destination": "AE", "bodies": ["UAE Ministry of Education equivalency", "MEA attestation + UAE embassy + MOFA"], "purpose": "Attested degree often required for work permit / skilled classification", "url": null, "typical_cost": null, "verified": false },
+    { "destination": "SA", "bodies": ["Saudi Council of Engineers (for 'engineer' job titles)", "MEA apostille (SA is Apostille member since 2022)"], "purpose": "Professional accreditation for engineering titles; degree authentication", "url": null, "typical_cost": null, "verified": false }
+  ],
+  "sources": [
+    { "url": "https://www.mea.gov.in/images/pdf/01-Overview-of-work-of-Overseas-Employment-21-04-2026.pdf", "title": "MEA - Overview of work of Overseas Employment & PGE Division (21-04-2026)", "used_for": "19 ECR countries, EC rules, eMigrate, ECNR voluntary registration, PBBY, PBSK helplines, 3,505 illegal agents", "accessed": "2026-11-22" },
+    { "url": "https://www.mea.gov.in/overseasmobilitybill2025.htm", "title": "MEA - Overseas Mobility (Facilitation and Welfare) Bill, 2025", "used_for": "draft bill replacing Emigration Act 1983; comments by 2025-11-07", "accessed": "2026-11-22" },
+    { "url": "https://www.policyedge.in/p/government-releases-stakeholder-recommendations-on-proposed-overseas-mobility-bill", "title": "The Policy Edge - stakeholder recommendations on proposed bill (Jul 2026)", "used_for": "bill still 'proposed' in 2026", "accessed": "2026-11-22" },
+    { "url": "https://www.hcch.net/en/instruments/conventions/status-table/?cid=41", "title": "HCCH - Apostille Convention status table", "used_for": "membership and entry-into-force dates per destination", "accessed": "2026-11-22" },
+    { "url": "https://www.mea.gov.in/apostille-menu.htm", "title": "MEA - Apostille menu", "used_for": "apostille fee Rs 50; normal attestation free (snippet)", "accessed": "2026-11-22" },
+    { "url": "https://www.mea.gov.in/attestation-and-apostille-matters.htm", "title": "MEA - Attestation and apostille matters", "used_for": "attestation process/FAQ (snippet)", "accessed": "2026-11-22" },
+    { "url": "https://portal2.passportindia.gov.in/AppOnlineProject/online/faqFeePayment", "title": "Passport Seva - Fee payment FAQ", "used_for": "PCC fee Rs 500 (snippet)", "accessed": "2026-11-22" },
+    { "url": "https://passportindia.gov.in/AppOnlineProject/pdf/PCC_Application_Form_Instructions_V2.0.pdf", "title": "Passport Seva - PCC application form instructions", "used_for": "PCC application flow (snippet)", "accessed": "2026-11-22" },
+    { "url": "https://incometaxindia.gov.in/Charts%20%20Tables/Residence-in-India-for-the-purpose-of-Income-Tax-Act.htm", "title": "Income Tax Dept - Residence in India chart", "used_for": "182-day rule for citizens leaving for employment (snippet)", "accessed": "2026-11-22" },
+    { "url": "https://taxsummaries.pwc.com/india/individual/residence", "title": "PwC Tax Summaries - India residence", "used_for": "RNOR / deemed residence / Rs 15 lakh (secondary)", "accessed": "2026-11-22" },
+    { "url": "https://pib.gov.in/PressReleasePage.aspx?PRID=1985025", "title": "PIB - MEA advisory on fake overseas jobs (Dec 2023) [403 on fetch]", "used_for": "red flags, RA fee cap (via news copies)", "accessed": "2026-11-22" },
+    { "url": "https://news.careers360.com/dont-fall-prey-fake-employment-offers-ministry-of-external-affairs-job-seekers-abroad", "title": "Careers360 - Don't fall prey to fake employment offers: MEA", "used_for": "secondary copy of Dec-2023 advisory", "accessed": "2026-11-22" },
+    { "url": "https://www.newsonair.gov.in/government-issues-advisory-to-nationals-travelling-to-cambodia-for-jobs-to-be-wary-of-fake-agents", "title": "AIR News - Advisory for Cambodia/Laos jobs (May 2024)", "used_for": "SE Asia cyber-scam advisory", "accessed": "2026-11-22" },
+    { "url": "https://theprint.in/india/verify-credentials-of-foreign-employers-mea-advisory-following-fake-job-offers-in-myanmar/1141182", "title": "ThePrint - MEA advisory Thailand/Myanmar (2022)", "used_for": "Myanmar advisory", "accessed": "2026-11-22" },
+    { "url": "https://scroll.in/latest/1090539/scroll_in", "title": "Scroll - ~7,000 Indians rescued from SE Asia cybercrime compounds", "used_for": "6,998 rescued 2022-2025", "accessed": "2026-11-22" },
+    { "url": "https://www.make-it-in-germany.com/en/visa-recognition/recognition/evaluation-academic-degrees", "title": "Make it in Germany - Evaluation of foreign academic degrees", "used_for": "anabin H+ / ZAB rules", "accessed": "2026-11-22" },
+    { "url": "https://acs.org.au/msa/infohub/fees-and-payment.html", "title": "ACS - MSA fees and payment", "used_for": "ACS as ICT assessor; fee figures not visible", "accessed": "2026-11-22" }
+  ]
+}

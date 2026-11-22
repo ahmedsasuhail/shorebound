@@ -1,0 +1,664 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred. Counts are for the whole Gulf research session (shared across ae/sa/qa and research later dropped for bh/kw/om); pages_read = 7 full pages via WebFetch + robots.txt of 20 job-site hosts via curl. Several official pages (mohre.gov.ae, saudieng.sa, sapr.gov.sa, mol.gov.qa) timed out or refused automated fetches."
+    },
+    "searches_run": 30,
+    "pages_read": 27,
+    "confidence": "low",
+    "open_questions": [
+      "High-skilled work-permit tier (from 2025-08-03): official minimum wage and points threshold not found; Centuro cites SAR 15,000/month and >=70 points but Fragomen/Magrath/Vialto say thresholds were not published - unverified.",
+      "Whether software/IT professions fall under the January 2026 engineering Saudization increase, and the current Nitaqat rates for IT roles.",
+      "Expat levy (SAR 800/700 per month) and dependent levy (SAR 400/month) come from aggregator sites, not an official MHRSD page.",
+      "Saudi Council of Engineers treatment of a 3-year BCA: whether a 'Software Development Specialist' or similar iqama title is available and what SCE registration it needs (saudieng.sa unreachable).",
+      "Premium Residency Special Talent: whether software engineers in private tech firms qualify under the 'science/healthcare' SAR 35,000 category; fees and processing time (sapr.gov.sa unreachable).",
+      "Work visa processing time and attestation specifics for Indian degrees (Saudi Cultural Mission / MOFA) not confirmed.",
+      "Salary: no Hays/Cooper Fitch tech figures could be read; range built from Jooble and Levels.fyi."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "SA",
+  "name": "Saudi Arabia",
+  "region": "middle_east",
+  "tier": "emerging_high_pay",
+  "default_enabled": true,
+  "currency": "SAR",
+  "languages": {
+    "official": [
+      "Arabic"
+    ],
+    "english_only_tech_jobs": "common",
+    "note": "Multinational and giga-project tech teams commonly work in English; Arabic is valued for government-facing roles (general observation, not sourced)."
+  },
+  "salary": {
+    "senior_swe_annual_gross": {
+      "low": 238524,
+      "high": 420232,
+      "currency": "SAR",
+      "period": "year",
+      "as_of": "2026-04"
+    },
+    "source_urls": [
+      "https://sa.jooble.org/salary/senior-developer/Riyadh",
+      "https://www.levels.fyi/t/software-engineer/levels/senior/locations/riyadh-sau",
+      "https://www.payscale.com/research/SA/Job=Senior_Software_Engineer/Salary/66cf1a84/Mid-Career-Riyadh"
+    ],
+    "note": "low = Jooble senior developer Riyadh ~SAR 19,877/month x 12 (posting-based); high = Levels.fyi Riyadh senior SWE total-comp upper value SAR 420,232/year (median SAR 343,798, updated 2026-04-01; skews to large tech employers and includes bonus/stock). PayScale early-career senior average ~SAR 15,000 (period unclear). Packages usually include housing and transport allowances. Approximate, low confidence."
+  },
+  "income_tax_note": "No personal income tax on employment income (general knowledge, not re-verified this session); expat costs include monthly levies on dependents (reported SAR 400/dependent/month, unverified) and 15% VAT (not re-verified).",
+  "cost_of_living_note": "Dependent levy materially raises family cost of living; no sourced housing figures gathered.",
+  "visa_routes": [
+    {
+      "id": "sa-work-visa",
+      "name": "Employer-sponsored work visa and iqama (skill-based classification)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": true,
+      "salary_threshold": {
+        "amount": null,
+        "currency": "SAR",
+        "period": "month",
+        "as_of": "2025-08",
+        "note": "From 2025-08-03 new hires are classified high-skilled / skilled / basic. High-skilled = occupation groups 1-3, minimum wage + professional accreditation + points test (education, experience, wage; Vialto adds skills and age). Official wage/points figures not found; one consultancy cites SAR 15,000 and >=70 points (unverified)."
+      },
+      "degree_requirement": "Attested degree matching the visa profession. Professional Accreditation programme: 'Professional Verification' (qualification check) for high-skill jobs; India was among the first five countries covered and it now spans 160 countries. Engineering professions on the iqama require Saudi Council of Engineers (SCE) registration.",
+      "three_year_indian_bachelors_note": "Risky for an 'Engineer' visa title: SCE assesses whether the academic programme qualifies for the engineer title (anecdotal reports say 8-semester/4-year degrees are expected). SCE also links IT iqama professions such as 'Software Development Specialist' and 'Software Engineering Specialist' to SCE registration at specialist/technician level. A BCA holder should seek a non-engineer title (e.g. programmer/developer/specialist) agreed with the employer before the visa is issued. Unconfirmed officially.",
+      "processing_time": null,
+      "lottery_or_quota": "No lottery. Nitaqat Saudization quotas by sector/profession; MHRSD announced higher Saudization for engineering and procurement roles (2026-01-04) and a next phase of 'Developed Nitaqat' (2026-04-26). Whether IT/software roles are directly affected was not confirmed. Basic tier has an age limit of 60 (not relevant to high-skilled).",
+      "path_to_pr": "No standard PR; Premium Residency (incl. Special Talent) is the long-term route.",
+      "employer_cost_note": "Employer pays the expat work-permit levy, reported as SAR 800/month per expat where expats outnumber Saudis (SAR 700 otherwise) plus a SAR 100/year work-permit service fee - aggregator figures, unverified.",
+      "official_url": "https://visa.mofa.gov.sa",
+      "verified": false
+    },
+    {
+      "id": "sa-premium-residency-special-talent",
+      "name": "Premium Residency - Special Talent (5-year)",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": true,
+      "salary_threshold": {
+        "amount": 35000,
+        "currency": "SAR",
+        "period": "month",
+        "as_of": "2025-01",
+        "note": "Healthcare and science professionals at whitelisted entities: SAR 35,000/month, bachelor's or higher, 3+ years experience. Researchers SAR 14,000; executives SAR 80,000. Per Fragomen/Centuro; official page not read."
+      },
+      "degree_requirement": "Bachelor's or higher (healthcare/science category); employer must be a whitelisted entity (3,484 private-sector entities reported approved).",
+      "three_year_indian_bachelors_note": "Unclear whether a 3-year bachelor's is accepted; and whether software roles count as 'science professionals' is unconfirmed.",
+      "processing_time": null,
+      "lottery_or_quota": "Employer whitelist",
+      "path_to_pr": "5-year permit, renewable; holders may become eligible for permanent Premium Residency if residency requirements are met (secondary sources).",
+      "employer_cost_note": "Fee not captured.",
+      "official_url": "https://sapr.gov.sa",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": false,
+    "name": "No public sponsor register (Nitaqat status visible only via logged-in Qiwa)",
+    "url": "https://www.qiwa.sa",
+    "format": "none",
+    "update_frequency": null,
+    "how_to_use": "Any licensed establishment with available Nitaqat visa quota may sponsor; the app cannot check this logged-out. Premium Residency whitelisted-entity list not found publicly.",
+    "verified": false
+  },
+  "sponsorship_phrases": {
+    "positive": [
+      "visa provided",
+      "employment visa will be provided",
+      "company visa",
+      "company sponsorship",
+      "relocation package",
+      "air ticket",
+      "annual air ticket",
+      "family status",
+      "overseas candidates considered",
+      "تأشيرة عمل",
+      "الشركة توفر التأشيرة",
+      "توفير التأشيرة",
+      "على كفالة الشركة",
+      "تذاكر سفر",
+      "بدل سكن",
+      "سكن مجاني",
+      "التوظيف من الخارج",
+      "استقدام"
+    ],
+    "negative": [
+      "nationals only",
+      "candidates currently in the country only",
+      "must be in the country",
+      "must have own visa",
+      "own visa",
+      "visit visa candidates",
+      "transferable visa",
+      "transferable iqama",
+      "NOC required",
+      "immediate joiner (local)",
+      "local candidates only",
+      "للمواطنين فقط",
+      "نقل كفالة",
+      "إقامة قابلة للتحويل",
+      "إقامة قابلة للنقل",
+      "مقيم داخل الدولة",
+      "متواجد داخل الدولة",
+      "تأشيرة زيارة",
+      "Saudi nationals only",
+      "Saudis only",
+      "للسعوديين فقط",
+      "سعودي الجنسية",
+      "transferable iqama only"
+    ]
+  },
+  "ease_for_indian_nationals": {
+    "score": 3,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "Large and growing tech hiring with high pay and English-speaking teams, and Indians are a core expatriate workforce. Friction: Saudization quotas, the 2025 skill-based classification and professional verification, SCE rules on 'engineer' titles that disadvantage a 3-year BCA, and employer levies that make employers selective.",
+    "factors": {
+      "degree_recognition": "Professional verification of qualifications; SCE engineer-title assessment is likely to reject 3-year degrees for 'Engineer' titles (anecdotal).",
+      "language_barrier": "Low-moderate; English common in tech.",
+      "processing_speed": "Not confirmed.",
+      "quota_or_lottery": "Nitaqat Saudization quotas; no lottery.",
+      "employer_willingness": "Moderate-high for senior tech; levies raise the bar.",
+      "attestation_or_paperwork": "Degree attestation plus Professional Accreditation verification; visa title must match qualification."
+    }
+  },
+  "relocation_norms": "Employer-paid visa and iqama are standard; packages commonly include housing and transport allowances. Flights, schooling and who pays dependent levies vary and were not sourced.",
+  "job_sites": [
+    {
+      "id": "bayt-sa",
+      "name": "Bayt.com",
+      "url": "https://www.bayt.com/en/saudi-arabia/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "One of the two largest Gulf-wide job boards. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-agent * disallows /en/jobs/?, /en/jobs/*-jobs/ (search and listing pages) and filter params; IndeedBot/LinkedInBot fully blocked. Use deep links only."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "gulftalent-sa",
+      "name": "GulfTalent",
+      "url": "https://www.gulftalent.com/saudi-arabia/jobs",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Major Gulf professional job board. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-agent * Allow: / but Disallow: /jobs/search and /api/jobs/search; Content-Signal search=yes, ai-train=no, use=reference; AI crawlers (incl. ClaudeBot) blocked. Country/category listing pages (not search) appear allowed for generic agents; low-rate polling only, and check ToS before enabling."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "naukrigulf-sa",
+      "name": "Naukrigulf",
+      "url": "https://www.naukrigulf.com",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Info Edge (Naukri.com) Gulf board; very widely used by Indian job seekers. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt and pages could not be fetched (connections from non-browser clients timed out/refused on 2026-11-22), so automated access is treated as not possible."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "indeed-sa",
+      "name": "Indeed (SA)",
+      "url": "https://sa.indeed.com",
+      "kind": "aggregator",
+      "reputation": "high",
+      "reputation_note": "Global aggregator; Gulf coverage includes many agency reposts. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. Disallows /rss, /*?rss, /m/viewjob and /jobs/<CC>/ paths, so the logged-out RSS feed is off-limits. Use link-out search URLs only."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "linkedin-sa",
+      "name": "LinkedIn Jobs",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Widely used for Gulf tech hiring and recruiter outreach. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt (120 KB) read 2026-11-22; generic crawlers are restricted. Link-out only."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "drjob-sa",
+      "name": "DrJob (drjobpro.com)",
+      "url": "https://www.drjobpro.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Gulf-focused aggregator; quality of listings not independently assessed. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-agent * Allow: / (only utm/refineParams disallowed); job-listing sitemaps published (sitemap-job-listings*.xml, sitemap-all-countries-index.xml), which suits polite polling."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "tanqeeb-sa",
+      "name": "Tanqeeb",
+      "url": "https://www.tanqeeb.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Arabic/English MENA aggregator; many reposted listings. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. Disallows /*?keywords, /*?countries, /*?job_id; sitemap at https://www.tanqeeb.com/sitemap.xml can be used for discovery. Site answered 202 (bot challenge likely) to curl."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "some",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "laimoon-sa",
+      "name": "Laimoon",
+      "url": "https://www.laimoon.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "MENA jobs/courses aggregator. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt returned an empty body/redirect on 2026-11-22; homepage reachable. Treat as link-only until robots/ToS are confirmed."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "akhtaboot-sa",
+      "name": "Akhtaboot",
+      "url": "https://www.akhtaboot.com",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Jordan-based MENA board with Gulf listings. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. Only named search engines allowed; 'User-agent: *' Disallow: /."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "jadarat-sa",
+      "name": "Jadarat (Unified National Employment Platform)",
+      "url": "https://jadarat.sa",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Official HRDF platform, but for Saudi nationals only (HRDF: applicant must be a Saudi national). Useful only as a negative signal: a role posted here targets Saudis.",
+      "access": {
+        "method": "link_only",
+        "auth": "account_required",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": false,
+        "robots_or_tos": "unclear",
+        "notes": "Cloudflare returned 403 to curl on 2026-11-22; login via National Unified Access with national ID. Not usable for expat job discovery."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "few",
+      "priority": 5,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    {
+      "name": "Glassdoor",
+      "url": "https://www.glassdoor.com",
+      "access": "link_only",
+      "note": "Employer reviews; link only."
+    }
+  ],
+  "communities": [
+    {
+      "name": "r/saudiarabia",
+      "url": "https://www.reddit.com/r/saudiarabia/",
+      "note": "General expat questions."
+    },
+    {
+      "name": "expat.com Saudi Arabia forum",
+      "url": "https://www.expat.com/en/forum/middle-east/saudi-arabia/",
+      "note": "Threads on iqama profession changes and SCE registration."
+    },
+    {
+      "name": "MADAD (MEA grievance portal)",
+      "url": "https://www.madad.gov.in",
+      "note": "Complaints about employers/agents."
+    }
+  ],
+  "scam_warnings": [
+    "Check that the visa profession (iqama title) printed on the offer matches your degree; a mismatched 'engineer' title can block SCE registration and iqama renewal.",
+    "Jadarat is for Saudi nationals only; offers claiming to come 'through Jadarat' for expatriates are suspect.",
+    "Any request for money (visa fee, processing fee, 'deposit', medical or 'security' fee) before or after an offer is a red flag; MOHRE states genuine employers cover all recruitment costs.",
+    "Offers that ask you to travel or start work on a visit/tourist visa: visit visas do not permit work; India's MEA says a genuine offer must allow emigration on an employment/work visa.",
+    "Unregistered Indian recruiting agents: MEA advisories report job seekers cheated by unregistered agents, with overcharging of roughly Rs 2-5 lakh; check the agent's licence number on the eMigrate 'List of active RA' (https://emigrate.gov.in/ext/raList.action).",
+    "A genuine overseas offer (per MEA) carries an employment contract signed by the foreign employer, the recruitment agent and the worker.",
+    "MEA (Aug 2023) warned that some agents misused foreign employers' eMigrate logins to generate fake offers, so an eMigrate-looking document alone is not proof.",
+    "App-detectable signals: fee/deposit keywords ('processing fee', 'visa charges', 'refundable deposit'), free-mail recruiter domains (gmail/yahoo/outlook) claiming to be a large company, WhatsApp/Telegram-only contact, no company name or address, salary far above market, 'immediate hiring, no interview', early requests for passport scans or bank details, and 'free visa' / 'visa for sale' wording ('فيزا حرة', 'إقامة حرة')."
+  ],
+  "sources": [
+    {
+      "url": "https://www.fragomen.com/insights/saudi-arabia-new-skill-based-work-permit-classification-system-introduced.html",
+      "title": "Fragomen 2025-07-28 - Saudi skill-based work permit classification",
+      "used_for": "tiers, effective dates, accreditation, thresholds not set",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://vialtopartners.com/regional-alerts/saudi-arabia-immigration-new-classification-of-work-permits-by-skill-categories",
+      "title": "Vialto - Saudi new classification of work permits",
+      "used_for": "high-skilled criteria (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.centuroglobal.com/article/saudi-arabia-work-visa/",
+      "title": "Centuro Global - Saudi work visa",
+      "used_for": "unverified SAR 15,000 / 70-point claim",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.hrsd.gov.sa/en/media-center/news/080720241",
+      "title": "HRSD news - Professional Accreditation Program",
+      "used_for": "Professional verification/inspection services (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://gulfnews.com/world/gulf/saudi/saudi-arabia-expands-professional-verification-programme-to-160-countries-1.500019969",
+      "title": "Gulf News - professional verification expanded to 160 countries",
+      "used_for": "Professional Verification scope",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.fragomen.com/insights/Saudi-Arabia-five-new-premium-residency-permit-categories-introduced.html",
+      "title": "Fragomen - five new Premium Residency categories",
+      "used_for": "Special Talent thresholds (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.zawya.com/en/economy/gcc/saudi-3-484-private-sector-entities-approved-for-special-talent-premium-residency-yubq0slr",
+      "title": "Zawya - 3,484 entities approved for Special Talent residency",
+      "used_for": "whitelist size",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.saudieng.sa/English/Eservices/Accreditation",
+      "title": "Saudi Council of Engineers - Accreditation",
+      "used_for": "non-engineering iqama registration, engineer-title assessment (search summary; page unreachable)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://saudieng.sa/English/Eservices/Accreditation/Pages/Guidelines-for-Registration-of-Technicians.aspx",
+      "title": "SCE - Guidelines for Registration of Technicians",
+      "used_for": "software-related iqama professions linked to SCE (search summary; fetch failed)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.expat.com/en/forum/middle-east/saudi-arabia/872075-list-of-professions-which-need-registration-in-sce.html",
+      "title": "expat.com forum - professions needing SCE registration",
+      "used_for": "anecdotal 8-semester degree expectation",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://taxnews.ey.com/news/2026-0167-saudi-arabia-announces-increase-in-saudization-rates-for-roles-in-the-engineering-and-procurement-sectors",
+      "title": "EY 2026-01-12 - Saudization increase for engineering/procurement",
+      "used_for": "Saudization announcement date (details not in page)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://taxnews.ey.com/news/2026-0983-saudi-arabia-introduces-next-phase-of-developed-nitaqat-framework",
+      "title": "EY 2026-05-04 - next phase of Developed Nitaqat",
+      "used_for": "Nitaqat phase (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://hijri-calendars.com/blog/saudi-work-permit-levy-guide-2026?lang=en",
+      "title": "Saudi work permit levy guide 2026 (aggregator)",
+      "used_for": "unverified levy amounts",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://hijri-calendars.com/blog/saudi-expat-levy-2026-complete-guide?lang=en",
+      "title": "Saudi expat dependent levy 2026 (aggregator)",
+      "used_for": "unverified dependent levy",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.hrdf.org.sa/en/products-and-services/programs/individuals/other/jadarat/",
+      "title": "HRDF - Jadarat for individuals",
+      "used_for": "Saudi-nationals-only eligibility (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.levels.fyi/t/software-engineer/levels/senior/locations/riyadh-sau",
+      "title": "Levels.fyi - Senior SWE Riyadh",
+      "used_for": "salary high bound (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://sa.jooble.org/salary/senior-developer/Riyadh",
+      "title": "Jooble - senior developer salary Riyadh",
+      "used_for": "salary low bound (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://sa.indeed.com/robots.txt",
+      "title": "sa.indeed.com robots.txt",
+      "used_for": "Indeed access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://jadarat.sa/robots.txt",
+      "title": "jadarat.sa robots.txt",
+      "used_for": "Jadarat (403 Cloudflare)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.mea.gov.in/overseas-employment.htm",
+      "title": "MEA - Overseas employment / advisories on fake job offers",
+      "used_for": "scam warnings, RA check, genuine-offer criteria (via search summaries of MEA advisories)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.hcigaborone.gov.in/docs/1703063160Advisory on overcharging by agents for overseas recruitment.pdf",
+      "title": "MEA advisory on overcharging by agents offering fake overseas jobs (Dec 2023, mission copy)",
+      "used_for": "Rs 2-5 lakh overcharging, unregistered agents",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://emigrate.gov.in/ext/raList.action",
+      "title": "eMigrate - List of active Recruiting Agents",
+      "used_for": "RA verification link (URL reachable 2026-11-22; redirects to SPA)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://gulfnews.com/going-out/society/agents-misuse-uae-employers-login-details-to-issue-fake-job-offers-1.1878795",
+      "title": "Gulf News - agents misuse employers' eMigrate login details to issue fake job offers",
+      "used_for": "scam warning",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.bayt.com/robots.txt",
+      "title": "www.bayt.com robots.txt",
+      "used_for": "Bayt access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.gulftalent.com/robots.txt",
+      "title": "www.gulftalent.com robots.txt",
+      "used_for": "GulfTalent access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.tanqeeb.com/robots.txt",
+      "title": "www.tanqeeb.com robots.txt",
+      "used_for": "Tanqeeb access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.akhtaboot.com/robots.txt",
+      "title": "www.akhtaboot.com robots.txt",
+      "used_for": "Akhtaboot access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.drjobpro.com/robots.txt",
+      "title": "www.drjobpro.com robots.txt",
+      "used_for": "DrJob access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.linkedin.com/robots.txt",
+      "title": "www.linkedin.com robots.txt",
+      "used_for": "LinkedIn access stance",
+      "accessed": "2026-11-22"
+    }
+  ]
+}

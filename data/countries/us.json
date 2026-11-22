@@ -1,0 +1,337 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred; robots.txt fetched directly with curl for job sites"
+    },
+    "searches_run": 19,
+    "pages_read": 25,
+    "confidence": "medium",
+    "open_questions": [
+      "Status of the $100,000 H-1B payment is in active litigation: D. Mass. vacated the policy on 2026-06-08, First Circuit denied a stay (reported 2026-07-24), a new proclamation of 2026-09-18 extends the fee to 2027-09-21, and USCIS was reported (Yale OISS, 2026-09-23) as not collecting it. A D.C. court reportedly upheld it in a separate case. Re-check USCIS before relying on it.",
+      "Exact weighted-selection entries per OEWS wage level (secondary sources say Level IV=4, III=3, II=2, I=1); the Federal Register text (90 FR, 2025-12-29) could not be loaded (bot block).",
+      "FY2027 registration count (211,600 reported by Fragomen) and selection rates not confirmed on a USCIS primary page.",
+      "Standard H-1B government filing fees (registration fee, I-129, ACWIA, fraud fee, premium processing) not re-read on USCIS fee schedule in this session; left out.",
+      "Current India EB-2/EB-3 Visa Bulletin final action dates not read; backlog described qualitatively only.",
+      "USCIS H-1B Specialty Occupations page returned 404 at its old URL; degree-equivalency regulation (8 CFR 214.2(h)(4)(iii)(D)(5)) cited from knowledge, eCFR blocked automated fetch.",
+      "Relocation-package norms not researched from a citable source.",
+      "Indeed / Dice / Built In / Wellfound Terms of Service pages not read; only robots.txt checked."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "US",
+  "name": "United States",
+  "region": "north_america",
+  "tier": "high_pay",
+  "default_enabled": true,
+  "currency": "USD",
+  "languages": {
+    "official": ["English (de facto; no federal official language law researched)"],
+    "english_only_tech_jobs": "common",
+    "note": "Tech work is in English."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 200000, "high": 398000, "currency": "USD", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://www.levels.fyi/t/software-engineer/locations/united-states"],
+    "note": "Levels.fyi all-levels TOTAL compensation (base+stock+bonus), 45,985 data points, updated 2026-11-22: 25th pct $140,000, median $200,000, 75th $289,400, 90th $398,000. Range here uses median→90th as a rough proxy for senior (5-10 yrs) at product companies; base salary alone is lower and varies strongly by metro and company. Not a government wage figure."
+  },
+  "income_tax_note": "Federal progressive income tax plus state (and sometimes city) income tax; some states (e.g. Texas, Washington) have no state income tax. Rates not re-verified in this session.",
+  "cost_of_living_note": "Very high in SF Bay Area, Seattle, New York; lower in many other metros. Not quantified in this research.",
+  "visa_routes": [
+    {
+      "id": "us-h1b",
+      "name": "H-1B Specialty Occupation (cap-subject)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "USD", "period": "year", "as_of": "2026-11", "note": "No fixed national minimum; employer must pay at least the DOL prevailing/actual wage via an LCA. Since FY2027 the cap lottery is wage-weighted: higher OEWS wage level = more lottery entries (reported Level IV 4x, III 3x, II 2x, I 1x)." },
+      "degree_requirement": "Specialty occupation requiring a US bachelor's degree or foreign equivalent in a specific related field (or equivalent via education + experience).",
+      "three_year_indian_bachelors_note": "A 3-year Indian bachelor's is usually NOT accepted alone as a US bachelor's equivalent. WES may grant US-bachelor's equivalency only if earned in Division I from a NAAC 'A' or better institution; otherwise treated as 3 years of undergraduate study. For H-1B, USCIS regulations allow '3-for-1': three years of progressively responsible specialized experience may substitute for each missing year of college (8 CFR 214.2(h)(4)(iii)(D)(5)), so a 3-year degree + 3 years relevant experience is commonly evaluated as a US bachelor's equivalent by a credential evaluator. The 3-for-1 substitution generally does not carry over to EB-2 green-card filings that require a single-source degree.",
+      "processing_time": "Registration in March (FY2027 window 2026-03-04 to 2026-03-19); selections announced 2026-03-31; petitions filed from 1 April; employment start 1 October at earliest. Premium processing available for petitions.",
+      "lottery_or_quota": "Annual cap 65,000 + 20,000 US-master's cap. FY2027 used the new wage-weighted selection (DHS final rule published 2025-12-29, effective 2026-02-27). Cap reached for FY2027; no second lottery. Cap-exempt employers (universities, affiliated nonprofits, research orgs) are not subject to the lottery.",
+      "path_to_pr": "Dual intent; employer can sponsor EB-2/EB-3 green card (PERM). Indian-born applicants face very long EB-2/EB-3 per-country backlogs (many years; check State Dept Visa Bulletin).",
+      "employer_cost_note": "Employer pays registration, petition and legal fees. Proclamation 10973 (2025-09-19) added a $100,000 payment for certain NEW petitions for workers outside the US / requiring consular notification; extended 2026-09-18 to 2027-09-21, but the implementing policy was vacated by D. Mass. on 2026-06-08 and reported not being collected as of late Sept 2026. Change-of-status/extension petitions inside the US were exempt. A 2026-09-18 Executive Order adds closer review of employers with recent layoffs.",
+      "official_url": "https://www.uscis.gov/working-in-the-united-states/h-1b-specialty-occupations",
+      "verified": false
+    },
+    {
+      "id": "us-l1",
+      "name": "L-1A / L-1B Intracompany Transferee",
+      "type": "intra_company",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "USD", "period": "year", "as_of": "2026-11", "note": "No statutory salary minimum." },
+      "degree_requirement": "No degree requirement; worker must have been employed abroad by a qualifying related entity (parent/subsidiary/affiliate/branch) for 1 continuous year in the prior 3 years, as manager/executive (L-1A) or with specialized knowledge (L-1B).",
+      "three_year_indian_bachelors_note": "Degree not required, so a 3-year degree is not a barrier.",
+      "processing_time": null,
+      "lottery_or_quota": "No cap, no lottery.",
+      "path_to_pr": "L-1A managers may qualify for EB-1C (no PERM); still subject to India per-country limits.",
+      "employer_cost_note": "Employer files petition; only realistic if currently employed at a multinational with a US entity.",
+      "official_url": "https://www.uscis.gov/working-in-the-united-states/temporary-workers/l-1a-intracompany-transferee-executive-or-manager",
+      "verified": false
+    },
+    {
+      "id": "us-o1",
+      "name": "O-1A Extraordinary Ability",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "USD", "period": "year", "as_of": "2026-11", "note": "'High salary' is one of the evidentiary criteria, not a threshold." },
+      "degree_requirement": "None; must show sustained national/international acclaim (meet at least 3 of the regulatory criteria, e.g. awards, publications, judging, critical role, high remuneration).",
+      "three_year_indian_bachelors_note": "Degree not relevant.",
+      "processing_time": null,
+      "lottery_or_quota": "No cap.",
+      "path_to_pr": "Often paired with EB-1A or EB-2 NIW self-petition; India backlog still applies.",
+      "employer_cost_note": "US employer or agent petitions; legal fees significant. High evidentiary bar for a typical senior full-stack engineer.",
+      "official_url": "https://www.uscis.gov/working-in-the-united-states/temporary-workers/o-1-visa-individuals-with-extraordinary-ability-or-achievement",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": true,
+    "name": "USCIS H-1B Employer Data Hub (also: DOL OFLC LCA disclosure data)",
+    "url": "https://www.uscis.gov/tools/reports-and-studies/h-1b-employer-data-hub",
+    "format": "csv",
+    "update_frequency": "Not stated on page; data covers FY2009 through FY2026 Q4 as of 2026-11-22.",
+    "how_to_use": "Download annual files (Crosstab View → Download → CSV/Excel). Fields queryable by fiscal year, employer name, city, state, ZIP, NAICS; employers identified by name + last 4 of tax ID; counts are first-decision approvals/denials for initial and continuing employment. App: normalise employer names (lowercase, strip punctuation and suffixes like Inc/LLC/Corp/LP, '&'→'and'), aggregate across name variants, flag companies with recent 'initial approval' counts > 0 as likely H-1B sponsors. It is not a licence register: any US employer can file.",
+    "verified": true
+  },
+  "sponsorship_phrases": {
+    "positive": ["visa sponsorship available", "will sponsor H-1B", "H-1B sponsorship", "open to sponsoring", "H-1B transfer", "green card sponsorship"],
+    "negative": ["must be authorized to work in the US without sponsorship", "no visa sponsorship", "we are unable to sponsor", "US citizens or green card holders only", "requires US citizenship", "security clearance required", "no C2C / no H-1B", "will not sponsor now or in the future"]
+  },
+  "ease_for_indian_nationals": {
+    "score": 2,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "Highest pay, but the main route (H-1B) is an annual lottery (now wage-weighted, which favours senior offers), the employer must sponsor from abroad, a $100,000 new-petition fee is in force-but-blocked litigation that deters overseas hiring, a 3-year Indian degree needs an education+experience equivalency, and India-born green-card backlogs are very long.",
+    "factors": {
+      "degree_recognition": "3-year degree not equivalent by itself; use 3-for-1 experience equivalency evaluation for H-1B.",
+      "language_barrier": "None for English speakers.",
+      "processing_speed": "Fixed annual cycle: register March, start October at earliest.",
+      "quota_or_lottery": "65,000 + 20,000 cap; wage-weighted lottery since FY2027.",
+      "employer_willingness": "Large H-1B ecosystem, but sponsoring candidates abroad is now costlier/riskier; many postings say 'no sponsorship'.",
+      "attestation_or_paperwork": "Credential evaluation, experience letters, LCA, petition, consular interview."
+    }
+  },
+  "relocation_norms": "Not researched from a citable source in this session; large tech firms commonly offer relocation for sponsored hires, but terms vary.",
+  "job_sites": [
+    {
+      "id": "hn-whoishiring-us",
+      "name": "Hacker News 'Ask HN: Who is hiring?' (monthly)",
+      "url": "https://news.ycombinator.com/submitted?id=whoishiring",
+      "kind": "community",
+      "reputation": "high",
+      "reputation_note": "Posts by startups/companies directly; many mention VISA/REMOTE/ONSITE in a header line.",
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://hn.algolia.com/api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Algolia HN Search API, e.g. /api/v1/search_by_date?tags=story,author_whoishiring then fetch comments by story id. Tested working 2026-11-22. Thread text asks posters to state location, REMOTE/ONSITE; grep comments for 'VISA'."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": true },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "adzuna-us",
+      "name": "Adzuna (US)",
+      "url": "https://www.adzuna.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Aggregates many boards; good for breadth, dedupe needed.",
+      "access": {
+        "method": "official_api",
+        "auth": "free_key",
+        "docs_url": "https://developer.adzuna.com/overview",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Requires app_id + app_key from developer registration. Pricing and rate limits not stated on overview page; read Adzuna API terms (attribution) before shipping. Endpoint pattern /v1/api/jobs/{country}/search/{page}."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": true },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "linkedin-us",
+      "name": "LinkedIn Jobs",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Largest professional network; many fake/ghost postings too.",
+      "access": {
+        "method": "link_only",
+        "auth": "account_required",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": false,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt states automated access without express permission is strictly prohibited and has 'User-agent: * Disallow: /'. Generate search deep links only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "indeed-us",
+      "name": "Indeed",
+      "url": "https://www.indeed.com",
+      "kind": "aggregator",
+      "reputation": "high",
+      "reputation_note": "Largest US job aggregator.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt allows some search paging but disallows '?rss' and many paths; ToS not read in this session. Treat as link-only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": true
+    },
+    {
+      "id": "dice-us",
+      "name": "Dice",
+      "url": "https://www.dice.com",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Tech-only board; heavy staffing-agency presence.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt disallows /job, /jobs?q*, /jobsearch/, /rss/, /feed/."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": true
+    },
+    {
+      "id": "builtin-us",
+      "name": "Built In",
+      "url": "https://builtin.com/jobs",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Tech/startup roles by US city hub.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt disallows /jobs*?search= and many facet paths; ToS not read."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 6,
+      "verified": true
+    },
+    {
+      "id": "wellfound-us",
+      "name": "Wellfound (formerly AngelList Talent)",
+      "url": "https://wellfound.com/jobs",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Startup jobs; some list visa sponsorship.",
+      "access": {
+        "method": "link_only",
+        "auth": "account_required",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt disallows /_jobs/, ?jobId=, ?role= and similar query paths. Applying requires an account."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 7,
+      "verified": false
+    },
+    {
+      "id": "glassdoor-us",
+      "name": "Glassdoor Jobs",
+      "url": "https://www.glassdoor.com/Job/",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Jobs alongside company reviews and salaries.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt has extensive Disallow rules; content often gated behind login."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 8,
+      "verified": true
+    }
+  ],
+  "review_sources": [
+    { "name": "Glassdoor", "url": "https://www.glassdoor.com", "access": "link_only", "note": "Employee reviews, salaries, interviews; login walls." },
+    { "name": "Levels.fyi", "url": "https://www.levels.fyi", "access": "link_only", "note": "Compensation by company/level; public pages readable." },
+    { "name": "Blind", "url": "https://www.teamblind.com", "access": "link_only", "note": "Anonymous verified-employee forum; not verified this session." },
+    { "name": "USCIS H-1B Employer Data Hub", "url": "https://www.uscis.gov/tools/reports-and-studies/h-1b-employer-data-hub", "access": "api", "note": "Not reviews, but historic H-1B approvals/denials per employer (CSV download)." }
+  ],
+  "communities": [
+    { "name": "r/h1b", "url": "https://www.reddit.com/r/h1b/", "note": "H-1B lottery/fee news and experiences (not verified this session)." },
+    { "name": "r/cscareerquestions", "url": "https://www.reddit.com/r/cscareerquestions/", "note": "US-centric tech career discussion." },
+    { "name": "r/immigration", "url": "https://www.reddit.com/r/immigration/", "note": "General US immigration questions." }
+  ],
+  "scam_warnings": [
+    "Anyone selling a 'guaranteed H-1B' or charging the worker for lottery registration/sponsorship: the H-1B is lottery-based and employer-filed; no one can guarantee selection.",
+    "Body-shop/consultancy offers that file many registrations and 'bench' workers without pay or require bonds/penalty clauses; verify the employer in the H-1B Employer Data Hub and ask for the actual end client.",
+    "Recruiters asking for money for 'visa processing', training or interview slots; or offers made only over chat apps without interviews.",
+    "Claims that the $100,000 fee must be paid by the worker: the proclamation targets employers' petitions, and its status is in litigation."
+  ],
+  "sources": [
+    { "url": "https://oiss.yale.edu/news/presidential-proclamation-extends-h-1b-100000-fee-policy-fee-remains-blocked-by-court-order", "title": "Yale OISS: Proclamation Extends H-1B $100,000 Fee Policy; Fee Remains Blocked by Court Order (2026-09-23)", "used_for": "Extension to 2027-09-21; D. Mass. 2026-06-08 vacatur; First Circuit 2026-07-24 stay denial; USCIS not collecting; 2026-09-18 Executive Order", "accessed": "2026-11-22" },
+    { "url": "https://www.fragomen.com/insights/united-states-federal-appeals-court-declines-to-stay-lower-court-order-vacating-dollar100000-h-1b-fee.html", "title": "Fragomen: Federal Appeals Court Declines to Stay Lower Court Order Vacating $100,000 H-1B Fee (2026-07-24)", "used_for": "Case name State of California et al. v. Mullin, No. 1:25-cv-13829 (D. Mass.)", "accessed": "2026-11-22" },
+    { "url": "https://www.bu.edu/isso/2025/10/20/uscis-publishes-additional-guidance-regarding-100000-h-1b-fee/", "title": "BU ISSO: USCIS additional guidance on $100,000 H-1B fee", "used_for": "Scope of fee (new petitions, consular notification; COS/extension exempt)", "accessed": "2026-11-22" },
+    { "url": "https://www.govinfo.gov/content/pkg/FR-2025-12-29/pdf/2025-23853.pdf", "title": "Federal Register 2025-12-29: Weighted Selection Process for cap-subject H-1B (not fully read)", "used_for": "Weighted selection rule reference; effective 2026-02-27 per secondary sources", "accessed": "2026-11-22" },
+    { "url": "https://www.gtlaw.com/ja/insights/2026/2/uscis-finalizes-wage-weighted-h-1b-cap-selection-rule-effective-feb-27-2026", "title": "Greenberg Traurig: USCIS finalizes wage-weighted H-1B cap selection rule effective Feb 27 2026 (search snippet)", "used_for": "Weighting by wage level", "accessed": "2026-11-22" },
+    { "url": "https://content.govdelivery.com/accounts/USDHSCIS/bulletins/410e914", "title": "USCIS bulletin: FY 2027 H-1B Initial Registration Selection Process Completed (search snippet)", "used_for": "Selection completed 2026-03-31; caps 65,000 + 20,000", "accessed": "2026-11-22" },
+    { "url": "https://www.fragomen.com/insights/united-states-h-1b-cap-is-reached-for-fy-2027.html", "title": "Fragomen: H-1B cap is reached for FY 2027 (search snippet)", "used_for": "211,600 registrations FY2027 vs 343,981 FY2026 (unconfirmed on USCIS)", "accessed": "2026-11-22" },
+    { "url": "https://www.uscis.gov/tools/reports-and-studies/h-1b-employer-data-hub", "title": "USCIS H-1B Employer Data Hub", "used_for": "Sponsor register: FY2009–FY2026 Q4, CSV/Excel, fields", "accessed": "2026-11-22" },
+    { "url": "https://www.wes.org/resource-library/blog/credential-advice/3-year-indian-bachelors-degree/", "title": "WES: The 3-year Indian bachelor's degree (2024-01-19)", "used_for": "Division I + NAAC A or better condition for US bachelor's equivalency", "accessed": "2026-11-22" },
+    { "url": "https://www.ecfr.gov/current/title-8/chapter-I/subchapter-B/part-214/section-214.2", "title": "8 CFR 214.2(h)(4)(iii)(D)(5) (fetch blocked; cited from knowledge)", "used_for": "3-for-1 experience-for-education rule", "accessed": "2026-11-22" },
+    { "url": "https://www.levels.fyi/t/software-engineer/locations/united-states", "title": "Levels.fyi Software Engineer salaries, United States", "used_for": "Salary percentiles", "accessed": "2026-11-22" },
+    { "url": "https://hn.algolia.com/api", "title": "HN Search API (Algolia)", "used_for": "Who is hiring access method (tested)", "accessed": "2026-11-22" },
+    { "url": "https://developer.adzuna.com/overview", "title": "Adzuna API overview", "used_for": "API auth (app_id/app_key)", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt", "used_for": "Automated access prohibited notice", "accessed": "2026-11-22" },
+    { "url": "https://www.indeed.com/robots.txt", "title": "Indeed robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://www.dice.com/robots.txt", "title": "Dice robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://builtin.com/robots.txt", "title": "Built In robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://wellfound.com/robots.txt", "title": "Wellfound robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://www.glassdoor.com/robots.txt", "title": "Glassdoor robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" }
+  ]
+}

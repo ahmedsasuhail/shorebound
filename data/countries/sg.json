@@ -1,0 +1,359 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred. Counts below are Singapore-attributed searches/page reads, including 3 region-wide scam-advisory searches; curl probes of robots.txt files are not counted."
+    },
+    "searches_run": 7,
+    "pages_read": 7,
+    "confidence": "medium",
+    "open_questions": [
+      "Whether a 3-year Indian bachelor's (e.g. BCA) is accepted by MOM as 'degree-equivalent' for COMPASS C2 (10 points). MOM says it benchmarks against bodies such as UK ENIC but I did not find an explicit ruling on 3-year Indian degrees.",
+      "Whether software developer / engineer occupations are on the COMPASS C5 Shortage Occupation List (not checked).",
+      "Minimum MyCareersFuture advertising period and exemptions under the Fair Consideration Framework (the MOM apply page does not state them).",
+      "EP validity for first-time candidates (not stated on the MOM apply page I read).",
+      "Path to PR: EP holders can apply to ICA for PR, but criteria and approval rates are not published and were not researched.",
+      "Income tax rates were not re-verified this session (IRAS not read). Tax note left generic.",
+      "MyCareersFuture terms of use on automated access could not be read (page rendered empty). robots.txt allows all user-agents except meta-externalagent.",
+      "NodeFlair job and salary pages returned 403 to automated fetches. Access method for the app is unconfirmed.",
+      "Typical relocation packages in Singapore were not researched.",
+      "Full ONE Pass (AI and Tech) track criteria, including renewals, still to be published by MOM (track opens 28 Jan 2027).",
+      "Updated COMPASS C2 institution lists apply from 1 Jan 2027. Re-check which institutions get 20 points."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "SG",
+  "name": "Singapore",
+  "region": "southeast_asia",
+  "tier": "high_pay",
+  "default_enabled": true,
+  "currency": "SGD",
+  "languages": {
+    "official": ["English", "Malay", "Mandarin", "Tamil"],
+    "english_only_tech_jobs": "common",
+    "note": "English is the working language of business and tech. Some roles ask for Mandarin for regional/China-facing work; treat 'Mandarin required' as a filter signal."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 136526, "high": 233681, "currency": "SGD", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://www.levels.fyi/t/software-engineer/levels/senior/locations/singapore"],
+    "note": "Levels.fyi Senior Software Engineer TOTAL COMPENSATION (incl. stock/bonus), 25th-75th percentile; median SGD 178K/yr (~SGD 14,802/month), 90th SGD 286,987; 377 data points, updated 2026-11-22. Levels.fyi skews to large tech/product firms; base salaries at local SMEs will be lower."
+  },
+  "income_tax_note": "Progressive resident personal income tax with relatively low rates by global standards; exact 2026 brackets not re-verified this session (see IRAS).",
+  "cost_of_living_note": "High; rental housing is the dominant cost for new arrivals. No figures researched.",
+  "visa_routes": [
+    {
+      "id": "sg-ep",
+      "name": "Employment Pass (EP)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": {
+        "amount": 5600,
+        "currency": "SGD",
+        "period": "month",
+        "as_of": "2026-11",
+        "note": "Stage 1 qualifying salary rises with age: S$5,600 at age 23 or below up to S$10,700 at 45+ (age-30 example S$7,223). Financial services: S$6,200 up to S$11,800. FROM 1 JAN 2027 (new applications; renewals expiring from 1 Jan 2028): S$6,000 up to S$11,500 (age-30 example S$7,750); financial services S$6,600 up to S$12,700. Stage 2: must score 40 COMPASS points unless fixed monthly salary is at least S$22,500, or the candidate is an overseas intra-corporate transferee, or the role is 1 month or less."
+      },
+      "degree_requirement": "No hard degree requirement. COMPASS C2 Qualifications: 20 pts for top-tier institutions (e.g. top-100 QS, Singapore autonomous universities), 10 pts for other degree-equivalent qualifications, 0 for none. Candidates without a degree can still pass with 40 pts from other criteria: C1 salary vs sector/age benchmarks (20/10/0), C3 nationality diversity (20/10/0; firms under 25 PMETs get 10), C4 support for local employment (20/10/0; firms under 25 PMETs get 10), C5 Shortage Occupation List bonus (20/10), C6 Strategic Economic Priorities bonus (10). Degrees declared for C2 need verification proof (background screening company, institution/government verification portal, or OpenCerts).",
+      "three_year_indian_bachelors_note": "MOM assesses foreign qualifications against bodies such as UK ENIC. A 3-year Indian BCA/BSc from a state university is unlikely to be on the 20-point list and would at best score 10 points if accepted as degree-equivalent. Acceptance is not confirmed (open question). Practical route for a senior engineer: a salary at or above the 90th percentile (C1 = 20) plus C2 = 10 plus some points from C3/C4/C5 to reach 40. C3 may be low at large firms where Indian nationals are a large share of PMETs. Pay of at least S$22,500/month fixed skips COMPASS.",
+      "processing_time": "Online applications are processed or given an update within 10 business days. Overseas companies without a Singapore-registered office (sponsorship route): within 6 weeks in most cases.",
+      "lottery_or_quota": "No lottery or quota for EP. COMPASS points-based assessment applies.",
+      "path_to_pr": "EP holders may apply to ICA for permanent residence. Approval is discretionary and the criteria are not published (not researched).",
+      "employer_cost_note": "Application fee S$105 and issuance fee S$225 per pass (Multiple Journey Visa S$30 if applicable). The employer or an appointed employment agent applies. The employer must first advertise the job on MyCareersFuture under the Fair Consideration Framework (FCF). There is no EP levy.",
+      "official_url": "https://www.mom.gov.sg/passes-and-permits/employment-pass/eligibility",
+      "verified": true
+    },
+    {
+      "id": "sg-one-pass",
+      "name": "Overseas Networks & Expertise Pass (ONE Pass)",
+      "type": "talent",
+      "requires_job_offer": false,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": {
+        "amount": 30000,
+        "currency": "SGD",
+        "period": "month",
+        "as_of": "2026-11",
+        "note": "Fixed monthly salary of at least S$30,000, either for 12 consecutive months with one employer before applying, or in prospective employment with an established Singapore company (start within 6 months). New AI and Tech track from 28 Jan 2027: fixed salary of at least S$22,500, with the rest of the S$30,000 allowed as vested non-cash components (e.g. ESOP), subject to assessment. There is also an outstanding-achievements route (sports, arts and culture, academia and research)."
+      },
+      "degree_requirement": "None stated for the salary route.",
+      "three_year_indian_bachelors_note": "Degree not assessed under the salary route. Out of reach for most senior ICs because of the salary bar.",
+      "processing_time": null,
+      "lottery_or_quota": "None stated.",
+      "path_to_pr": "Not researched.",
+      "employer_cost_note": "Not stated on the eligibility page.",
+      "official_url": "https://www.mom.gov.sg/passes-and-permits/overseas-networks-expertise-pass/eligibility",
+      "verified": true
+    },
+    {
+      "id": "sg-tech-pass",
+      "name": "Tech.Pass (EDB), closing 28 Jan 2027",
+      "type": "talent",
+      "requires_job_offer": false,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": {
+        "amount": 22500,
+        "currency": "SGD",
+        "period": "month",
+        "as_of": "2026-11",
+        "note": "Last-drawn fixed monthly salary in the past year of at least S$22,500, plus at least 5 cumulative years in a leading tech role (other criteria apply). EDB stops accepting new and renewal applications from 28 Jan 2027, when it is replaced by the ONE Pass AI and Tech track."
+      },
+      "degree_requirement": "Not stated in the material I read.",
+      "three_year_indian_bachelors_note": "Not degree-gated in the material I read. Out of reach for most senior ICs because of the salary bar.",
+      "processing_time": null,
+      "lottery_or_quota": "Scheme closing; quota not researched.",
+      "path_to_pr": "Not researched.",
+      "employer_cost_note": "Not researched.",
+      "official_url": "https://www.edb.gov.sg/en/how-we-help/incentives-and-facilitation/tech-pass",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": false,
+    "name": "None. There is no public register of approved EP employers. The Fair Consideration Framework (FCF) watchlist was discontinued in 2023, and its names were never part of what I read.",
+    "url": "https://www.mom.gov.sg/newsroom/parliament-questions-and-replies/2026/0224-written-answer-to-pq-on-fair-consideration-framework-watchlist",
+    "format": "none",
+    "update_frequency": "n/a",
+    "how_to_use": "There is no list to match against. Per MOM's 24 Feb 2026 parliamentary answer, nearly 1,000 firms (mostly ICT, professional services and construction) were placed on the FCF watchlist in 2016-2023, and its criteria now live inside COMPASS. No firm names are given. Useful proxy: the MyCareersFuture API returns the employer's UEN (postedCompany.uen) on every job. Use the UEN for exact company matching and de-duplication, and to look the company up in ACRA records (age, status). Because EP employers must advertise on MyCareersFuture first, an MCF posting is consistent with EP hiring but is NOT evidence of sponsorship.",
+    "verified": true
+  },
+  "sponsorship_phrases": {
+    "positive": ["visa sponsorship", "EP sponsorship", "Employment Pass sponsorship available", "open to foreigners", "open to all nationalities", "relocation package", "relocation support"],
+    "negative": ["Singaporeans only", "Singapore Citizens only", "Singaporeans and PRs only", "SC/PR only", "SC & PR only", "only Singaporeans/PRs need apply", "no visa sponsorship", "must be eligible to work in Singapore", "must have valid work pass"]
+  },
+  "ease_for_indian_nationals": {
+    "score": 4,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "English-only work is common, processing is fast (about 10 business days) and pay is high. There is no lottery and the EP is transparent and points-based. The main risks are COMPASS points: a 3-year Indian degree scores 10 at most (if accepted), and C3 diversity can score 0 at large firms with many Indian PMETs. The candidate therefore usually needs a salary near the 90th percentile for their age and sector. Thresholds rise on 1 Jan 2027.",
+    "factors": {
+      "degree_recognition": "Not mandatory. A degree-equivalent Indian degree gives 10 COMPASS points; acceptance of 3-year degrees is unconfirmed; verification proof required.",
+      "language_barrier": "Low; English is the business language.",
+      "processing_speed": "Fast: within 10 business days online (6 weeks for overseas sponsors).",
+      "quota_or_lottery": "None. COMPASS 40-point test unless fixed salary is at least S$22,500/month.",
+      "employer_willingness": "Common among MNC and tech employers, but COMPASS C3 (nationality share) discourages concentration of any one nationality at firms with 25 or more PMETs.",
+      "attestation_or_paperwork": "Qualification verification proof needed for C2 points (screening firm, institution portal or OpenCerts)."
+    }
+  },
+  "relocation_norms": "Not researched. Treat relocation as negotiable and parse 'relocation package' or 'relocation support' from the job text.",
+  "job_sites": [
+    {
+      "id": "mycareersfuture-sg",
+      "name": "MyCareersFuture (Workforce Singapore)",
+      "url": "https://www.mycareersfuture.gov.sg",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Official government job portal. Employers must advertise here before applying for an EP (FCF), so it is the most complete source for roles open to EP candidates.",
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Undocumented public JSON API, tested 2026-11-22: GET https://api.mycareersfuture.gov.sg/v2/jobs?search=software%20engineer&limit=20&page=0 returns results[], total and HAL _links (next/last). Each job has title, description (HTML), salary {minimum, maximum, type}, minimumYearsExperience, skills[], employmentTypes, positionLevels, flexibleWorkArrangements, postedCompany (incl. uen), and metadata {newPostingDate, originalPostingDate, expiryDate, createdAt, jobDetailsUrl, totalNumberJobApplication}. Detail: /v2/jobs/{uuid}. www robots.txt allows all user-agents except meta-externalagent. Terms of use could not be read. Use politely (low request rate, cache)."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "nodeflair-sg",
+      "name": "NodeFlair",
+      "url": "https://nodeflair.com/jobs",
+      "kind": "tech_niche",
+      "reputation": "high",
+      "reputation_note": "Singapore-founded tech job board and salary database. Its salary pages are a common local benchmark.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt: 'User-agent: * Allow: /' with Content-Signal 'search=yes, ai-train=no, use=reference'. Sitemap at https://nodeflair.com/sitemap.xml.gz. The jobs and salary pages returned 403 / connection failure to automated fetches during research, so bot protection is likely. Fall back to link_only if scraping fails."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": null, "relocation": null, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "linkedin-sg",
+      "name": "LinkedIn Jobs",
+      "url": "https://www.linkedin.com/jobs/search/?location=Singapore",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Largest professional network; widely used by Singapore tech employers and recruiters.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt: 'User-agent: * Disallow: /' (crawling requires whitelisting via whitelist-crawl@linkedin.com). Generate deep links only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "jobstreet-sg",
+      "name": "JobStreet Singapore (SEEK)",
+      "url": "https://sg.jobstreet.com",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Major general job board across Southeast Asia (SEEK group).",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt disallows all query strings ('*?', except ?keywords and ?advertiserid), /graphql and /api/jobsearch/. Deep links only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": true
+    },
+    {
+      "id": "glints-sg",
+      "name": "Glints",
+      "url": "https://glints.com/sg/opportunities/jobs/explore",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Regional startup/tech-leaning board, strongest in Indonesia and Vietnam; smaller Singapore inventory.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt disallows explore pages with query strings (*/opportunities/jobs/explore?*) and /api/gt/*, but publishes job sitemaps (https://glints.com/sitemap_index.xml lists sitemap_job_id_*.xml). Discover jobs via the sitemaps rather than search pages. Terms not read."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "techinasia-jobs-sg",
+      "name": "Tech in Asia Jobs",
+      "url": "https://www.techinasia.com/jobs",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Asian startup and tech media with a job board.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt returned 403 Forbidden to a non-browser client, so bot protection is likely. Link only."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": null, "relocation": null, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 6,
+      "verified": false
+    },
+    {
+      "id": "indeed-sg",
+      "name": "Indeed Singapore",
+      "url": "https://sg.indeed.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Large aggregator. Useful for coverage, but duplicates other boards and quality is mixed.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt allows / and paginated search for '*'. Terms of service not read this session, so link only until checked."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 7,
+      "verified": false
+    },
+    {
+      "id": "foundit-sg",
+      "name": "foundit (formerly Monster) Singapore",
+      "url": "https://www.foundit.sg",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "General board with many India-linked recruiters.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": null,
+        "robots_or_tos": "unclear",
+        "notes": "Akamai 'Access Denied' (403) even for robots.txt from a non-browser client. Link only."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": null, "relocation": null, "english": false, "remote": null, "date_posted": null },
+      "english_listings": "most",
+      "priority": 8,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    { "name": "Glassdoor", "url": "https://www.glassdoor.sg", "access": "link_only", "note": "Company reviews and salaries; access not tested." },
+    { "name": "NodeFlair salaries and reviews", "url": "https://nodeflair.com/salaries", "access": "link_only", "note": "Local tech salary data; automated fetch returned 403." },
+    { "name": "Levels.fyi", "url": "https://www.levels.fyi/t/software-engineer/levels/senior/locations/singapore", "access": "link_only", "note": "Total compensation percentiles; source of the salary range in this file." }
+  ],
+  "communities": [
+    { "name": "r/askSingapore", "url": "https://www.reddit.com/r/askSingapore/", "note": "Q&A on work passes, salaries and housing; not reviewed this session." },
+    { "name": "r/singapore", "url": "https://www.reddit.com/r/singapore/", "note": "General; not reviewed this session." },
+    { "name": "HardwareZone Forums", "url": "https://forums.hardwarezone.com.sg/", "note": "Large local forum, including careers threads; not reviewed this session." }
+  ],
+  "scam_warnings": [
+    "REGION-WIDE (CRITICAL): Indian nationals are being lured with 'IT', 'data entry', 'digital sales and marketing executive' or 'customer support' jobs in Thailand, Laos, Cambodia and elsewhere in Southeast Asia, then trafficked into cyber-scam compounds. Embassy of India Bangkok (19 Sep 2024): victims are 'lured with lucrative employment offers from dubious/non-existent firms in Thailand' and 'illegally taken across the land border'. Recruitment happens online and offline via social media and agents.",
+    "Visa-free or visa-on-arrival entry to Thailand (and visa-on-arrival to Laos) does NOT permit employment. Any offer that asks the candidate to fly in as a tourist and 'get the work permit later' is a red flag. A genuine Singapore EP is applied for by the employer through MOM before the candidate arrives, with an in-principle approval (IPA) letter.",
+    "Flag locations: Myawaddy and the Hpa Lu area south of Myawaddy (Myanmar; Indian Embassy Yangon, July 2024); Mae Sot (Thailand) as the border transit point, through which 549 Indians were repatriated by special flights on 10-11 Mar 2025; the Golden Triangle Special Economic Zone (Laos); Cambodia, where the Indian embassy reports just over 1,000 Indians rescued since 2022 and advises using only MEA-authorised agents.",
+    "App-detectable red flags: job located in or 'near' the Thai-Myanmar border or the Golden Triangle; vague employer name not found in company registries (for Singapore, no UEN / ACRA record); recruitment only via WhatsApp/Telegram/social media; free flights or very high pay for low-skill 'typing'/'data entry'/'crypto'/'customer support' roles; interview only by chat; tourist-visa entry; recruiter based in Dubai or India acting for a Thai/Lao/Cambodian 'company'; any upfront fee to the candidate.",
+    "If a listing claims a Singapore employer, require a verifiable UEN (the MyCareersFuture API exposes postedCompany.uen). Offers routed through Singapore but with the actual workplace in Thailand/Myanmar/Laos/Cambodia should be blocked."
+  ],
+  "sources": [
+    { "url": "https://www.mom.gov.sg/passes-and-permits/employment-pass/eligibility", "title": "MOM - Employment Pass eligibility (qualifying salary, COMPASS, 2027 changes)", "used_for": "EP salary thresholds, COMPASS criteria and exemptions, 2027 changes", "accessed": "2026-11-22" },
+    { "url": "https://www.mom.gov.sg/passes-and-permits/employment-pass/apply-for-a-pass", "title": "MOM - Apply for an Employment Pass", "used_for": "Processing time, fees, MyCareersFuture advertising requirement", "accessed": "2026-11-22" },
+    { "url": "https://www.mom.gov.sg/passes-and-permits/overseas-networks-expertise-pass/eligibility", "title": "MOM - ONE Pass eligibility", "used_for": "ONE Pass salary criterion and AI and Tech track", "accessed": "2026-11-22" },
+    { "url": "https://www.edb.gov.sg/en/how-we-help/incentives-and-facilitation/tech-pass", "title": "EDB - Tech.Pass (via search results; page not read in full)", "used_for": "Tech.Pass S$22,500 criterion and closure on 28 Jan 2027", "accessed": "2026-11-22" },
+    { "url": "https://www.mom.gov.sg/-/media/mom/documents/press-releases/2026/factsheet-on-foreign-workforce-policies-03032026.pdf", "title": "MOM factsheet on foreign workforce policies, 3 Mar 2026 (via search results)", "used_for": "Corroboration of 2027 EP salary increase and ONE Pass AI and Tech track", "accessed": "2026-11-22" },
+    { "url": "https://www.mom.gov.sg/newsroom/parliament-questions-and-replies/2026/0224-written-answer-to-pq-on-fair-consideration-framework-watchlist", "title": "MOM - Written answer to PQ on FCF watchlist, 24 Feb 2026", "used_for": "FCF watchlist discontinued 2023; nearly 1,000 firms 2016-2023; no names", "accessed": "2026-11-22" },
+    { "url": "https://www.mom.gov.sg/maintenance/-/media/mom/documents/work-passes-and-permits/compass/compass-c2-list-of-degree-equivalent-qualifications.pdf", "title": "MOM - COMPASS C2 degree-equivalent qualifications list (via search results)", "used_for": "C2 assessment against UK ENIC; verification proof requirement", "accessed": "2026-11-22" },
+    { "url": "https://api.mycareersfuture.gov.sg/v2/jobs?search=software%20engineer&limit=2&page=0", "title": "MyCareersFuture public jobs API (live response)", "used_for": "Access method, fields (dates, salary, UEN)", "accessed": "2026-11-22" },
+    { "url": "https://www.mycareersfuture.gov.sg/robots.txt", "title": "MyCareersFuture robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://www.levels.fyi/t/software-engineer/levels/senior/locations/singapore", "title": "Levels.fyi - Senior Software Engineer, Singapore", "used_for": "Salary range", "accessed": "2026-11-22" },
+    { "url": "https://embassyofindiabangkok.gov.in/public/assets/pdf/advisory_sep20_bangkok.pdf", "title": "Embassy of India Bangkok - Advisory, 19 Sep 2024", "used_for": "Scam-compound trafficking warning; visa-free entry does not permit work", "accessed": "2026-11-22" },
+    { "url": "https://embassyofindiayangon.gov.in/public_files/assets/pdf/yangon_3july2024_popup.pdf", "title": "Embassy of India Yangon - Advisory, Jul 2024 (via search results)", "used_for": "Hpa Lu area south of Myawaddy flagged", "accessed": "2026-11-22" },
+    { "url": "https://www.tribuneindia.com/news/world/india-secures-repatriation-of-283-indians-from-myanmar-thailand-lured-on-pretext-of-fake-jobs", "title": "Tribune India - repatriation of Indians from Myanmar/Thailand (via search results)", "used_for": "Mar 2025 repatriation via Mae Sot", "accessed": "2026-11-22" },
+    { "url": "https://www.newsonair.gov.in/government-issues-advisory-to-nationals-travelling-to-cambodia-for-jobs-to-be-wary-of-fake-agents", "title": "All India Radio - advisory for Indians travelling to Cambodia/Laos for jobs, May 2024 (via search results)", "used_for": "Cambodia/Laos advisory, Golden Triangle SEZ, MEA-authorised agents", "accessed": "2026-11-22" },
+    { "url": "https://phnompenhpost.com/post-in-depth/india-implements-airport-warnings-to-caution-citizens-about-job-scams-", "title": "Phnom Penh Post - India airport warnings on job scams (via search results)", "used_for": "Just over 1,000 Indians rescued from Cambodian scam operations since 2022", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://sg.jobstreet.com/robots.txt", "title": "JobStreet SG robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://nodeflair.com/robots.txt", "title": "NodeFlair robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" },
+    { "url": "https://glints.com/robots.txt", "title": "Glints robots.txt", "used_for": "robots stance, sitemaps", "accessed": "2026-11-22" },
+    { "url": "https://sg.indeed.com/robots.txt", "title": "Indeed SG robots.txt", "used_for": "robots stance", "accessed": "2026-11-22" }
+  ]
+}

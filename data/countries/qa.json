@@ -1,0 +1,620 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred. Counts are for the whole Gulf research session (shared across ae/sa/qa and research later dropped for bh/kw/om); pages_read = 7 full pages via WebFetch + robots.txt of 20 job-site hosts via curl. Several official pages (mohre.gov.ae, saudieng.sa, sapr.gov.sa, mol.gov.qa) timed out or refused automated fetches."
+    },
+    "searches_run": 30,
+    "pages_read": 27,
+    "confidence": "low",
+    "open_questions": [
+      "Qatarisation: no official private-sector quota rules for IT roles found.",
+      "Official work-visa fee (secondary sources say QAR 300 MOI fee vs QAR 200) and processing time; mol.gov.qa unreachable during research.",
+      "Degree attestation chain for Indian degrees (notary -> state HRD -> MEA -> Qatar Embassy -> MoFA Qatar) is from consultancy blogs only.",
+      "Whether the 2020 labour reforms (job mobility without NOC, exit-permit removal) still apply as-is in 2026 - not re-verified.",
+      "Qatar 'special competencies' permanent residency and a reported upcoming Highly Skilled Talent Visa - criteria not confirmed.",
+      "Treatment of a 3-year Indian bachelor's for skilled job titles not found."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "QA",
+  "name": "Qatar",
+  "region": "middle_east",
+  "tier": "emerging_high_pay",
+  "default_enabled": true,
+  "currency": "QAR",
+  "languages": {
+    "official": [
+      "Arabic"
+    ],
+    "english_only_tech_jobs": "common",
+    "note": "English widely used in private and semi-government tech roles (general observation, not sourced)."
+  },
+  "salary": {
+    "senior_swe_annual_gross": {
+      "low": 150708,
+      "high": 480000,
+      "currency": "QAR",
+      "period": "year",
+      "as_of": "2026-05"
+    },
+    "source_urls": [
+      "https://www.naukrigulf.com/salaries/senior-software-engineer-salary-in-qatar",
+      "https://www.qatarliving.com/en/article/salary-expectations-job-role-qatar",
+      "https://www.payscale.com/research/QA/Job=Senior_Software_Engineer/Salary",
+      "https://www.levels.fyi/t/software-engineer/levels/senior/locations/doha-qat"
+    ],
+    "note": "low = Naukrigulf average QAR 12,559/month x 12 (~170 self-reported salaries); high = Qatar Living 2026 guide senior/lead engineer upper value QAR 40,000/month x 12 (guide range QAR 26,000-40,000/month, may be all-inclusive). PayScale average QAR 177,965 (2026); Levels.fyi Doha median total comp QAR 263,441 (updated 2026-05-01). Check basic vs total package. Approximate, low confidence."
+  },
+  "income_tax_note": "No personal income tax on employment income (general knowledge, not re-verified this session).",
+  "cost_of_living_note": "Housing is the main cost in Doha; packages usually include housing or an allowance (not sourced).",
+  "visa_routes": [
+    {
+      "id": "qa-work-visa",
+      "name": "Employer-sponsored work visa and residence permit (via Qatar Visa Center in India)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": true,
+      "salary_threshold": {
+        "amount": null,
+        "currency": "QAR",
+        "period": "month",
+        "as_of": "2026-11",
+        "note": "No minimum salary threshold found for a standard work visa."
+      },
+      "degree_requirement": "Employer obtains Ministry of Labour recruitment approval, then MOI work entry visa. Attested educational qualifications are typically required; regulated professions (healthcare, engineering, education) may need professional-authority approval.",
+      "three_year_indian_bachelors_note": "Degree must be attested (reported chain: notary -> state HRD/education dept -> MEA -> Qatar Embassy -> MoFA Qatar). Whether an 'engineer' title requires an engineering degree for software roles was not confirmed; a BCA holder should prefer non-engineer titles (developer/programmer). Unverified.",
+      "processing_time": "Few weeks to a few months end-to-end including attestation (secondary sources).",
+      "lottery_or_quota": "No lottery; Qatarisation rules for private IT roles not confirmed.",
+      "path_to_pr": "Standard work residence does not lead to PR; limited PR routes (investment QAR 3.65m with quotas; 'special competencies'); 10-year residency only for executives/entrepreneurs.",
+      "employer_cost_note": "Employer applies and pays recruitment approval and visa; reported MOI fee QAR 300 (secondary). Candidate usually pays for attestation and police clearance. MoL Decision 61 of 2026 (Official Gazette 2026-10-25) tightens licensing of recruitment offices.",
+      "official_url": "https://www.qatarvisacenter.com/",
+      "verified": false
+    },
+    {
+      "id": "qa-10yr-residency-executive",
+      "name": "10-year residency for executives and entrepreneurs",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": {
+        "amount": 50000,
+        "currency": "QAR",
+        "period": "month",
+        "as_of": "2026-02",
+        "note": "QAR 50,000/month for chairman/C-suite; QAR 80,000 for other executive director titles. Not open to general professionals - not realistic for a senior IC engineer."
+      },
+      "degree_requirement": null,
+      "three_year_indian_bachelors_note": "Not applicable to typical senior engineers.",
+      "processing_time": null,
+      "lottery_or_quota": null,
+      "path_to_pr": "Long-term residence, not PR.",
+      "employer_cost_note": null,
+      "official_url": "https://portal.moi.gov.qa",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": false,
+    "name": "No public sponsor register found",
+    "url": null,
+    "format": "none",
+    "update_frequency": null,
+    "how_to_use": "Any licensed Qatari establishment with recruitment approval can sponsor; no public list to match against.",
+    "verified": false
+  },
+  "sponsorship_phrases": {
+    "positive": [
+      "visa provided",
+      "employment visa will be provided",
+      "company visa",
+      "company sponsorship",
+      "relocation package",
+      "air ticket",
+      "annual air ticket",
+      "family status",
+      "overseas candidates considered",
+      "تأشيرة عمل",
+      "الشركة توفر التأشيرة",
+      "توفير التأشيرة",
+      "على كفالة الشركة",
+      "تذاكر سفر",
+      "بدل سكن",
+      "سكن مجاني",
+      "التوظيف من الخارج",
+      "استقدام"
+    ],
+    "negative": [
+      "nationals only",
+      "candidates currently in the country only",
+      "must be in the country",
+      "must have own visa",
+      "own visa",
+      "visit visa candidates",
+      "transferable visa",
+      "transferable iqama",
+      "NOC required",
+      "immediate joiner (local)",
+      "local candidates only",
+      "للمواطنين فقط",
+      "نقل كفالة",
+      "إقامة قابلة للتحويل",
+      "إقامة قابلة للنقل",
+      "مقيم داخل الدولة",
+      "متواجد داخل الدولة",
+      "تأشيرة زيارة",
+      "Qatari nationals only",
+      "للقطريين فقط",
+      "Qatari ID holders only",
+      "transferable RP"
+    ]
+  },
+  "ease_for_indian_nationals": {
+    "score": 3,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "English-friendly market with a large Indian community and a streamlined India-side process through Qatar Visa Centers (biometrics, medicals, contract signing). The tech market is smaller than UAE/Saudi and long-term residence options are limited to executives/investors.",
+    "factors": {
+      "degree_recognition": "Attested degree required; 3-year degree treatment unconfirmed.",
+      "language_barrier": "Low; English common.",
+      "processing_speed": "Weeks to months including attestation (secondary).",
+      "quota_or_lottery": "No lottery; Qatarisation impact on IT unconfirmed.",
+      "employer_willingness": "Moderate; smaller pool of tech employers.",
+      "attestation_or_paperwork": "Multi-step attestation plus QVC biometrics/medical in India."
+    }
+  },
+  "relocation_norms": "Employer sponsors the visa; packages may be quoted as basic or all-inclusive (Qatar Living warns to check). Housing, flights and schooling not sourced.",
+  "job_sites": [
+    {
+      "id": "bayt-qa",
+      "name": "Bayt.com",
+      "url": "https://www.bayt.com/en/qatar/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "One of the two largest Gulf-wide job boards. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-agent * disallows /en/jobs/?, /en/jobs/*-jobs/ (search and listing pages) and filter params; IndeedBot/LinkedInBot fully blocked. Use deep links only."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "gulftalent-qa",
+      "name": "GulfTalent",
+      "url": "https://www.gulftalent.com/qatar/jobs",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Major Gulf professional job board. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-agent * Allow: / but Disallow: /jobs/search and /api/jobs/search; Content-Signal search=yes, ai-train=no, use=reference; AI crawlers (incl. ClaudeBot) blocked. Country/category listing pages (not search) appear allowed for generic agents; low-rate polling only, and check ToS before enabling."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "naukrigulf-qa",
+      "name": "Naukrigulf",
+      "url": "https://www.naukrigulf.com",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Info Edge (Naukri.com) Gulf board; very widely used by Indian job seekers. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt and pages could not be fetched (connections from non-browser clients timed out/refused on 2026-11-22), so automated access is treated as not possible."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "qatarliving-qa",
+      "name": "Qatar Living Jobs",
+      "url": "https://www.qatarliving.com/jobs",
+      "kind": "community",
+      "reputation": "medium",
+      "reputation_note": "Long-running Qatar expat community/classifieds; listings mix employers and agents, so scam filtering is needed. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-Agent * Allow: / except /api/; AI agents explicitly allowed. ToS not reviewed."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "indeed-qa",
+      "name": "Indeed (QA)",
+      "url": "https://qa.indeed.com",
+      "kind": "aggregator",
+      "reputation": "high",
+      "reputation_note": "Global aggregator; Gulf coverage includes many agency reposts. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. Disallows /rss, /*?rss, /m/viewjob and /jobs/<CC>/ paths, so the logged-out RSS feed is off-limits. Use link-out search URLs only."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "linkedin-qa",
+      "name": "LinkedIn Jobs",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Widely used for Gulf tech hiring and recruiter outreach. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt (120 KB) read 2026-11-22; generic crawlers are restricted. Link-out only."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "drjob-qa",
+      "name": "DrJob (drjobpro.com)",
+      "url": "https://www.drjobpro.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Gulf-focused aggregator; quality of listings not independently assessed. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. User-agent * Allow: / (only utm/refineParams disallowed); job-listing sitemaps published (sitemap-job-listings*.xml, sitemap-all-countries-index.xml), which suits polite polling."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "tanqeeb-qa",
+      "name": "Tanqeeb",
+      "url": "https://www.tanqeeb.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Arabic/English MENA aggregator; many reposted listings. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "html_scrape",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. Disallows /*?keywords, /*?countries, /*?job_id; sitemap at https://www.tanqeeb.com/sitemap.xml can be used for discovery. Site answered 202 (bot challenge likely) to curl."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "some",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "laimoon-qa",
+      "name": "Laimoon",
+      "url": "https://www.laimoon.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "MENA jobs/courses aggregator. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt returned an empty body/redirect on 2026-11-22; homepage reachable. Treat as link-only until robots/ToS are confirmed."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "akhtaboot-qa",
+      "name": "Akhtaboot",
+      "url": "https://www.akhtaboot.com",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Jordan-based MENA board with Gulf listings. Reputation judged from general market presence; not backed by a survey in this research session.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt read 2026-11-22; site ToS not reviewed. Only named search engines allowed; 'User-agent: *' Disallow: /."
+      },
+      "posted_date_available": null,
+      "filters": {
+        "visa_sponsorship": null,
+        "relocation": null,
+        "english": null,
+        "remote": null,
+        "date_posted": null
+      },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    {
+      "name": "Glassdoor",
+      "url": "https://www.glassdoor.com",
+      "access": "link_only",
+      "note": "Employer reviews."
+    }
+  ],
+  "communities": [
+    {
+      "name": "r/qatar",
+      "url": "https://www.reddit.com/r/qatar/",
+      "note": "Expat questions, offer checks."
+    },
+    {
+      "name": "Qatar Living forums",
+      "url": "https://www.qatarliving.com",
+      "note": "Largest Qatar expat community."
+    },
+    {
+      "name": "Embassy of India, Doha",
+      "url": "https://www.indianembassyqatar.gov.in",
+      "note": "Welfare and labour assistance."
+    },
+    {
+      "name": "MADAD (MEA grievance portal)",
+      "url": "https://www.madad.gov.in",
+      "note": "Complaints about employers/agents."
+    }
+  ],
+  "scam_warnings": [
+    "If anyone asks you to pay recruitment fees or 'mandatory QVC processing fees', verify through official channels before paying.",
+    "Recruitment offices must be licensed under MoL Decision 61 of 2026; ask for the office's licence.",
+    "Any request for money (visa fee, processing fee, 'deposit', medical or 'security' fee) before or after an offer is a red flag; MOHRE states genuine employers cover all recruitment costs.",
+    "Offers that ask you to travel or start work on a visit/tourist visa: visit visas do not permit work; India's MEA says a genuine offer must allow emigration on an employment/work visa.",
+    "Unregistered Indian recruiting agents: MEA advisories report job seekers cheated by unregistered agents, with overcharging of roughly Rs 2-5 lakh; check the agent's licence number on the eMigrate 'List of active RA' (https://emigrate.gov.in/ext/raList.action).",
+    "A genuine overseas offer (per MEA) carries an employment contract signed by the foreign employer, the recruitment agent and the worker.",
+    "MEA (Aug 2023) warned that some agents misused foreign employers' eMigrate logins to generate fake offers, so an eMigrate-looking document alone is not proof.",
+    "App-detectable signals: fee/deposit keywords ('processing fee', 'visa charges', 'refundable deposit'), free-mail recruiter domains (gmail/yahoo/outlook) claiming to be a large company, WhatsApp/Telegram-only contact, no company name or address, salary far above market, 'immediate hiring, no interview', early requests for passport scans or bank details, and 'free visa' / 'visa for sale' wording ('فيزا حرة', 'إقامة حرة')."
+  ],
+  "sources": [
+    {
+      "url": "https://www.qatarliving.com/en/article/how-to-get-work-visa-qatar",
+      "title": "Qatar Living - How to get a work visa in Qatar (2026)",
+      "used_for": "employer-led process, fee caution (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://commoner-law.com/qatar/immigration-pathways/work-visas",
+      "title": "Work visas & employment permits in Qatar (2026 legal guide)",
+      "used_for": "MoL/MOI roles, documents, regulated professions, QAR 300 fee (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.y-axis.com/blog/how-to-apply-qatar-work-visa-from-india/",
+      "title": "Y-Axis - Qatar work visa from India",
+      "used_for": "QVC steps and attestation (consultancy, secondary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.legit.ng/people/1740021-qatar-releases-16-conditions-recruiting-foreigners-rules/",
+      "title": "Qatar releases conditions for recruiting foreigners (Decision 61 of 2026)",
+      "used_for": "recruitment office licensing (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.fragomen.com/insights/qatar-long-term-residence-permit-for-executives-and-entrepreneurs-announced.html",
+      "title": "Fragomen - Qatar long-term residence for executives and entrepreneurs",
+      "used_for": "10-year residency thresholds (search summary)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.qatarliving.com/en/article/salary-expectations-job-role-qatar",
+      "title": "Qatar Living - salary expectations by role (2026)",
+      "used_for": "salary high bound",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.naukrigulf.com/salaries/senior-software-engineer-salary-in-qatar",
+      "title": "Naukrigulf - senior software engineer salary Qatar",
+      "used_for": "salary low bound (search summary; page fetch timed out)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.levels.fyi/t/software-engineer/levels/senior/locations/doha-qat",
+      "title": "Levels.fyi - Senior SWE Doha",
+      "used_for": "salary cross-check",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.qatarvisacenter.com/",
+      "title": "Qatar Visa Center",
+      "used_for": "official route link (reachable 2026-11-22, content not read)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.qatarliving.com/robots.txt",
+      "title": "www.qatarliving.com robots.txt",
+      "used_for": "Qatar Living access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://qa.indeed.com/robots.txt",
+      "title": "qa.indeed.com robots.txt",
+      "used_for": "Indeed access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.mea.gov.in/overseas-employment.htm",
+      "title": "MEA - Overseas employment / advisories on fake job offers",
+      "used_for": "scam warnings, RA check, genuine-offer criteria (via search summaries of MEA advisories)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.hcigaborone.gov.in/docs/1703063160Advisory on overcharging by agents for overseas recruitment.pdf",
+      "title": "MEA advisory on overcharging by agents offering fake overseas jobs (Dec 2023, mission copy)",
+      "used_for": "Rs 2-5 lakh overcharging, unregistered agents",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://emigrate.gov.in/ext/raList.action",
+      "title": "eMigrate - List of active Recruiting Agents",
+      "used_for": "RA verification link (URL reachable 2026-11-22; redirects to SPA)",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://gulfnews.com/going-out/society/agents-misuse-uae-employers-login-details-to-issue-fake-job-offers-1.1878795",
+      "title": "Gulf News - agents misuse employers' eMigrate login details to issue fake job offers",
+      "used_for": "scam warning",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.bayt.com/robots.txt",
+      "title": "www.bayt.com robots.txt",
+      "used_for": "Bayt access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.gulftalent.com/robots.txt",
+      "title": "www.gulftalent.com robots.txt",
+      "used_for": "GulfTalent access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.tanqeeb.com/robots.txt",
+      "title": "www.tanqeeb.com robots.txt",
+      "used_for": "Tanqeeb access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.akhtaboot.com/robots.txt",
+      "title": "www.akhtaboot.com robots.txt",
+      "used_for": "Akhtaboot access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.drjobpro.com/robots.txt",
+      "title": "www.drjobpro.com robots.txt",
+      "used_for": "DrJob access stance",
+      "accessed": "2026-11-22"
+    },
+    {
+      "url": "https://www.linkedin.com/robots.txt",
+      "title": "www.linkedin.com robots.txt",
+      "used_for": "LinkedIn access stance",
+      "accessed": "2026-11-22"
+    }
+  ]
+}

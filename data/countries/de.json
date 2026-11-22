@@ -1,0 +1,405 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-22",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred; direct HTTP probes (curl) of job-site APIs and robots.txt. One research session covered DE, NL, CH and AT; searches_run / pages_read are totals for that whole session (15 web searches, 19 page reads via fetch tool, plus about 45 curl probes of robots.txt files and API endpoints)."
+    },
+    "searches_run": 15,
+    "pages_read": 19,
+    "confidence": "medium",
+    "open_questions": [
+      "make-it-in-germany.com was behind a Radware bot wall for both fetch tool and curl on 2026-11-22. The Blue Card figures were read on the Bundesagentur fuer Arbeit (ZAV) page instead.",
+      "Whether a specific 3-year Indian BCA counts as comparable to a German bachelor's depends on anabin (institution H+ and the degree entry) or a ZAB statement. No official source says all 3-year Indian degrees qualify. Check per university.",
+      "Visa fee for national (D) employment visa, accelerated skilled-worker procedure (section 81a) fee, and current New Delhi / Mumbai / Bengaluru appointment waits: no dated official 2026 figure found. One india.diplo.de page lists 4 weeks for employment with prior BA approval (undated).",
+      "Settlement permit timeline for section 18b skilled workers with academic training (believed 3 years) was not read on an official page this session.",
+      "Opportunity Card points criteria and fee: the official page read (bern.diplo.de) gives the 6-point minimum, the language rule and the funds, but not the points table or the fee (third-party sources say EUR 75).",
+      "Arbeitnow API: the `visa_sponsorship=true` query parameter changed the result count (275 vs 300) but job objects carry no visa field. Whether it really filters is unconfirmed.",
+      "BA Jobsuche API terms of use: rest.arbeitsagentur.de/robots.txt returns HTTP 403 and no ToS for the endpoint was found. The BA states it offers no official API (per the bundesAPI README).",
+      "Senior-specific salary band: levels.fyi Germany page shows all-level percentiles only, used here as a proxy."
+    ],
+    "review_by": "2027-05-22"
+  },
+  "code": "DE",
+  "name": "Germany",
+  "region": "europe",
+  "tier": "high_pay",
+  "default_enabled": true,
+  "currency": "EUR",
+  "languages": {
+    "official": ["German"],
+    "english_only_tech_jobs": "common",
+    "note": "English-only software roles are common at startups and international product companies in Berlin and Munich, and in tech hubs generally. Outside those, many listings ask for 'fliessend Deutsch' or C1 German. Inference from listing samples, not a measured statistic. Blue Card settlement is faster with German (21 months at B1 vs 27 months at A1)."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 85983, "high": 127638, "currency": "EUR", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://www.levels.fyi/t/software-engineer/locations/germany"],
+    "note": "Levels.fyi Germany, Software Engineer total compensation, all levels: p25 EUR 71,581, median EUR 85,983, p75 EUR 103,952, p90 EUR 127,638. low = median and high = p90 are used as a rough senior proxy. This is total comp (incl. bonus and equity) and skews to companies that report to levels.fyi. Mid-size German employers often pay less."
+  },
+  "income_tax_note": "Progressive income tax for 2026: basic allowance EUR 12,348 (single), 42% from EUR 69,879 taxable income, 45% from EUR 277,826. Solidarity surcharge 5.5% of tax only above an exemption (EUR 20,350 tax, single). Church tax only if registered. Social contributions (pension, health, unemployment, care) add roughly 20% employee share. That share is not verified this session.",
+  "cost_of_living_note": "Munich and Frankfurt are the most expensive cities, and Berlin rents have risen sharply. Rental housing is scarce in hubs and an Anmeldung (address registration) is needed for many steps. Qualitative note, not verified with figures this session.",
+  "visa_routes": [
+    {
+      "id": "de-blue-card",
+      "name": "EU Blue Card (Blaue Karte EU, section 18g AufenthG), standard",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 50700, "currency": "EUR", "period": "year", "as_of": "2026-01", "note": "Standard 2026 threshold, no Federal Employment Agency (BA) approval needed. Reduced threshold EUR 45,934.20 for shortage occupations, new entrants (degree within the last 3 years) and IT specialists without a degree, with BA approval. Bonuses count only if not tied to conditions. Adjusted every 1 January (50% / 45.3% of the pension contribution ceiling)." },
+      "degree_requirement": "German university degree or a foreign degree comparable to one. For non-regulated jobs like software engineering, comparability is shown via an anabin printout (institution H+ and degree listed as equivalent), or else a ZAB statement of comparability. Job offer of at least 6 months, related to the qualification.",
+      "three_year_indian_bachelors_note": "A 3-year Indian bachelor's (BCA/BSc) is not automatically comparable. It depends on the anabin entry for that degree and institution, or on a ZAB statement of comparability. If the BCA is not accepted, use the IT-specialist route (de-blue-card-it-specialist), which needs no degree. Most experienced IT candidates with a doubtful 3-year degree can use that route.",
+      "processing_time": "Not stated on the official page read. Visa issued by German missions in India (VFS appointment). Appointment and decision times vary; no dated 2026 official figure found.",
+      "lottery_or_quota": "None",
+      "path_to_pr": "Settlement permit after 27 months of Blue Card employment with German A1, or after 21 months with German B1. Permit is issued for contract length + 3 months, up to 4 years for permanent contracts.",
+      "employer_cost_note": "No sponsor licence or levy. The employer fills in the BA 'Erklaerung zum Beschaeftigungsverhaeltnis' form. An optional accelerated skilled-worker procedure (section 81a) is paid by the employer; the fee was not verified this session.",
+      "official_url": "https://www.arbeitsagentur.de/vor-ort/zav/working-and-living-in-germany/iss-en/issue-03-2026/blue-card",
+      "verified": true
+    },
+    {
+      "id": "de-blue-card-it-specialist",
+      "name": "EU Blue Card for IT specialists without a degree (section 18g(2) AufenthG)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 45934.2, "currency": "EUR", "period": "year", "as_of": "2026-01", "note": "Reduced threshold, needs BA approval. The BA checks that pay, hours and leave are comparable to domestic staff, which can mean more than the minimum." },
+      "degree_requirement": "No degree needed. At least 3 years of relevant IT experience at academic level within the last 7 years, in a qualified academic-level IT role (IT specialist or manager).",
+      "three_year_indian_bachelors_note": "Bypasses degree recognition entirely. A 3-year BCA holder with 7+ years of software experience fits this route, using employer references and work certificates as evidence.",
+      "processing_time": "Includes BA approval step; no official duration found.",
+      "lottery_or_quota": "None",
+      "path_to_pr": "Same as the Blue Card: settlement after 27 months (A1 German) or 21 months (B1 German).",
+      "employer_cost_note": "No levy. The employer completes the BA declaration and may pay for the accelerated procedure.",
+      "official_url": "https://www.arbeitsagentur.de/vor-ort/zav/working-and-living-in-germany/iss-en/issue-03-2026/blue-card",
+      "verified": true
+    },
+    {
+      "id": "de-18b-skilled-worker",
+      "name": "Skilled worker with academic training (section 18b AufenthG)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "EUR", "period": "year", "as_of": "2026-11", "note": "No general salary floor found for 2026. A separate minimum applies to first-time applicants aged 45+, not verified this session. For a senior SWE, the Blue Card is usually better." },
+      "degree_requirement": "Recognised (comparable) foreign higher-education degree.",
+      "three_year_indian_bachelors_note": "Same anabin/ZAB comparability problem as the Blue Card. Unlike the Blue Card it has no no-degree IT variant, so it is weaker for a doubtful 3-year degree.",
+      "processing_time": null,
+      "lottery_or_quota": "None",
+      "path_to_pr": "Settlement permit after a few years as a skilled worker. Exact duration not verified this session (believed 3 years).",
+      "employer_cost_note": "As for the Blue Card.",
+      "official_url": "https://www.make-it-in-germany.com/en/visa-residence/types/work-qualified-professionals",
+      "verified": false
+    },
+    {
+      "id": "de-opportunity-card",
+      "name": "Opportunity Card (Chancenkarte, section 20a AufenthG), job-search permit",
+      "type": "points_based",
+      "requires_job_offer": false,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 1091, "currency": "EUR", "period": "month", "as_of": "2026-01", "note": "This is NOT a salary threshold: it is proof of funds for living costs (EUR 13,092 for 12 months). Proof by blocked account, 3 months of bank statements, part-time contract or declaration of commitment." },
+      "degree_requirement": "Option 1: qualification fully recognised in Germany (no points needed). Option 2: academic or 2-year+ vocational qualification recognised in the issuing country, with a positive ZAB result, plus at least 6 points. Also German A1 or English B2.",
+      "three_year_indian_bachelors_note": "A 3-year BCA from a recognised Indian university should meet option 2 (recognised in India; ZAB positive result needed), so points are required. Points include experience, language, age and partial recognition; the official table was not read this session.",
+      "processing_time": null,
+      "lottery_or_quota": "None",
+      "path_to_pr": "No direct PR. Valid up to 12 months for job search with secondary work of up to 20 hours/week (third-party sources). Switch to a Blue Card or skilled-worker permit once hired.",
+      "employer_cost_note": "Self-funded; no employer involvement until a job is found. Visa fee: third-party sources say EUR 75; the official page links to a separate fee page.",
+      "official_url": "https://bern.diplo.de/ch-de/service/visa/opportunity-card-2757060",
+      "verified": true
+    }
+  ],
+  "sponsor_register": {
+    "exists": false,
+    "name": "No public register of visa-sponsoring employers",
+    "url": null,
+    "format": "none",
+    "update_frequency": null,
+    "how_to_use": "Germany has no employer licensing for work visas: any employer can hire a Blue Card holder, so there is nothing to match against. The app should rely on job-text phrases (see sponsorship_phrases), the company's English-language careers page, and boards that tag visa or relocation support.",
+    "verified": true
+  },
+  "sponsorship_phrases": {
+    "positive": [
+      "Visa-Unterstützung",
+      "Unterstützung beim Visum",
+      "Visa-Sponsoring",
+      "Visasponsoring",
+      "Blaue Karte",
+      "Blue Card",
+      "Relocation-Unterstützung",
+      "Umzugsunterstützung",
+      "Umzugskostenzuschuss",
+      "Unterstützung bei der Arbeitserlaubnis",
+      "internationale Bewerbungen willkommen",
+      "Arbeitssprache Englisch",
+      "Deutschkenntnisse nicht erforderlich",
+      "visa sponsorship",
+      "relocation support"
+    ],
+    "negative": [
+      "Arbeitserlaubnis erforderlich",
+      "gültige Arbeitserlaubnis",
+      "gültige Arbeitserlaubnis für Deutschland",
+      "kein Visa-Sponsoring",
+      "keine Visa-Unterstützung",
+      "kein Sponsoring",
+      "Aufenthaltstitel erforderlich",
+      "nur EU-Bürger",
+      "Wohnsitz in Deutschland",
+      "fließende Deutschkenntnisse",
+      "verhandlungssicheres Deutsch",
+      "Deutsch auf C1-Niveau",
+      "no visa sponsorship",
+      "must have the right to work in Germany"
+    ]
+  },
+  "ease_for_indian_nationals": {
+    "score": 4,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "There is no quota, no sponsor licensing, and an EU Blue Card route for IT specialists without a degree (3 years of experience in the last 7, EUR 45,934.20 in 2026). That removes the 3-year-degree recognition risk for experienced engineers. The English-only tech market in Berlin and Munich is large. Settlement is possible after 21-27 months. Points lost for: visa-appointment queues at German missions in India, BA approval on the reduced threshold, German needed for much of the market outside hubs and for daily life, and bureaucracy.",
+    "factors": {
+      "degree_recognition": "Standard Blue Card needs an anabin/ZAB-comparable degree. A 3-year Indian degree is uncertain, but the IT-specialist route needs no degree.",
+      "language_barrier": "Moderate: English-only roles are common in tech hubs. Many other listings need C1 German; German speeds up settlement.",
+      "processing_speed": "Variable; depends on mission appointment availability in India. No reliable dated official figure for 2026.",
+      "quota_or_lottery": "None",
+      "employer_willingness": "Many Berlin and Munich tech employers hire from India. The Blue Card is a routine process with no sponsor fees. Qualitative; no statistic gathered.",
+      "attestation_or_paperwork": "Degree certificates (anabin printout or ZAB statement), employer references proving IT experience for the no-degree route, and the BA employment-relationship declaration. Indian document attestation needs are covered in origins/in.json."
+    }
+  },
+  "relocation_norms": "International tech employers commonly offer a relocation budget or lump sum, visa support, temporary housing and sometimes German lessons. Smaller German firms often offer little. Qualitative; not verified with survey data this session.",
+  "job_sites": [
+    {
+      "id": "ba-jobsuche-de",
+      "name": "Bundesagentur für Arbeit Jobsuche (Jobbörse)",
+      "url": "https://www.arbeitsagentur.de/jobsuche/",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Federal Employment Agency's national job exchange; very large coverage. Many listings are German-language and from staffing agencies (filter zeitarbeit).",
+      "access": {
+        "method": "public_json",
+        "auth": "none",
+        "docs_url": "https://github.com/bundesAPI/jobsuche-api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Undocumented app API, documented by the community at bundesAPI; the BA says it offers no official API. Search endpoint GET https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v6/jobs with header 'X-API-Key: jobboerse-jobsuche' (static public key). Tested 2026-11-22: v6 returned HTTP 200 and the old pc/v4/jobs returned 403. Params: was (keywords), wo (location), umkreis, veroeffentlichtseit (0-100 days), angebotsart=1 (work), arbeitszeit=ho (home office), size, page, zeitarbeit. Details: pc/v4/jobdetails/{base64(refnr)}. Response fields include datumErsteVeroeffentlichung, aenderungsdatum, homeofficemoeglich and externeURL. rest.arbeitsagentur.de/robots.txt returns 403; www.arbeitsagentur.de robots.txt allows all. Use a polite request rate."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "few",
+      "priority": 1,
+      "verified": true
+    },
+    {
+      "id": "arbeitnow-de",
+      "name": "Arbeitnow",
+      "url": "https://www.arbeitnow.com",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Berlin-based board aggregating ATS postings for Germany and Europe. Popular with English-speaking job seekers; the site advertises visa-sponsorship filtering.",
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://www.arbeitnow.com/blog/job-board-api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "GET https://www.arbeitnow.com/api/job-board-api?page=N returns JSON with 300 jobs per page, updated hourly and ordered by created_at (unix timestamp). The response says: 'free public API for jobs, please do not abuse... appreciate linking back... agree to the terms of service'. Fields: slug, company_name, title, description (HTML), remote (bool), url, tags, job_types, location, created_at. robots.txt allows all. A visa_sponsorship=true parameter exists in site URLs, but the API objects have no visa field. Verify before relying on it."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 2,
+      "verified": true
+    },
+    {
+      "id": "berlinstartupjobs-de",
+      "name": "Berlin Startup Jobs",
+      "url": "https://berlinstartupjobs.com",
+      "kind": "tech_niche",
+      "reputation": "medium",
+      "reputation_note": "Long-running English-language board for the Berlin startup scene.",
+      "access": {
+        "method": "rss",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "WordPress RSS feeds: https://berlinstartupjobs.com/feed/ and per-category https://berlinstartupjobs.com/engineering/feed/ (pubDate present, latest 2026-11-17 when tested). robots.txt allows /feed/ for generic agents and blocks Scrapy specifically."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 3,
+      "verified": true
+    },
+    {
+      "id": "make-it-in-germany-jobs",
+      "name": "Make it in Germany – job listings",
+      "url": "https://www.make-it-in-germany.com/en/working-in-germany/job-listings",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Federal government portal for skilled immigration. Its job listings target international applicants.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt allows / but disallows solr query parameters (tx_solr[q], tx_solr[filter]). The site served a Radware bot challenge to both curl and the fetch tool on 2026-11-22. Treat as a human-click link. For machine access use the BA Jobsuche API (the listings are believed to be BA-sourced; not verified)."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "some",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "stepstone-de",
+      "name": "StepStone",
+      "url": "https://www.stepstone.de",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "One of Germany's largest paid-posting job boards; mostly German-language listings.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Akamai bot protection: both robots.txt and search pages returned HTTP 403 'Access Denied' to curl on 2026-11-22. Do not scrape; deep-link search URLs such as https://www.stepstone.de/jobs/software-engineer for the user to open."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "few",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "xing-jobs-de",
+      "name": "XING Jobs",
+      "url": "https://www.xing.com/jobs",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "German professional network (New Work SE); strong for German-speaking employers.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt for * explicitly allows /jobs/search/ and /jobs/search?* (tested 2026-11-22) but has separate blocks for GPTBot and ClaudeBot. ToS not reviewed. Safest to deep-link search results."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "few",
+      "priority": 6,
+      "verified": false
+    },
+    {
+      "id": "indeed-de",
+      "name": "Indeed Deutschland",
+      "url": "https://de.indeed.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Large aggregator; quality varies; includes staffing-agency duplicates.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "robots.txt (2026-11-22) lets generic agents fetch /jobs, but it carries a comment on fully disallowing aggressive scrapers and blocks many bots. Public publisher APIs are no longer offered (not verified this session). Deep-link only, e.g. https://de.indeed.com/jobs?q=software+engineer+english&fromage=7."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 7,
+      "verified": false
+    },
+    {
+      "id": "linkedin-jobs-de",
+      "name": "LinkedIn Jobs (Germany)",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Widely used by international tech employers in Germany.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "robots.txt disallows /jobs/search for generic agents (tested 2026-11-22). Deep-link only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 8,
+      "verified": true
+    },
+    {
+      "id": "germantechjobs-de",
+      "name": "GermanTechJobs (defunct redirect)",
+      "url": "https://germantechjobs.de",
+      "kind": "tech_niche",
+      "reputation": "low",
+      "reputation_note": "Formerly a well-regarded IT board with salary ranges. On 2026-11-22 the domain redirected to a JobCopilot sign-up page (devitjobs.jobcopilot.com/signup), so it is no longer a free logged-out board.",
+      "access": {
+        "method": "link_only",
+        "auth": "account_required",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": false,
+        "robots_or_tos": "unclear",
+        "notes": "Keep disabled. Re-check at review."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "some",
+      "priority": 10,
+      "verified": true
+    }
+  ],
+  "review_sources": [
+    { "name": "kununu", "url": "https://www.kununu.com/de", "access": "link_only", "note": "Leading DACH employer-review site, also salary data. robots.txt allows company pages for generic agents but blocks many named bots; ToS not reviewed, so link out per company." },
+    { "name": "Glassdoor Deutschland", "url": "https://www.glassdoor.de", "access": "link_only", "note": "robots.txt blocks AI crawlers and restricts many paths; link out only." }
+  ],
+  "communities": [
+    { "name": "r/germany", "url": "https://www.reddit.com/r/germany/", "note": "Large expat subreddit with a wiki on visas, Anmeldung and housing. Not reviewed this session." },
+    { "name": "r/cscareerquestionsEU", "url": "https://www.reddit.com/r/cscareerquestionsEU/", "note": "European software career threads, incl. Germany salaries and Blue Card experiences. Not reviewed this session." },
+    { "name": "r/berlin / r/Munich", "url": "https://www.reddit.com/r/berlin/", "note": "City-level housing and job tips. Not reviewed this session." }
+  ],
+  "scam_warnings": [
+    "The German consulate in Kolkata warns that Indian citizens have received fake job offers from alleged German employers or agents. Deal only with legitimate contacts.",
+    "The German consulate in Mumbai warns of imposters and local agents claiming to represent the consulate and 'selling' visas. Visas are applied for only via the mission/VFS and are never sold.",
+    "The German ambassador (2025) warned Indian applicants against relying on agents who 'tune' applications. Fake or altered documents lead to rejection.",
+    "The Indian embassy in the UAE (Oct 2026) warned that fake job offers 'are mostly for European countries', advertised on social media, with victims paying money upfront.",
+    "App heuristic: a genuine German employer never charges the candidate for the visa, a 'work permit', or a 'job guarantee'. An Opportunity Card is not a job offer, so treat 'guaranteed job + Chancenkarte' packages as high risk."
+  ],
+  "sources": [
+    { "url": "https://www.arbeitsagentur.de/vor-ort/zav/working-and-living-in-germany/iss-en/issue-03-2026/blue-card", "title": "Bundesagentur für Arbeit (ZAV) – EU Blue Card (issue 03/2026)", "used_for": "2026 Blue Card thresholds, IT-specialist route, anabin/ZAB, settlement timeline", "accessed": "2026-11-22" },
+    { "url": "https://globaltaxnews.ey.com/news/2025-2249", "title": "EY – Germany approves new salary thresholds for EU Blue Card (Nov 2025)", "used_for": "Corroboration of 2026 thresholds", "accessed": "2026-11-22" },
+    { "url": "https://bern.diplo.de/ch-de/service/visa/opportunity-card-2757060", "title": "German mission Bern – Opportunity Card", "used_for": "Chancenkarte requirements, EUR 1,091/month funds", "accessed": "2026-11-22" },
+    { "url": "https://india.diplo.de/in-en/service/-/2601362", "title": "German missions in India – national visa info (search snippet)", "used_for": "Employment visa with BA pre-approval listed at 4 weeks (undated)", "accessed": "2026-11-22" },
+    { "url": "https://india.diplo.de/in-en/vertretungen/kolkata/-/2001136", "title": "German Consulate Kolkata – fake job offers warning", "used_for": "Scam warning", "accessed": "2026-11-22" },
+    { "url": "https://india.diplo.de/in-en/ueber-uns/mumbai/beware-of-fraud-1988568", "title": "German Consulate Mumbai – Beware of fraud", "used_for": "Scam warning", "accessed": "2026-11-22" },
+    { "url": "https://theprint.in/diplomacy/come-to-germany-but-dont-trust-your-agents-too-much-warns-german-envoy-as-fraud-cases-go-up/2754541", "title": "ThePrint – German envoy warns about agents", "used_for": "Scam warning", "accessed": "2026-11-22" },
+    { "url": "https://www.thenationalnews.com/news/uae/2026/10/16/indian-embassy-in-uae-issues-warning-over-fake-job-offers-and-visa-scams/", "title": "The National – Indian embassy in UAE warns of fake job offers (Oct 2026)", "used_for": "Scam warning", "accessed": "2026-11-22" },
+    { "url": "https://www.anerkennung-in-deutschland.de/html/en/pro/news-recognition-indian-qualifications.php", "title": "Anerkennung in Deutschland – Recognition of Indian qualifications (seminar note)", "used_for": "Context on anabin use for Indian degrees", "accessed": "2026-11-22" },
+    { "url": "https://github.com/bundesAPI/jobsuche-api", "title": "bundesAPI – Jobsuche API documentation", "used_for": "BA API endpoints, header key, parameters", "accessed": "2026-11-22" },
+    { "url": "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v6/jobs", "title": "BA Jobsuche API live test", "used_for": "Verified v6 works (200), v4 403, field names", "accessed": "2026-11-22" },
+    { "url": "https://www.arbeitnow.com/api/job-board-api", "title": "Arbeitnow job board API (live)", "used_for": "API format, terms text, fields", "accessed": "2026-11-22" },
+    { "url": "https://berlinstartupjobs.com/engineering/feed/", "title": "Berlin Startup Jobs RSS", "used_for": "RSS availability and dates", "accessed": "2026-11-22" },
+    { "url": "https://www.levels.fyi/t/software-engineer/locations/germany", "title": "Levels.fyi – Software Engineer salaries in Germany", "used_for": "Salary percentiles", "accessed": "2026-11-22" },
+    { "url": "https://wundertax.de/en/tax-tips/tax-changes-2026/", "title": "Wundertax – tax changes 2026 (via search)", "used_for": "2026 tax brackets, basic allowance, Soli exemption", "accessed": "2026-11-22" },
+    { "url": "https://www.xing.com/robots.txt", "title": "XING robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://de.indeed.com/robots.txt", "title": "Indeed DE robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://www.make-it-in-germany.com/robots.txt", "title": "Make it in Germany robots.txt", "used_for": "Access stance", "accessed": "2026-11-22" }
+  ]
+}
