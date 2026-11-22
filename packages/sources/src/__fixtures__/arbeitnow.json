@@ -1,0 +1,95 @@
+{
+ "data": [
+  {
+   "slug": "frontend-engineer-munich-170243",
+   "company_name": "Manex AI GmbH",
+   "title": "Frontend Engineer (f/m/d)",
+   "description": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">Manufacturing runs on fragmented data: machines, sensors and decade-old systems that don't talk to each other. Data sits in departmental silos, knowledge lives in people's heads, and AI can't unfold its potential in point solutions that don't deliver. At Manex AI, we build the missing layer. Our platform handles manufacturing data at scale, models the factory ontology and builds agentic applications that reaso",
+   "remote": false,
+   "url": "https://www.arbeitnow.com/jobs/companies/manex-ai-gmbh/frontend-engineer-munich-170243",
+   "tags": [
+    "Tech"
+   ],
+   "job_types": [
+    "Full Time"
+   ],
+   "location": "Munich",
+   "created_at": 1795372815
+  },
+  {
+   "slug": "senior-staff-ml-scientist-bidding-optimization-berlin-248715",
+   "company_name": "adjoe",
+   "title": "Senior/Staff ML Scientist - Bidding & Optimization (f/m/d)",
+   "description": "<p style=\"min-height:1.5em\">adjoe builds the technologies behind mobile app growth and monetization, challenging the status quo of adtech by redefining how apps acquire users and generate revenue. Our two products, Playtime Arcade and adjoe Ads, sit at opposite ends of the mobile advertising spectrum: rewarded engagement and programmatic in-app advertising. Together they run on <strong>13% of the world’s smartphones</strong>, connecting advertisers, publishers, and hundreds of millions of users,",
+   "remote": false,
+   "url": "https://www.arbeitnow.com/jobs/companies/adjoe/senior-staff-ml-scientist-bidding-optimization-berlin-248715",
+   "tags": [
+    "adjoe"
+   ],
+   "job_types": [
+    "Full Time"
+   ],
+   "location": "Berlin",
+   "created_at": 1795372812
+  },
+  {
+   "slug": "product-manager-platform-all-genders-berlin-490722",
+   "company_name": "Distribusion Technologies",
+   "title": "Product Manager, Platform (all genders)",
+   "description": "<p><strong>Distribusion</strong> is the world’s leading ground transportation marketplace and gives travelers seamless access to ground transportation online, from search to ticket purchase. We have built a cutting-edge B2B technology platform that connects bus, rail, and ferry operators in 70+ countries with the biggest online retailers, including Google Maps and Booking.com.</p><p>We are shaping the future of travel and building the largest global network of transport providers and retailers. ",
+   "remote": false,
+   "url": "https://www.arbeitnow.com/jobs/companies/distribusion-technologies/product-manager-platform-all-genders-berlin-490722",
+   "tags": [
+    "Information technology",
+    "bachelor's degree"
+   ],
+   "job_types": [
+    "Full-time permanent",
+    "experienced"
+   ],
+   "location": "Berlin",
+   "created_at": 1795364410
+  },
+  {
+   "slug": "neg-1",
+   "company_name": "Manex AI GmbH",
+   "title": "Backend Engineer (m/f/d)",
+   "description": "<p>We cannot provide visa sponsorship for this role. Must have right to work in Germany.</p>",
+   "remote": false,
+   "url": "https://www.arbeitnow.com/jobs/companies/manex-ai-gmbh/frontend-engineer-munich-170243",
+   "tags": [
+    "Tech"
+   ],
+   "job_types": [
+    "Full Time"
+   ],
+   "location": "Munich",
+   "created_at": 1795286415
+  },
+  {
+   "slug": "old-1",
+   "company_name": "Manex AI GmbH",
+   "title": "Old Job",
+   "description": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">Manufacturing runs on fragmented data: machines, sensors and decade-old systems that don't talk to each other. Data sits in departmental silos, knowledge lives in people's heads, and AI can't unfold its potential in point solutions that don't deliver. At Manex AI, we build the missing layer. Our platform handles manufacturing data at scale, models the factory ontology and builds agentic applications that reaso",
+   "remote": false,
+   "url": "https://www.arbeitnow.com/jobs/companies/manex-ai-gmbh/frontend-engineer-munich-170243",
+   "tags": [
+    "Tech"
+   ],
+   "job_types": [
+    "Full Time"
+   ],
+   "location": "Munich",
+   "created_at": 1792780815
+  }
+ ],
+ "links": {
+  "first": "https://www.arbeitnow.com/api/job-board-api?visa_sponsorship=true&page=1",
+  "last": null,
+  "prev": null,
+  "next": "https://www.arbeitnow.com/api/job-board-api?visa_sponsorship=true&page=2"
+ },
+ "meta": {
+  "current_page": 1
+ }
+}
