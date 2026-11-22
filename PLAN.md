@@ -61,13 +61,13 @@ shorebound/
 ```
 
 - **Desktop mode:** Electron runs the server in the main process and the UI in the window. Windows is the first build target.
-- **Browser mode:** `pnpm dev` / `pnpm start` serves the same UI at `http://localhost:<port>`.
+- **Browser mode:** `npm run dev` / `npm start` serves the same UI at `http://localhost:<port>`.
 - **Storage:** SQLite and files live in the OS app-data folder (`%APPDATA%/Shorebound`, `~/Library/Application Support/Shorebound`, `~/.config/shorebound`), never in the repo.
 - **Secrets:**
   - The Claude API key is encrypted with the OS keychain (Electron `safeStorage`).
   - In browser-only mode it falls back to the `ANTHROPIC_API_KEY` env var.
   - It is never written to logs or exports, and never committed.
-- **Workspace tooling:** pnpm workspaces, Vitest, Playwright, ESLint and Prettier, GitHub Actions CI (typecheck, test, and validate `/data`).
+- **Workspace tooling:** npm workspaces (pnpm skipped to avoid an extra tool), Vitest, Playwright, ESLint and Prettier, GitHub Actions CI (typecheck, test, and validate `/data`).
 
 ### Source connector interface
 
@@ -306,7 +306,7 @@ registers(country, company_normalized, raw_name, route, fetched_at)   -- sponsor
 | Milestone | Scope | Done when |
 |---|---|---|
 | **M0 · Plan & research** | Repo, license, plan, schema, deep research → `/data` | `/data` validates; plan reviewed |
-| **M1 · Foundation** | • Monorepo scaffold, CI, zod data validation, SQLite/Drizzle, settings + resume persistence<br>• First connectors: Greenhouse / Lever / Ashby (company lists seeded from sponsor registers), Arbeitnow, Adzuna, Remotive/Himalayas, HN "Who is hiring"<br>• Negation-aware sponsorship classifier with fixtures; 7-day newest-first feed in browser mode | `pnpm dev` shows real, recent, sponsorship-qualified jobs with evidence |
+| **M1 · Foundation** | • Monorepo scaffold, CI, zod data validation, SQLite/Drizzle, settings + resume persistence<br>• First connectors: Greenhouse / Lever / Ashby (company lists seeded from sponsor registers), Arbeitnow, Adzuna, Remotive/Himalayas, HN "Who is hiring"<br>• Negation-aware sponsorship classifier with fixtures; 7-day newest-first feed in browser mode | `npm run dev` shows real, recent, sponsorship-qualified jobs with evidence |
 | **M2 · Coverage** | • Government portal APIs (e.g. Germany BA Jobsuche, Singapore MyCareersFuture) and top boards per country where allowed<br>• Pre-filled LinkedIn/Indeed search links (see §3.1); cross-source dedupe; sponsor-register importers | ≥ 1 working source for every enabled country |
 | **M3 · Intelligence** | • Claude integration: resume parsing, match scoring, ambiguous classification<br>• Company enrichment (registers, Wikidata/Companies House, layoffs, reviews); confidence meter; scam detection | Every job shows match score + confidence breakdown |
 | **M4 · Workflow** | Tracker kanban, cover-letter drafts, scheduled refresh, desktop notifications, export/import | Full loop: discover → evaluate → apply → track |

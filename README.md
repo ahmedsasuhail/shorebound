@@ -32,7 +32,7 @@ based on the company's reputation, employee reviews, sponsorship evidence and ho
 
 Country, job-site and trust research lives in [`data/`](data/) as plain JSON ([schema](data/SCHEMA.md)).
 Each file records which model researched it, when, from which sources, and when it should be re-checked.
-The research notes and a per-file summary are in [`docs/research/`](docs/research/). Validate with `python scripts/validate_data.py`.
+The research notes and a per-file summary are in [`docs/research/`](docs/research/). Validate with `npm run validate:data`.
 Immigration information changes often: always confirm on the official government pages linked in each file.
 
 ## Disclaimer
