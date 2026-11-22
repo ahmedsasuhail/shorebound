@@ -71,6 +71,16 @@ export const cases: Case[] = [
   { text: "Kein Visa-Sponsoring.", country: "DE", sponsorship: "negative", relocation: "none", why: "German negative, short" },
   { text: "التأشيرة والسكن وتذكرة الطيران مقدمة من الشركة", country: "SA", sponsorship: "confirmed_text", relocation: "offered", why: "Arabic: visa, housing and air ticket provided by the company" },
 
+  // ── Presence / residency requirements (employer expects you to already be there) ──
+  { text: "Only candidates currently residing in Singapore will be considered.", country: "SG", sponsorship: "negative", relocation: "none", why: "must already live there" },
+  { text: "Local candidates only.", sponsorship: "negative", relocation: "none", why: "local only" },
+  { text: "Must currently be based in Dubai.", country: "AE", sponsorship: "negative", relocation: "none", why: "presence required" },
+  { text: "Candidates must have their own visa; visit visa holders welcome.", country: "AE", sponsorship: "negative", relocation: "none", why: "Gulf: 'own visa' = no sponsorship" },
+  { text: "Must be eligible to work in Canada.", country: "CA", sponsorship: "negative", relocation: "none", why: "eligibility required up front" },
+  { text: "Must be willing to relocate to Berlin.", country: "DE", sponsorship: "unknown", relocation: "mentioned", why: "asks you to move, says nothing about paying for it" },
+  { text: "We handle the Employment Pass application for international hires.", country: "SG", sponsorship: "confirmed_text", relocation: "none", why: "employer handles the pass" },
+  { text: "Accommodation provided for the first month.", sponsorship: "unknown", relocation: "offered", why: "employer-provided housing" },
+
   // ── Real-world messy formats ───────────────────────────────────────────────
   { text: "Benefits: Health insurance | Visa sponsorship | Learning budget", sponsorship: "confirmed_text", relocation: "none", why: "benefits list" },
   { text: "VISA SPONSORSHIP: YES | RELOCATION: YES", sponsorship: "confirmed_text", relocation: "offered", why: "structured form, all caps" },
