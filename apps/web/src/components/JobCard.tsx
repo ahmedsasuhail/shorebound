@@ -7,7 +7,7 @@ import { ConfidenceRing, MatchPill } from "./Meters";
 
 const RAIL: Record<string, string> = {
   confirmed_text: "bg-emerald-500",
-  confirmed_register: "bg-emerald-500",
+  confirmed_register: "bg-sky-500",
   visa_source: "bg-sky-500",
   possible: "bg-amber-400",
   negative: "bg-rose-500",

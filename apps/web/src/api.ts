@@ -19,7 +19,12 @@ export interface Settings {
     minMatch: number;
     maxPerCompany: number;
   };
-  sponsorship: { excludeNegative: boolean; relocation: "required" | "bonus" | "ignore"; includePossible: boolean };
+  sponsorship: {
+    excludeNegative: boolean;
+    relocation: "required" | "bonus" | "ignore";
+    includePossible: boolean;
+    includeRegister: boolean;
+  };
   sources: { disabled: string[] };
   appearance: { theme: "system" | "light" | "dark" };
 }

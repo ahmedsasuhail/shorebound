@@ -37,9 +37,10 @@ export function SponsorshipBadge({ job }: { job: JobDTO }) {
         </Pill>
       );
     case "confirmed_register":
+      // Employer-level: the company is licensed/approved, but the posting itself does not say it sponsors.
       return (
-        <Pill tone="good" icon={<BadgeCheck size={12} />}>
-          Registered sponsor
+        <Pill tone="info" icon={<BadgeCheck size={12} />}>
+          Employer on sponsor register
         </Pill>
       );
     case "visa_source":

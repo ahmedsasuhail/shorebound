@@ -281,6 +281,20 @@ export function SettingsPage() {
                 { v: "ignore", label: "Ignore" },
               ]}
             />
+            <div className="mt-4 text-sm font-medium">Jobs where only the employer is on a sponsor register</div>
+            <Segmented
+              value={s.sponsorship.includeRegister ? "yes" : "no"}
+              onChange={(v) => save.mutate({ sponsorship: { ...s.sponsorship, includeRegister: v === "yes" } })}
+              options={[
+                { v: "yes", label: "Include (marked)" },
+                { v: "no", label: "Hide" },
+              ]}
+            />
+            <p className="mt-2 text-xs text-muted">
+              Big employers on the UK sponsor register or Canada's foreign-worker list often don't mention visas in the
+              posting. Those jobs are listed as "Employer on sponsor register": the company can sponsor, but the posting
+              doesn't say it will. Hide them to see only jobs that state sponsorship (or come from a visa-only source).
+            </p>
             <div className="mt-4 text-sm font-medium">Jobs where only the salary meets the visa bar</div>
             <Segmented
               value={s.sponsorship.includePossible ? "yes" : "no"}

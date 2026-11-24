@@ -76,7 +76,19 @@ export function JobDrawer({ job, onClose }: { job: JobDTO | null; onClose: () =>
 
             <div className="flex-1 space-y-4 overflow-y-auto p-5">
               <WhyPanel job={job} />
-              {job.sponsorship.evidence && <Evidence label="Sponsorship evidence" text={job.sponsorship.evidence} />}
+              {job.sponsorship.status === "confirmed_register" && (
+                <div className="rounded-xl border border-sky-500/40 bg-sky-500/10 p-3.5 text-[13px] text-sky-800 dark:text-sky-200">
+                  <b>The posting does not mention visas or relocation.</b> It is listed because the employer is on an
+                  official sponsor register, so it is allowed to sponsor. Whether this particular role is sponsored is
+                  something to confirm with the employer.
+                </div>
+              )}
+              {job.sponsorship.evidence && (
+                <Evidence
+                  label={job.sponsorship.status === "confirmed_register" ? "Why it is listed" : "Sponsorship evidence"}
+                  text={job.sponsorship.evidence}
+                />
+              )}
               {job.relocation.evidence && <Evidence label="Relocation evidence" text={job.relocation.evidence} />}
               <div>
                 <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted">Description</h3>
