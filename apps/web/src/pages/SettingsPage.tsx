@@ -1,78 +1,15 @@
-import { FileText, Lock, Monitor, Moon, Plus, Sun, Trash2, UploadCloud, X } from "lucide-react";
+import { Monitor, Moon, Plus, Sun, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useRef, useState } from "react";
-import { useCatalog, useProfile, useRemoveResume, useResume, useSaveProfile, useSaveSettings, useSettings, useUploadResume, type CatalogCountry, type Profile } from "../api";
+import { useState } from "react";
+import { useCatalog, useProfile, useSaveProfile, useSaveSettings, useSettings, type CatalogCountry, type Profile } from "../api";
 import { CountryChip } from "../components/Badges";
+import { ResumeCard } from "../components/ResumeCard";
+import { Section, Segmented } from "../components/Section";
 
 const REGIONS: Record<string, string> = {
   north_america: "North America", europe: "Europe", middle_east: "Middle East", southeast_asia: "Southeast Asia",
   east_asia: "East Asia", oceania: "Oceania",
 };
-
-function Section({ title, hint, children }: { title: string; hint?: string; children: React.ReactNode }) {
-  return (
-    <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
-      <h2 className="font-semibold tracking-tight">{title}</h2>
-      {hint && <p className="mt-0.5 text-[13px] text-muted">{hint}</p>}
-      <div className="mt-4">{children}</div>
-    </motion.section>
-  );
-}
-
-function Segmented<T extends string | number>({ value, options, onChange }: { value: T; options: { v: T; label: React.ReactNode }[]; onChange: (v: T) => void }) {
-  return (
-    <div className="inline-flex rounded-full bg-surface2 p-0.5 text-sm font-medium">
-      {options.map((o) => (
-        <button key={String(o.v)} onClick={() => onChange(o.v)} className="relative rounded-full px-4 py-1.5">
-          {value === o.v && <motion.span layoutId={`seg-${options.map((x) => x.v).join("-")}`} className="absolute inset-0 rounded-full bg-surface shadow-sm" transition={{ type: "spring", stiffness: 420, damping: 32 }} />}
-          <span className={`relative inline-flex items-center gap-1.5 ${value === o.v ? "text-accentink" : "text-muted"}`}>{o.label}</span>
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function ResumeCard() {
-  const resume = useResume();
-  const upload = useUploadResume();
-  const remove = useRemoveResume();
-  const input = useRef<HTMLInputElement>(null);
-  const [drag, setDrag] = useState(false);
-  const info = resume.data?.resume;
-  const take = (f?: File) => f && upload.mutate(f);
-
-  return (
-    <Section title="Resume" hint="Used as the basis for your skills, role and experience. Stored only on this machine.">
-      <input ref={input} type="file" hidden accept=".pdf,.docx,.txt,.md" onChange={(e) => take(e.target.files?.[0])} />
-      {info ? (
-        <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="flex items-center gap-4 rounded-xl border border-line bg-surface2 p-4">
-          <div className="grid h-11 w-11 place-items-center rounded-xl bg-accentsoft text-accentink"><FileText size={20} /></div>
-          <div className="min-w-0 flex-1">
-            <div className="truncate text-sm font-medium">{info.originalName}</div>
-            <div className="text-xs text-muted">{(info.bytes / 1024).toFixed(0)} KB · saved {new Date(info.uploadedAt).toLocaleDateString()}</div>
-          </div>
-          <button onClick={() => input.current?.click()} className="rounded-lg px-3 py-1.5 text-xs font-medium text-accentink hover:bg-accentsoft">Replace</button>
-          <button onClick={() => remove.mutate()} aria-label="Remove resume" className="rounded-lg p-2 text-muted hover:bg-rose-500/10 hover:text-rose-500"><Trash2 size={16} /></button>
-        </motion.div>
-      ) : (
-        <motion.div
-          animate={{ scale: drag ? 1.015 : 1, borderColor: drag ? "var(--accent)" : "var(--border)" }}
-          onDragOver={(e) => { e.preventDefault(); setDrag(true); }} onDragLeave={() => setDrag(false)}
-          onDrop={(e) => { e.preventDefault(); setDrag(false); take(e.dataTransfer.files[0]); }}
-          onClick={() => input.current?.click()}
-          className="grid cursor-pointer place-items-center rounded-2xl border-2 border-dashed p-10 text-center"
-        >
-          <motion.div animate={{ y: drag ? -4 : 0 }} className="mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-accentsoft text-accentink"><UploadCloud size={24} /></motion.div>
-          <p className="text-sm font-medium">Drop your resume here, or click to browse</p>
-          <p className="mt-1 text-xs text-muted">PDF, DOCX, TXT or MD · up to 10 MB</p>
-        </motion.div>
-      )}
-      {upload.error && <p className="mt-3 text-sm text-rose-500">{(upload.error as Error).message}</p>}
-      {upload.data?.parseError && <p className="mt-3 text-sm text-amber-600">{upload.data.parseError}</p>}
-      <p className="mt-3 flex items-center gap-1.5 text-xs text-muted"><Lock size={12} /> Read on this machine only. Nothing is uploaded anywhere.</p>
-    </Section>
-  );
-}
 
 
 const LEVELS: Profile["seniority"][] = ["junior", "mid", "senior", "lead", "manager"];
@@ -191,6 +128,13 @@ export function SettingsPage() {
             <div className="mb-2 text-sm font-medium">Posted within</div>
             <Segmented value={s.search.lookbackDays} onChange={(d) => save.mutate({ search: { ...s.search, lookbackDays: d } })}
               options={[1, 3, 7, 14, 30].map((d) => ({ v: d, label: d === 1 ? "24h" : `${d} days` }))} />
+          </div>
+          <div>
+            <div className="mb-2 text-sm font-medium">How strict should the fit be?</div>
+            <Segmented value={s.search.minMatch <= 47 ? 40 : s.search.minMatch <= 62 ? 55 : 70}
+              onChange={(m) => save.mutate({ search: { ...s.search, minMatch: m, onlyMatching: true } })}
+              options={[{ v: 40, label: "Broad" }, { v: 55, label: "Balanced" }, { v: 70, label: "Strict" }]} />
+            <p className="mt-2 text-xs text-muted">Hides jobs that fit your resume less than this. Broad shows more, including near-misses; Strict only shows close fits.</p>
           </div>
           <div>
             <div className="mb-2 text-sm font-medium">Relocation</div>

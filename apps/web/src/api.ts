@@ -9,7 +9,7 @@ export interface Settings {
   countries: string[];
   search: {
     lookbackDays: number; showUnknownPostedDate: boolean; targetRoles: string[];
-    sort: "newest" | "match" | "confidence"; onlyMatching: boolean; maxPerCompany: number;
+    sort: "newest" | "match" | "confidence"; onlyMatching: boolean; minMatch: number; maxPerCompany: number;
   };
   sponsorship: { excludeNegative: boolean; relocation: "required" | "bonus" | "ignore" };
   sources: { disabled: string[] };
@@ -21,7 +21,7 @@ export interface Profile {
   seniority: "intern" | "junior" | "mid" | "senior" | "lead" | "manager";
   families: string[]; title: string | null; source: "rules" | "user" | "claude";
 }
-export interface Feed { jobs: JobDTO[]; total: number; hidden: { notMatching: number; companyCap: number } }
+export interface Feed { jobs: JobDTO[]; total: number; hidden: { notMatching: number; companyCap: number }; needsProfile?: boolean }
 export interface ResumeInfo { originalName: string; bytes: number; uploadedAt: string }
 export interface RefreshReport {
   startedAt: string;
@@ -95,7 +95,9 @@ export function useRemoveResume() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => call("/api/resume", { method: "DELETE" }),
-    onSuccess: () => void qc.invalidateQueries({ queryKey: ["resume"] }),
+    onSuccess: () => {
+      for (const k of ["resume", "profile", "jobs"]) void qc.invalidateQueries({ queryKey: [k] });
+    },
   });
 }
 
