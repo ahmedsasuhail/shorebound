@@ -5,6 +5,8 @@ export interface FeedOptions {
   easeByCountry: Map<string, number>;
   sort: "newest" | "match" | "confidence";
   onlyMatching: boolean;
+  /** Jobs scoring below this are hidden when `onlyMatching` is on. */
+  minMatch: number;
   maxPerCompany: number;
   relocationBonus: boolean;
   limit?: number;
@@ -17,9 +19,6 @@ export interface Feed {
   hidden: { notMatching: number; companyCap: number };
 }
 
-/** Below this match score a job is hidden when "only matching" is on. */
-export const MATCH_THRESHOLD = 40;
-
 /** Scores, filters, sorts and caps jobs. Newest-first stays the default (user requirement). */
 export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   const now = o.now ?? new Date();
@@ -28,7 +27,7 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   for (const j of rows) {
     const analysis = analyzeJob(j.title, j.description);
     const match = o.profile ? matchScore(o.profile, analysis) : null;
-    if (o.onlyMatching && match && match.score < MATCH_THRESHOLD) {
+    if (o.onlyMatching && match && match.score < o.minMatch) {
       notMatching++;
       continue;
     }

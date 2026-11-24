@@ -6,6 +6,7 @@ import type { Job } from "@shorebound/core";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { buildApp } from "./app.js";
 import { openDb, type Db } from "./db.js";
+import { putSetting } from "./db.js";
 import { upsertJobs } from "./jobs.js";
 
 const dataDir = fileURLToPath(new URL("../../../data", import.meta.url));
@@ -36,6 +37,13 @@ afterEach(() => {
 });
 
 const make = () => buildApp({ db, appData: dir, dataDir });
+// Feed tests that are not about matching use a profile and "Broad" strictness so every job shows.
+const makeWithProfile = async () => {
+  const app = make();
+  await app.inject({ method: "PUT", url: "/api/profile", payload: { skills: ["node.js"], yearsExperience: 7, seniority: "senior", families: ["backend"], title: null } });
+  await app.inject({ method: "PUT", url: "/api/settings", payload: { search: { minMatch: 0, onlyMatching: false } } });
+  return app;
+};
 
 describe("api", () => {
   it("catalog lists available and coming-soon countries", async () => {
@@ -46,7 +54,7 @@ describe("api", () => {
   });
 
   it("feed: newest first, hides negatives and old jobs, filters by country", async () => {
-    const app = make();
+    const app = await makeWithProfile();
     const all = (await app.inject("/api/jobs?countries=DE,GB,US&sinceDays=30")).json().jobs as { id: string }[];
     expect(all.map((j) => j.id)).not.toContain("neg-de");
     const week = (await app.inject("/api/jobs?countries=DE&sinceDays=7")).json().jobs as { id: string }[];
@@ -58,7 +66,7 @@ describe("api", () => {
   });
 
   it("negatives can be shown on request", async () => {
-    const r = (await make().inject("/api/jobs?countries=DE&sinceDays=30&excludeNegative=false")).json().jobs;
+    const r = (await (await makeWithProfile()).inject("/api/jobs?countries=DE&sinceDays=30&excludeNegative=false")).json().jobs;
     expect(r.map((j: { id: string }) => j.id)).toContain("neg-de");
   });
 
@@ -86,6 +94,57 @@ describe("api", () => {
     const app = buildApp({ db, appData: dir, dataDir, refresh: async () => ({ startedAt: "x", sources: [] }) });
     const r = await app.inject({ method: "POST", url: "/api/refresh", headers: { "content-type": "application/x-www-form-urlencoded" } });
     expect(r.statusCode).toBe(200);
+  });
+
+  it("no profile → no feed (needsProfile), even when jobs exist", async () => {
+    const r = (await make().inject("/api/jobs?countries=DE&sinceDays=30")).json();
+    expect(r.needsProfile).toBe(true);
+    expect(r.jobs).toEqual([]);
+    expect(r.total).toBe(0);
+  });
+
+  it("removing the resume also removes the profile and hides the feed again", async () => {
+    const app = make();
+    await app.inject({ method: "PUT", url: "/api/resume", headers: { "content-type": "application/octet-stream", "x-filename": "cv.txt" }, payload: Buffer.from("Senior Software Engineer. 7+ years of experience. TypeScript Node.js React") });
+    expect((await app.inject("/api/profile")).json().profile).not.toBeNull();
+    await app.inject({ method: "DELETE", url: "/api/resume" });
+    expect((await app.inject("/api/profile")).json().profile).toBeNull();
+    expect((await app.inject("/api/jobs?countries=DE&sinceDays=30")).json().needsProfile).toBe(true);
+  });
+
+  it("a rule-derived profile from an older extractor is re-read from the stored resume", async () => {
+    const app = make();
+    await app.inject({ method: "PUT", url: "/api/resume", headers: { "content-type": "application/octet-stream", "x-filename": "cv.txt" }, payload: Buffer.from("Senior Software Engineer. 7+ years of experience. TypeScript Node.js React Next.js HTML CSS AWS Docker Jenkins") });
+    putSetting(db, "profile", { skills: ["java"], yearsExperience: 1, seniority: "junior", families: ["devops", "mobile"], title: null, source: "rules", version: 1 });
+    const p = (await app.inject("/api/profile")).json().profile;
+    expect(p.seniority).toBe("senior");
+    expect(p.families).not.toContain("devops");
+    expect(p.version).toBeGreaterThanOrEqual(2);
+  });
+
+  it("a profile the user edited is never overwritten by re-reading the resume", async () => {
+    const app = make();
+    await app.inject({ method: "PUT", url: "/api/resume", headers: { "content-type": "application/octet-stream", "x-filename": "cv.txt" }, payload: Buffer.from("Senior Software Engineer. 7+ years. TypeScript") });
+    await app.inject({ method: "PUT", url: "/api/profile", payload: { skills: ["go"], yearsExperience: 3, seniority: "mid", families: ["backend"], title: null } });
+    const p = (await app.inject("/api/profile")).json().profile;
+    expect(p.source).toBe("user");
+    expect(p.skills).toEqual(["go"]);
+  });
+
+  it("strictness: a higher minMatch hides weaker jobs", async () => {
+    const app = make();
+    await app.inject({ method: "PUT", url: "/api/profile", payload: { skills: ["typescript", "node.js", "react"], yearsExperience: 7, seniority: "senior", families: ["fullstack", "frontend", "backend"], title: null } });
+    upsertJobs(db, [
+      job("strong", { title: "Senior Full Stack Engineer", description: "TypeScript, React, Node.js. 5+ years of experience." }),
+      job("weak", { title: "Software Engineer", description: "Work on internal tools." }),
+    ], now);
+    const ids = async (minMatch: number) => {
+      await app.inject({ method: "PUT", url: "/api/settings", payload: { search: { minMatch, onlyMatching: true } } });
+      return (await app.inject("/api/jobs?countries=DE&sinceDays=30")).json().jobs.map((j: { id: string }) => j.id);
+    };
+    expect(await ids(40)).toContain("weak");
+    expect(await ids(70)).not.toContain("weak");
+    expect(await ids(70)).toContain("strong");
   });
 
   it("resume upload, read and delete", async () => {

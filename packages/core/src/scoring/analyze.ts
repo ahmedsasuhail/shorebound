@@ -9,8 +9,16 @@ export interface JobAnalysis {
   family: RoleFamily | null;
   seniority: Seniority;
   minYears: number | null;
+  /** All skills found in title + description. */
   skills: string[];
+  /** Skills named in the TITLE only (e.g. "Go Backend Developer"): the strongest stack signal. */
+  titleSkills: string[];
+  /** Platform/CMS specialist roles (WordPress, Salesforce, SAP...): software, but a different career track. */
+  offStack: boolean;
 }
+
+/** Bump when extractProfile changes, so stored rule-derived profiles are re-read from the resume. */
+export const PROFILE_VERSION = 2;
 
 export interface Profile {
   skills: string[];
@@ -18,6 +26,7 @@ export interface Profile {
   seniority: Seniority;
   families: RoleFamily[];
   title: string | null;
+  version?: number;
   /** "rules" = extracted locally; "user" = edited in Settings; "claude" = refined by AI (later). */
   source: "rules" | "user" | "claude";
 }
@@ -29,7 +38,8 @@ const SOFTWARE_TITLE = new RegExp(
   String.raw`\b(?:${TECH_WORD})\b[\w\s/&().,-]{0,30}\b(?:engineer|developer|architect|programmer|lead)\b|\b(?:developer|programmer|swe|sde|sre)\b|\bsoftware\b|\b(?:engineer|developer)\b[\s\w,/-]{0,25}\b(?:${TECH_WORD})\b`,
   "i",
 );
-const NON_SOFTWARE_TITLE = /\b(?:recruit\w*|talent acquisition|sales|account (?:executive|manager)|marketing|copywriter|writer|hr\b|human resources|accountant|finance|financial|legal|lawyer|nurse|chef|venture|consultant|customer (?:success|support|service)|designer|mechanical|civil|electrical|chemical|quantitative researcher|trader|analyst)\b/i;
+const OFF_STACK_TITLE = /\b(?:wordpress|shopify|salesforce|sap|abap|servicenow|dynamics|magento|drupal|wix|webflow|sitecore|netsuite|workday|mainframe|cobol)\b/i;
+const NON_SOFTWARE_TITLE = /\b(?:solutions? (?:architect|engineer|consultant)|sales engineer|customer engineer|technical account|(?:technical|it|customer|application) support|support engineer|field engineer|pre-?sales|implementation (?:consultant|engineer|specialist)|quant\w*|researcher|data scientist|recruit\w*|talent acquisition|sales|account (?:executive|manager)|marketing|copywriter|writer|hr\b|human resources|accountant|finance|financial|legal|lawyer|nurse|chef|venture|consultant|customer (?:success|support|service)|designer|mechanical|civil|electrical|chemical|quantitative researcher|trader|analyst)\b/i;
 
 function familyOf(title: string, skills: string[]): RoleFamily | null {
   const t = title.toLowerCase();
@@ -75,6 +85,8 @@ export function analyzeJob(title: string, description: string): JobAnalysis {
     seniority: seniorityOf(title),
     minYears: minYearsOf(description),
     skills,
+    titleSkills: findSkills(title),
+    offStack: OFF_STACK_TITLE.test(title),
   };
 }
 
@@ -150,13 +162,15 @@ export function extractProfile(text: string, now = new Date()): Profile {
 
   const fe = skills.filter((s) => FRONTEND.has(s)).length;
   const be = skills.filter((s) => BACKEND.has(s)).length;
+  // Primary families come from front/back-end skills. Secondary ones need stronger evidence, otherwise
+  // a full-stack resume that lists AWS/Docker would also "fit" every infrastructure role.
   const families: RoleFamily[] = [];
   if (fe >= 2 && be >= 2) families.push("fullstack", "frontend", "backend");
   else if (fe >= 2) families.push("frontend");
   else if (be >= 2) families.push("backend");
-  if (skills.includes("react native")) families.push("mobile");
-  if (skills.filter((s) => ["aws", "docker", "kubernetes", "terraform", "ci/cd"].includes(s)).length >= 2) families.push("devops");
-  if (skills.includes("machine learning") || skills.includes("data engineering")) families.push("data");
+  if (skills.includes("react native") && /b(?:mobile|ios|android)b/i.test(head)) families.push("mobile");
+  if (skills.filter((s) => ["aws", "docker", "kubernetes", "terraform", "ci/cd"].includes(s)).length >= 3 && (families.length === 0 || /b(?:devops|sre|site reliability|infrastructure|platform)b/i.test(head))) families.push("devops");
+  if ((skills.includes("machine learning") || skills.includes("data engineering")) && /b(?:data|machine learning|ml|ai)b/i.test(head)) families.push("data");
 
-  return { skills, yearsExperience, seniority, families, title: titleMatch?.[1]?.trim() ?? null, source: "rules" };
+  return { skills, yearsExperience, seniority, families, title: titleMatch?.[1]?.trim() ?? null, source: "rules", version: PROFILE_VERSION };
 }

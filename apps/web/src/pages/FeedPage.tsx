@@ -1,11 +1,12 @@
 import type { JobDTO } from "@shorebound/core";
-import { AlertCircle, FileUser, Loader2, Plane, RefreshCw, Search, SearchX, ShieldCheck, Target } from "lucide-react";
+import { AlertCircle, Loader2, Plane, RefreshCw, Search, SearchX, ShieldCheck, Target } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useCatalog, useJobs, useProfile, useRefresh, useSaveSettings, useSettings } from "../api";
 import { CountryChip } from "../components/Badges";
 import { JobCard, JobSkeleton } from "../components/JobCard";
 import { JobDrawer } from "../components/JobDrawer";
+import { Onboarding } from "../components/Onboarding";
 
 const WINDOWS = [1, 3, 7, 14] as const;
 
@@ -45,6 +46,7 @@ export function FeedPage({ goSettings }: { goSettings: () => void }) {
   }, [refresh.data, refresh.error]);
 
   if (!s) return <div className="space-y-3">{[0, 1, 2].map((i) => <JobSkeleton key={i} />)}</div>;
+  if (jobs.data?.needsProfile || (profile.isSuccess && !profile.data.profile)) return <Onboarding />;
 
   const toggleCountry = (code: string) =>
     save.mutate({ countries: s.countries.includes(code) ? s.countries.filter((c) => c !== code) : [...s.countries, code] });
@@ -118,15 +120,6 @@ export function FeedPage({ goSettings }: { goSettings: () => void }) {
 
       {!jobs.isLoading && !jobs.isError && (
         <>
-          {!profile.data?.profile && (
-            <motion.button
-              initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} onClick={goSettings}
-              className="mb-4 flex w-full items-center gap-3 rounded-2xl border border-accent/40 bg-accentsoft/50 p-4 text-left text-sm"
-            >
-              <FileUser size={20} className="shrink-0 text-accentink" />
-              <span><b>Add your resume</b> to rank jobs by how well they fit you and hide roles that don't. It stays on this machine.</span>
-            </motion.button>
-          )}
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
             <span>
               {jobs.data?.total ?? 0} job{jobs.data?.total === 1 ? "" : "s"}
