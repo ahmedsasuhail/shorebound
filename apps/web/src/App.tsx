@@ -22,7 +22,7 @@ function useTheme(theme: "system" | "light" | "dark" | undefined) {
 }
 
 export function App() {
-  const [page, setPage] = useState<Page>(() => (location.hash === "#settings" ? "settings" : "feed"));
+  const [page, setPage] = useState<Page>(() => (location.hash.startsWith("#settings") ? "settings" : "feed"));
   const settings = useSettings();
   useTheme(settings.data?.appearance.theme);
 

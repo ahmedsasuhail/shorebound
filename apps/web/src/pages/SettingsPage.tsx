@@ -1,4 +1,17 @@
-import { Monitor, Moon, Plus, Sun, X } from "lucide-react";
+import {
+  Database,
+  FileUser,
+  Globe2,
+  Monitor,
+  Moon,
+  Palette,
+  Plus,
+  ShieldCheck,
+  SlidersHorizontal,
+  Sun,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import {
@@ -13,7 +26,7 @@ import {
 } from "../api";
 import { CountryChip } from "../components/Badges";
 import { ResumeCard } from "../components/ResumeCard";
-import { Section, Segmented } from "../components/Section";
+import { Field, Section, Segmented } from "../components/Section";
 
 const REGIONS: Record<string, string> = {
   north_america: "North America",
@@ -190,171 +203,273 @@ function SourcesCard() {
   );
 }
 
-export function SettingsPage() {
+type CategoryId = "resume" | "countries" | "search" | "sponsorship" | "sources" | "appearance";
+
+const CATEGORIES: { id: CategoryId; label: string; hint: string; icon: LucideIcon }[] = [
+  { id: "resume", label: "Resume & profile", hint: "What jobs are matched against", icon: FileUser },
+  { id: "countries", label: "Countries", hint: "Where to look", icon: Globe2 },
+  { id: "search", label: "Search & ranking", hint: "Window, fit, relocation", icon: SlidersHorizontal },
+  { id: "sponsorship", label: "Sponsorship signals", hint: "What counts as evidence", icon: ShieldCheck },
+  { id: "sources", label: "Sources", hint: "Where Refresh looks", icon: Database },
+  { id: "appearance", label: "Appearance", hint: "Theme", icon: Palette },
+];
+
+const initialCategory = (): CategoryId => {
+  const wanted = location.hash.replace("#settings/", "");
+  return CATEGORIES.some((c) => c.id === wanted) ? (wanted as CategoryId) : "resume";
+};
+
+const IncludeHide = ({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) => (
+  <Segmented
+    value={value ? "yes" : "no"}
+    onChange={(v) => onChange(v === "yes")}
+    options={[
+      { v: "yes", label: "Include (marked)" },
+      { v: "no", label: "Hide" },
+    ]}
+  />
+);
+
+function CountriesPanel() {
   const settings = useSettings();
   const catalog = useCatalog();
   const save = useSaveSettings();
   const s = settings.data;
   if (!s) return null;
-
+  const all = catalog.data?.countries ?? [];
   const grouped = Object.entries(REGIONS)
-    .map(([region, label]) => ({ label, items: (catalog.data?.countries ?? []).filter((c) => c.region === region) }))
+    .map(([region, label]) => ({ label, items: all.filter((c) => c.region === region) }))
     .filter((g) => g.items.length);
   const toggle = (code: string) =>
     save.mutate({
       countries: s.countries.includes(code) ? s.countries.filter((c) => c !== code) : [...s.countries, code],
     });
+  return (
+    <Section title="Countries" hint="Only countries with researched visa data can be switched on. More are coming.">
+      <div className="mb-4 flex flex-wrap gap-2 text-xs">
+        <button
+          className="rounded-full bg-surface2 px-3 py-1 text-muted hover:text-ink"
+          onClick={() => save.mutate({ countries: all.filter((c) => c.status === "available").map((c) => c.code) })}
+        >
+          Select all
+        </button>
+        <button
+          className="rounded-full bg-surface2 px-3 py-1 text-muted hover:text-ink"
+          onClick={() => save.mutate({ countries: [] })}
+        >
+          Clear
+        </button>
+      </div>
+      <div className="space-y-5">
+        {grouped.map((g) => (
+          <div key={g.label}>
+            <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted">{g.label}</h3>
+            <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+              {g.items.map((c) => (
+                <CountryCard key={c.code} c={c} on={s.countries.includes(c.code)} toggle={() => toggle(c.code)} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function SearchPanel() {
+  const settings = useSettings();
+  const save = useSaveSettings();
+  const s = settings.data;
+  if (!s) return null;
+  return (
+    <Section
+      title="Search & ranking"
+      hint="How far back to look, how closely a job must fit you, and what to do about relocation."
+    >
+      <div className="space-y-6">
+        <Field label="Posted within">
+          <Segmented
+            value={s.search.lookbackDays}
+            onChange={(d) => save.mutate({ search: { ...s.search, lookbackDays: d } })}
+            options={[1, 3, 7, 14, 30].map((d) => ({ v: d, label: d === 1 ? "24h" : `${d} days` }))}
+          />
+        </Field>
+        <Field
+          label="How strict should the fit be?"
+          help="Hides jobs that fit your resume less than this. Broad shows more, including near-misses; Strict only shows close fits. Non-engineering roles are always discarded."
+        >
+          <Segmented
+            value={s.search.minMatch <= 47 ? 40 : s.search.minMatch <= 62 ? 55 : 70}
+            onChange={(m) => save.mutate({ search: { ...s.search, minMatch: m } })}
+            options={[
+              { v: 40, label: "Broad" },
+              { v: 55, label: "Balanced" },
+              { v: 70, label: "Strict" },
+            ]}
+          />
+        </Field>
+        <Field
+          label="Relocation"
+          help="Only some postings state that the employer pays for relocation. “Bonus” ranks those higher; “Must be offered” shows only those."
+        >
+          <Segmented
+            value={s.sponsorship.relocation}
+            onChange={(r) => save.mutate({ sponsorship: { ...s.sponsorship, relocation: r } })}
+            options={[
+              { v: "required", label: "Must be offered" },
+              { v: "bonus", label: "Bonus" },
+              { v: "ignore", label: "Ignore" },
+            ]}
+          />
+        </Field>
+        <Field label="Jobs per company" help="Stops one employer filling the feed.">
+          <Segmented
+            value={s.search.maxPerCompany}
+            onChange={(n) => save.mutate({ search: { ...s.search, maxPerCompany: n } })}
+            options={[
+              { v: 1, label: "1" },
+              { v: 3, label: "3" },
+              { v: 5, label: "5" },
+              { v: 0, label: "No limit" },
+            ]}
+          />
+        </Field>
+      </div>
+    </Section>
+  );
+}
+
+function SponsorshipPanel() {
+  const settings = useSettings();
+  const save = useSaveSettings();
+  const s = settings.data;
+  if (!s) return null;
+  return (
+    <Section
+      title="Sponsorship signals"
+      hint="Every job needs some evidence that the employer can sponsor. These control the weaker kinds."
+    >
+      <div className="space-y-6">
+        <div className="rounded-xl border border-line bg-surface2 p-3.5 text-[13px] leading-relaxed">
+          <b>Always shown:</b> the posting states sponsorship, or comes from a board that only lists visa-sponsoring
+          jobs. <b>Always discarded:</b> postings that rule sponsorship out (“no sponsorship”, “must already live
+          there”, “right to work required”).
+        </div>
+        <Field
+          label="Employer is on an official sponsor register"
+          help="Big employers on the UK sponsor register or Canada's foreign-worker list often don't mention visas in the posting. They are listed as “Employer on sponsor register”: the company can sponsor, but the posting doesn't say it will."
+        >
+          <IncludeHide
+            value={s.sponsorship.includeRegister}
+            onChange={(v) => save.mutate({ sponsorship: { ...s.sponsorship, includeRegister: v } })}
+          />
+        </Field>
+        <Field
+          label="Salary meets the visa threshold (Singapore)"
+          help="Singapore has no sponsor register and few postings mention visas. Where the posted salary clears the Employment Pass minimum, the job is listed as “Visa-eligible salary · unconfirmed”. It does not mean the employer sponsors: ask before applying."
+        >
+          <IncludeHide
+            value={s.sponsorship.includePossible}
+            onChange={(v) => save.mutate({ sponsorship: { ...s.sponsorship, includePossible: v } })}
+          />
+        </Field>
+      </div>
+    </Section>
+  );
+}
+
+function AppearancePanel() {
+  const settings = useSettings();
+  const save = useSaveSettings();
+  const s = settings.data;
+  if (!s) return null;
+  const opt = (v: "system" | "light" | "dark", Icon: LucideIcon, label: string) => ({
+    v,
+    label: (
+      <>
+        <Icon size={14} />
+        {label}
+      </>
+    ),
+  });
+  return (
+    <Section title="Appearance">
+      <Segmented
+        value={s.appearance.theme}
+        onChange={(t) => save.mutate({ appearance: { theme: t } })}
+        options={[opt("system", Monitor, "System"), opt("light", Sun, "Light"), opt("dark", Moon, "Dark")]}
+      />
+    </Section>
+  );
+}
+
+/** Two-pane settings: categories on the left, the selected category's content on the right. */
+export function SettingsPage() {
+  const [active, setActive] = useState<CategoryId>(initialCategory);
+  const select = (id: CategoryId) => {
+    setActive(id);
+    history.replaceState(null, "", `#settings/${id}`);
+  };
 
   return (
-    <div className="space-y-5">
+    <div>
       <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
-      <ResumeCard />
-      <ProfileCard />
+      <div className="mt-6 grid gap-6 md:grid-cols-[230px_minmax(0,1fr)]">
+        <nav
+          aria-label="Settings categories"
+          className="-mx-1 flex gap-1 overflow-x-auto px-1 md:sticky md:top-6 md:mx-0 md:flex-col md:self-start md:overflow-visible md:px-0"
+        >
+          {CATEGORIES.map((c) => {
+            const on = c.id === active;
+            return (
+              <button
+                key={c.id}
+                onClick={() => select(c.id)}
+                aria-current={on ? "page" : undefined}
+                className={`relative flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${on ? "text-accentink" : "text-muted hover:text-ink"}`}
+              >
+                {on && (
+                  <motion.span
+                    layoutId="settings-pill"
+                    className="absolute inset-0 rounded-xl bg-accentsoft"
+                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                  />
+                )}
+                <c.icon size={18} className="relative shrink-0" />
+                <span className="relative min-w-0">
+                  <span className="block text-sm font-medium">{c.label}</span>
+                  <span className="hidden text-[11px] opacity-80 md:block">{c.hint}</span>
+                </span>
+              </button>
+            );
+          })}
+        </nav>
 
-      <Section title="Countries" hint="Only countries with researched visa data can be switched on. More are coming.">
-        <div className="mb-4 flex flex-wrap gap-2 text-xs">
-          <button
-            className="rounded-full bg-surface2 px-3 py-1 text-muted hover:text-ink"
-            onClick={() =>
-              save.mutate({
-                countries: (catalog.data?.countries ?? []).filter((c) => c.status === "available").map((c) => c.code),
-              })
-            }
-          >
-            Select all
-          </button>
-          <button
-            className="rounded-full bg-surface2 px-3 py-1 text-muted hover:text-ink"
-            onClick={() => save.mutate({ countries: [] })}
-          >
-            Clear
-          </button>
-        </div>
-        <div className="space-y-5">
-          {grouped.map((g) => (
-            <div key={g.label}>
-              <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted">{g.label}</h3>
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {g.items.map((c) => (
-                  <CountryCard key={c.code} c={c} on={s.countries.includes(c.code)} toggle={() => toggle(c.code)} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Search" hint="How far back to look, and how strict to be.">
-        <div className="space-y-5">
-          <div>
-            <div className="mb-2 text-sm font-medium">Posted within</div>
-            <Segmented
-              value={s.search.lookbackDays}
-              onChange={(d) => save.mutate({ search: { ...s.search, lookbackDays: d } })}
-              options={[1, 3, 7, 14, 30].map((d) => ({ v: d, label: d === 1 ? "24h" : `${d} days` }))}
-            />
-          </div>
-          <div>
-            <div className="mb-2 text-sm font-medium">How strict should the fit be?</div>
-            <Segmented
-              value={s.search.minMatch <= 47 ? 40 : s.search.minMatch <= 62 ? 55 : 70}
-              onChange={(m) => save.mutate({ search: { ...s.search, minMatch: m, onlyMatching: true } })}
-              options={[
-                { v: 40, label: "Broad" },
-                { v: 55, label: "Balanced" },
-                { v: 70, label: "Strict" },
-              ]}
-            />
-            <p className="mt-2 text-xs text-muted">
-              Hides jobs that fit your resume less than this. Broad shows more, including near-misses; Strict only shows
-              close fits.
-            </p>
-          </div>
-          <div>
-            <div className="mb-2 text-sm font-medium">Relocation</div>
-            <Segmented
-              value={s.sponsorship.relocation}
-              onChange={(r) => save.mutate({ sponsorship: { ...s.sponsorship, relocation: r } })}
-              options={[
-                { v: "required", label: "Must be offered" },
-                { v: "bonus", label: "Bonus" },
-                { v: "ignore", label: "Ignore" },
-              ]}
-            />
-            <div className="mt-4 text-sm font-medium">Jobs where only the employer is on a sponsor register</div>
-            <Segmented
-              value={s.sponsorship.includeRegister ? "yes" : "no"}
-              onChange={(v) => save.mutate({ sponsorship: { ...s.sponsorship, includeRegister: v === "yes" } })}
-              options={[
-                { v: "yes", label: "Include (marked)" },
-                { v: "no", label: "Hide" },
-              ]}
-            />
-            <p className="mt-2 text-xs text-muted">
-              Big employers on the UK sponsor register or Canada's foreign-worker list often don't mention visas in the
-              posting. Those jobs are listed as "Employer on sponsor register": the company can sponsor, but the posting
-              doesn't say it will. Hide them to see only jobs that state sponsorship (or come from a visa-only source).
-            </p>
-            <div className="mt-4 text-sm font-medium">Jobs where only the salary meets the visa bar</div>
-            <Segmented
-              value={s.sponsorship.includePossible ? "yes" : "no"}
-              onChange={(v) => save.mutate({ sponsorship: { ...s.sponsorship, includePossible: v === "yes" } })}
-              options={[
-                { v: "yes", label: "Include (marked)" },
-                { v: "no", label: "Hide" },
-              ]}
-            />
-            <p className="mt-2 text-xs text-muted">
-              Singapore has no sponsor register and few postings mention visas. Where a posted salary clears the
-              Employment Pass minimum, the job is listed as "Visa-eligible salary · unconfirmed". It does not mean the
-              employer sponsors: ask before applying.
-            </p>
-            <p className="mt-2 text-xs text-muted">
-              Every job needs some sponsorship signal: stated in the posting, a sponsor-register match, or (if enabled
-              above) a visa-eligible salary. Jobs that expect you to already live there or hold the right to work are
-              hidden by default.
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      <SourcesCard />
-
-      <Section title="Appearance">
-        <Segmented
-          value={s.appearance.theme}
-          onChange={(t) => save.mutate({ appearance: { theme: t } })}
-          options={[
-            {
-              v: "system",
-              label: (
+        <div className="min-w-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="space-y-5"
+            >
+              {active === "resume" && (
                 <>
-                  <Monitor size={14} />
-                  System
+                  <ResumeCard />
+                  <ProfileCard />
                 </>
-              ),
-            },
-            {
-              v: "light",
-              label: (
-                <>
-                  <Sun size={14} />
-                  Light
-                </>
-              ),
-            },
-            {
-              v: "dark",
-              label: (
-                <>
-                  <Moon size={14} />
-                  Dark
-                </>
-              ),
-            },
-          ]}
-        />
-      </Section>
+              )}
+              {active === "countries" && <CountriesPanel />}
+              {active === "search" && <SearchPanel />}
+              {active === "sponsorship" && <SponsorshipPanel />}
+              {active === "sources" && <SourcesCard />}
+              {active === "appearance" && <AppearancePanel />}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 }

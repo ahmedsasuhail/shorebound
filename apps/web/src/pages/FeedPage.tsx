@@ -1,5 +1,5 @@
 import type { JobDTO } from "@shorebound/core";
-import { AlertCircle, Loader2, Plane, RefreshCw, Search, SearchX, ShieldCheck, Target } from "lucide-react";
+import { AlertCircle, Loader2, Plane, RefreshCw, Search, SearchX } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useCatalog, useJobs, useProfile, useRefresh, useSaveSettings, useSettings } from "../api";
@@ -167,22 +167,7 @@ export function FeedPage({ goSettings }: { goSettings: () => void }) {
             }
           >
             Relocation offered
-          </Toggle>
-          <Toggle
-            on={s.search.onlyMatching}
-            icon={<Target size={13} />}
-            onClick={() => save.mutate({ search: { ...s.search, onlyMatching: !s.search.onlyMatching } })}
-          >
-            Fits my profile
-          </Toggle>
-          <Toggle
-            on={s.sponsorship.excludeNegative}
-            icon={<ShieldCheck size={13} />}
-            onClick={() =>
-              save.mutate({ sponsorship: { ...s.sponsorship, excludeNegative: !s.sponsorship.excludeNegative } })
-            }
-          >
-            Hide "no sponsorship"
+            {jobs.data ? ` (${jobs.data.relocationOffered})` : ""}
           </Toggle>
         </div>
       </div>
@@ -208,6 +193,7 @@ export function FeedPage({ goSettings }: { goSettings: () => void }) {
             <span>
               {jobs.data?.total ?? 0} job{jobs.data?.total === 1 ? "" : "s"}
               {jobs.data && jobs.data.total > list.length ? ` · showing ${list.length}` : ""}
+              {jobs.data?.relocationOffered ? ` · ${jobs.data.relocationOffered} offer relocation` : ""}
               {jobs.data?.hidden.notMatching ? ` · ${jobs.data.hidden.notMatching} hidden as poor fit` : ""}
               {jobs.data?.hidden.companyCap ? ` · ${jobs.data.hidden.companyCap} more from the same companies` : ""}
             </span>

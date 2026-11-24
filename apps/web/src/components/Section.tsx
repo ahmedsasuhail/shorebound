@@ -44,3 +44,14 @@ export function Segmented<T extends string | number>({
     </div>
   );
 }
+
+/** A labelled control with optional help text. */
+export function Field({ label, help, children }: { label: string; help?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <div className="mb-2 text-sm font-medium">{label}</div>
+      {children}
+      {help && <p className="mt-2 text-xs leading-relaxed text-muted">{help}</p>}
+    </div>
+  );
+}
