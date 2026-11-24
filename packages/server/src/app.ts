@@ -25,7 +25,7 @@ import { extractResumeText } from "./resumeText.js";
 import { queryJobs } from "./jobs.js";
 import { refreshJobs, type RefreshReport } from "./refresh.js";
 import { getResume, removeResume, resumePath, saveResume } from "./resume.js";
-import { SettingsSchema, loadSettings, updateSettings } from "./settings.js";
+import { SettingsSchema, loadSettings, reconcileNewCountries, updateSettings } from "./settings.js";
 
 export interface AppDeps {
   db: Db;
@@ -80,6 +80,20 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     }
   };
 
+  // Switch on countries added since this user's settings were saved (once; see reconcileNewCountries).
+  if (getSetting(deps.db, "app") !== undefined) {
+    const added = data.catalog.countries
+      .filter((c) => c.status === "available" && c.since)
+      .map((c) => ({
+        code: c.code,
+        since: c.since!,
+        defaultEnabled: Boolean(data.countries.get(c.code)?.default_enabled),
+      }));
+    const current = loadSettings(deps.db, enabledDefaults);
+    const { settings } = reconcileNewCountries(current, added, new Date().toISOString().slice(0, 10));
+    if (JSON.stringify(settings) !== JSON.stringify(current)) putSetting(deps.db, "app", settings);
+  }
+
   app.get("/api/health", async () => ({ ok: true }));
 
   app.get("/api/sources", async () => ({ sources: SOURCE_INFO }));
@@ -95,6 +109,7 @@ export function buildApp(deps: AppDeps): FastifyInstance {
         ease: full?.ease_for_indian_nationals.score ?? null,
         confidence: full?._meta.confidence ?? null,
         note: (c as { note?: string }).note ?? null,
+        since: c.since ?? null,
       };
     }),
   }));

@@ -359,4 +359,16 @@ describe("api", () => {
     expect((await app.inject("/settings")).body).toContain("Shorebound");
     expect((await app.inject("/api/nope")).statusCode).toBe(404);
   });
+
+  it("on startup, an existing user's settings gain the countries added since (Netherlands, France, Japan)", async () => {
+    putSetting(db, "app", { countries: ["GB", "DE"] }); // settings saved before those countries existed
+    const s = (await make().inject("/api/settings")).json();
+    expect(s.countries).toEqual(expect.arrayContaining(["GB", "DE", "NL", "FR", "JP"]));
+    expect(s.countriesReviewedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+
+  it("the catalog marks newly added countries with their date", async () => {
+    const nl = (await make().inject("/api/catalog")).json().countries.find((c: { code: string }) => c.code === "NL");
+    expect(nl).toMatchObject({ status: "available", since: "2026-11-25" });
+  });
 });

@@ -9,6 +9,8 @@ export interface CatalogCountry {
   ease: number | null;
   confidence: "high" | "medium" | "low" | null;
   note: string | null;
+  /** YYYY-MM-DD the country was added (countries added after v1 only). */
+  since: string | null;
 }
 export interface Settings {
   countries: string[];

@@ -1,5 +1,5 @@
 {
-  "_about": "Index of destination countries. 'available' = researched file exists in data/countries/. 'coming_soon' = shown greyed out in Settings until researched. v1 keeps countries where senior software roles clearly out-pay Indian product companies.",
+  "_about": "Index of destination countries. 'available' = researched file exists in data/countries/. 'coming_soon' = shown greyed out in Settings until researched. v1 keeps countries where senior software roles clearly out-pay Indian product companies. 'since' marks countries added after v1: existing users get them switched on once (if enabled by default) and see a 'New' badge.",
   "updated": "2026-11-25",
   "countries": [
     {
@@ -72,7 +72,8 @@
       "code": "NL",
       "name": "Netherlands",
       "region": "europe",
-      "status": "available"
+      "status": "available",
+      "since": "2026-11-25"
     },
     {
       "code": "CH",
@@ -102,7 +103,8 @@
       "code": "FR",
       "name": "France",
       "region": "europe",
-      "status": "available"
+      "status": "available",
+      "since": "2026-11-25"
     },
     {
       "code": "DK",
@@ -174,7 +176,8 @@
       "code": "JP",
       "name": "Japan",
       "region": "east_asia",
-      "status": "available"
+      "status": "available",
+      "since": "2026-11-25"
     },
     {
       "code": "KR",

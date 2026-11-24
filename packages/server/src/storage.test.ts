@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { openDb, type Db } from "./db.js";
 import { appDataDir } from "./paths.js";
 import { getResume, removeResume, resumePath, saveResume } from "./resume.js";
-import { defaultSettings, loadSettings, updateSettings } from "./settings.js";
+import { defaultSettings, loadSettings, reconcileNewCountries, updateSettings } from "./settings.js";
 
 let dir: string;
 let db: Db;
@@ -76,5 +76,30 @@ describe("appDataDir", () => {
     expect(appDataDir({ SHOREBOUND_HOME: "/x" })).toBe("/x");
     expect(appDataDir({ APPDATA: "C:\\Users\\a\\AppData\\Roaming" }, "win32")).toMatch(/Shorebound$/);
     expect(appDataDir({ XDG_CONFIG_HOME: "/c" }, "linux")).toBe(join("/c", "shorebound"));
+  });
+});
+
+describe("reconcileNewCountries", () => {
+  const added = [
+    { code: "NL", since: "2026-11-25", defaultEnabled: true },
+    { code: "XX", since: "2026-11-25", defaultEnabled: false },
+  ];
+  const base = defaultSettings(["GB"]);
+
+  it("switches on newly added, enabled-by-default countries for an existing user, once", () => {
+    const r = reconcileNewCountries(base, added, "2026-11-26");
+    expect(r.addedCodes).toEqual(["NL"]);
+    expect(r.settings.countries).toEqual(["GB", "NL"]);
+    expect(r.settings.countriesReviewedAt).toBe("2026-11-26");
+  });
+
+  it("never re-adds a country the user unticked after it was offered", () => {
+    const offered = reconcileNewCountries(base, added, "2026-11-26").settings;
+    const unticked = { ...offered, countries: ["GB"] };
+    expect(reconcileNewCountries(unticked, added, "2026-12-01").settings.countries).toEqual(["GB"]);
+  });
+
+  it("does nothing for countries that were already selected", () => {
+    expect(reconcileNewCountries({ ...base, countries: ["GB", "NL"] }, added, "2026-11-26").addedCodes).toEqual([]);
   });
 });
