@@ -54,19 +54,21 @@ Model: [`data/trust/signals.json`](data/trust/signals.json).
 
 Ordered roughly by value. Each is independent of the v1 core.
 
-1. **Staffing-agency filter**: many Singapore results are contract/agency postings.
-2. **More registers**: US (DOL LCA data; the USCIS H-1B hub was unreliable in 2026). (Ireland and the Netherlands
+1. **TODO: Adzuna connector** (free API key per user; ~20 countries including Australia; keyword search for
+   "visa sponsorship"; returns real `created` dates). Needs a Settings field for the user's app id and key.
+2. **Staffing-agency filter**: many Singapore results are contract/agency postings.
+3. **More registers**: US (DOL LCA data; the USCIS H-1B hub was unreliable in 2026). (Ireland and the Netherlands
    were added in Nov 2026.)
-3. **More countries**: research the *coming soon* entries in `data/catalog.json` (Australia needs a free source
+4. **More countries**: research the *coming soon* entries in `data/catalog.json` (Australia needs a free source
    first: none is permitted today); free sources for the Gulf, Malaysia and Thailand. Considered and skipped:
    Germany's federal Jobsuche API (no descriptions in results, German postings rarely mention visas).
-4. **Keyword filters**: target roles, must-have and excluded keywords, work mode (remote/hybrid/onsite).
-5. **Scheduled refresh and notifications** for new high-fit jobs.
-6. **Application tracker** (saved → applied → interviewing → offer).
-7. **LinkedIn/Indeed quick-search links** (pre-filled, opened in your own browser; never fetched).
-8. **Company reputation and reviews** (Wikidata, Companies House, layoff trackers; review sites are link-only).
-9. **Desktop app** (Electron) with OS-keychain secret storage.
-10. **Optional AI (Claude)**: profile refinement, unclear-posting classification, cover-letter drafts, with the
+5. **Keyword filters**: target roles, must-have and excluded keywords, work mode (remote/hybrid/onsite).
+6. **Scheduled refresh and notifications** for new high-fit jobs.
+7. **Application tracker** (saved → applied → interviewing → offer).
+8. **LinkedIn/Indeed quick-search links** (pre-filled, opened in your own browser; never fetched).
+9. **Company reputation and reviews** (Wikidata, Companies House, layoff trackers; review sites are link-only).
+10. **Desktop app** (Electron) with OS-keychain secret storage.
+11. **Optional AI (Claude)**: profile refinement, unclear-posting classification, cover-letter drafts, with the
     user's own API key and a budget cap.
 11. Other origin countries; family/dependant visa planning.
 

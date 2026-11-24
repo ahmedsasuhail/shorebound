@@ -40,7 +40,7 @@ Refresh ─► connectors (polite: identifying User-Agent, 1 req/s per source, 3
           ─► SQLite upsert (jobs older than 30 days pruned)
 
 GET /api/jobs ─► needs a profile (from the resume) ─► SQL filters (countries, window, no "no sponsorship", relocation)
-              ─► buildFeed: analyzeJob → matchScore (fit) + confidenceScore (trust) → discard ≤5% matches, hide poor fits
+              ─► buildFeed: analyzeJob → matchScore (fit) + confidenceScore (trust) → merge cross-source duplicates → discard ≤5% matches, hide poor fits
                  → sort (newest | best fit | most trusted) → max N per company
 ```
 
@@ -65,6 +65,6 @@ would differ by hue alone. Status colours always ship with an icon and a label.
 
 ## Tests
 
-`npm test` runs ~215 Vitest tests: the classifier table, scoring regressions taken from real feeds, each
+`npm test` runs ~290 Vitest tests: the classifier table, scoring regressions taken from real feeds, each
 connector against saved/synthetic responses (no network), register parsing and caching, and API routes via
 Fastify's `inject`.
