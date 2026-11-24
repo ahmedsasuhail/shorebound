@@ -2,7 +2,14 @@ import { analyzeJob, classify, type Job } from "@shorebound/core";
 import { inferCountry } from "./geo.js";
 import { decodeEntities, htmlToText } from "./html.js";
 import { normalizeOrg, type RegisterIndex } from "./registers.js";
-import { USER_AGENT, sleep, type FetchContext, type FetchLike, type FetchResult, type SourceConnector } from "./types.js";
+import {
+  USER_AGENT,
+  sleep,
+  type FetchContext,
+  type FetchLike,
+  type FetchResult,
+  type SourceConnector,
+} from "./types.js";
 
 /**
  * Public job-board APIs used by many employers (no key, no login). Source facts:
@@ -46,8 +53,14 @@ const strs = (...v: unknown[]) => v.flat(Infinity).filter((x): x is string => ty
 // ── Per-ATS parsing ─────────────────────────────────────────────────────────
 
 type GhJob = {
-  id: number; title: string; absolute_url: string; first_published?: string; updated_at?: string; content?: string;
-  location?: { name?: string }; offices?: { name?: string; location?: string }[];
+  id: number;
+  title: string;
+  absolute_url: string;
+  first_published?: string;
+  updated_at?: string;
+  content?: string;
+  location?: { name?: string };
+  offices?: { name?: string; location?: string }[];
   metadata?: { name?: string; value?: unknown }[] | null;
 };
 export function parseGreenhouse(body: unknown): Candidate[] {
@@ -67,8 +80,15 @@ export function parseGreenhouse(body: unknown): Candidate[] {
 }
 
 type LvJob = {
-  id: string; text: string; hostedUrl: string; createdAt?: number; descriptionPlain?: string; additionalPlain?: string;
-  country?: string; workplaceType?: string; categories?: { location?: string; allLocations?: string[] };
+  id: string;
+  text: string;
+  hostedUrl: string;
+  createdAt?: number;
+  descriptionPlain?: string;
+  additionalPlain?: string;
+  country?: string;
+  workplaceType?: string;
+  categories?: { location?: string; allLocations?: string[] };
 };
 export function parseLever(body: unknown): Candidate[] {
   return (Array.isArray(body) ? (body as LvJob[]) : []).map((j) => ({
@@ -83,35 +103,49 @@ export function parseLever(body: unknown): Candidate[] {
 }
 
 type AbJob = {
-  id: string; title: string; jobUrl: string; publishedAt?: string; descriptionPlain?: string; isListed?: boolean; isRemote?: boolean;
-  location?: string; secondaryLocations?: { location?: string }[] | string[];
+  id: string;
+  title: string;
+  jobUrl: string;
+  publishedAt?: string;
+  descriptionPlain?: string;
+  isListed?: boolean;
+  isRemote?: boolean;
+  location?: string;
+  secondaryLocations?: { location?: string }[] | string[];
   address?: { postalAddress?: { addressCountry?: string; addressLocality?: string } };
 };
 export function parseAshby(body: unknown): Candidate[] {
-  return (((body ?? {}) as { jobs?: AbJob[] }).jobs ?? []).filter((j) => j.isListed !== false).map((j) => ({
-    id: j.id,
-    title: j.title,
-    url: j.jobUrl,
-    // publishedAt is the LAST publish time: a re-posted job looks new (documented limitation).
-    postedAt: date(j.publishedAt),
-    locations: strs(
-      j.address?.postalAddress?.addressCountry,
-      j.location,
-      (j.secondaryLocations ?? []).map((s) => (typeof s === "string" ? s : s.location)),
-    ),
-    description: j.descriptionPlain ?? "",
-    remote: j.isRemote,
-  }));
+  return (((body ?? {}) as { jobs?: AbJob[] }).jobs ?? [])
+    .filter((j) => j.isListed !== false)
+    .map((j) => ({
+      id: j.id,
+      title: j.title,
+      url: j.jobUrl,
+      // publishedAt is the LAST publish time: a re-posted job looks new (documented limitation).
+      postedAt: date(j.publishedAt),
+      locations: strs(
+        j.address?.postalAddress?.addressCountry,
+        j.location,
+        (j.secondaryLocations ?? []).map((s) => (typeof s === "string" ? s : s.location)),
+      ),
+      description: j.descriptionPlain ?? "",
+      remote: j.isRemote,
+    }));
 }
 
-const PARSERS: Record<AtsKind, (b: unknown) => Candidate[]> = { greenhouse: parseGreenhouse, lever: parseLever, ashby: parseAshby };
+const PARSERS: Record<AtsKind, (b: unknown) => Candidate[]> = {
+  greenhouse: parseGreenhouse,
+  lever: parseLever,
+  ashby: parseAshby,
+};
 
 // ── Connector ───────────────────────────────────────────────────────────────
 
 /** What being "on the register" means in each country, shown as evidence in the UI. */
 const REGISTER_EVIDENCE: Record<string, (name: string) => string> = {
   GB: (n) => `${n} holds a UK Home Office Skilled Worker sponsor licence.`,
-  CA: (n) => `${n} was approved for a Labour Market Impact Assessment for software occupations in the last four quarters (Canada's foreign-worker programme).`,
+  CA: (n) =>
+    `${n} was approved for a Labour Market Impact Assessment for software occupations in the last four quarters (Canada's foreign-worker programme).`,
 };
 
 export type RegistersResult = RegisterIndex | { index: RegisterIndex; warnings: string[] };
@@ -134,14 +168,18 @@ export function atsConnector(companies: SeedCompany[], getRegisters: () => Promi
           warnings.push(...r.warnings);
         }
       } catch (e) {
-        warnings.push(`Sponsor register unavailable (${(e as Error).message}); only jobs with explicit sponsorship text will appear.`);
+        warnings.push(
+          `Sponsor register unavailable (${(e as Error).message}); only jobs with explicit sponsorship text will appear.`,
+        );
       }
 
       for (let i = 0; i < companies.length; i++) {
         const co = companies[i]!;
         if (i > 0) await sleep(ctx.delayMs ?? 1000);
         try {
-          const res = await (ctx.fetch as FetchLike)(URLS[co.ats](co.token), { headers: { "User-Agent": USER_AGENT, Accept: "application/json" } });
+          const res = await (ctx.fetch as FetchLike)(URLS[co.ats](co.token), {
+            headers: { "User-Agent": USER_AGENT, Accept: "application/json" },
+          });
           stats.requests++;
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           for (const c of PARSERS[co.ats](await res.json())) {
@@ -158,22 +196,49 @@ export function atsConnector(companies: SeedCompany[], getRegisters: () => Promi
   };
 }
 
-function toJob(co: SeedCompany, c: Candidate, ctx: FetchContext, registers: RegisterIndex, stats: FetchResult["stats"]): Job | null {
-  if (!c.postedAt || c.postedAt < ctx.since || c.postedAt > new Date(ctx.now.getTime() + 86_400_000)) { stats.tooOld++; return null; }
-  if (!analyzeJob(c.title, "").isSoftware) { stats.notSoftware = (stats.notSoftware ?? 0) + 1; return null; }
+function toJob(
+  co: SeedCompany,
+  c: Candidate,
+  ctx: FetchContext,
+  registers: RegisterIndex,
+  stats: FetchResult["stats"],
+): Job | null {
+  if (!c.postedAt || c.postedAt < ctx.since || c.postedAt > new Date(ctx.now.getTime() + 86_400_000)) {
+    stats.tooOld++;
+    return null;
+  }
+  if (!analyzeJob(c.title, "").isSoftware) {
+    stats.notSoftware = (stats.notSoftware ?? 0) + 1;
+    return null;
+  }
 
   const country = c.locations.map(inferCountry).find(Boolean);
-  if (!country) { stats.unknownCountry++; return null; }
+  if (!country) {
+    stats.unknownCountry++;
+    return null;
+  }
 
   const cls = classify(c.description, { country });
   let sponsorship: Job["sponsorship"];
-  if (cls.sponsorship === "negative") { stats.noSponsorshipSignal = (stats.noSponsorshipSignal ?? 0) + 1; return null; }
-  if (cls.sponsorship === "confirmed_text") sponsorship = { status: "confirmed_text", evidence: cls.sponsorshipEvidence };
+  if (cls.sponsorship === "negative") {
+    stats.noSponsorshipSignal = (stats.noSponsorshipSignal ?? 0) + 1;
+    return null;
+  }
+  if (cls.sponsorship === "confirmed_text")
+    sponsorship = { status: "confirmed_text", evidence: cls.sponsorshipEvidence };
   else {
     const known = registers.get(country);
     const hit = co.register?.[country]?.find((n) => known?.has(normalizeOrg(n)));
-    if (!hit) { stats.noSponsorshipSignal = (stats.noSponsorshipSignal ?? 0) + 1; return null; }
-    sponsorship = { status: "confirmed_register", evidence: (REGISTER_EVIDENCE[country] ?? ((n: string) => `${n} is on the official ${country} sponsor register.`))(hit) };
+    if (!hit) {
+      stats.noSponsorshipSignal = (stats.noSponsorshipSignal ?? 0) + 1;
+      return null;
+    }
+    sponsorship = {
+      status: "confirmed_register",
+      evidence: (REGISTER_EVIDENCE[country] ?? ((n: string) => `${n} is on the official ${country} sponsor register.`))(
+        hit,
+      ),
+    };
   }
 
   return {
@@ -184,11 +249,15 @@ function toJob(co: SeedCompany, c: Candidate, ctx: FetchContext, registers: Regi
     title: c.title,
     company: co.name,
     country,
-    city: c.locations.find((l) => inferCountry(l) === country)?.split(",")[0]?.trim(),
+    city: c.locations
+      .find((l) => inferCountry(l) === country)
+      ?.split(",")[0]
+      ?.trim(),
     workMode: c.remote ? "remote" : undefined,
     postedAt: c.postedAt,
     description: c.description,
     sponsorship,
-    relocation: cls.relocation === "none" ? { status: "none" } : { status: cls.relocation, evidence: cls.relocationEvidence },
+    relocation:
+      cls.relocation === "none" ? { status: "none" } : { status: cls.relocation, evidence: cls.relocationEvidence },
   };
 }

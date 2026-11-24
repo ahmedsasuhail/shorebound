@@ -12,6 +12,9 @@
     "sourceMap": true,
     "verbatimModuleSyntax": true,
     "types": ["node"],
-    "outDir": "dist"
+    "outDir": "dist",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   }
 }

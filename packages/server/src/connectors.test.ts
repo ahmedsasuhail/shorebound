@@ -8,17 +8,25 @@ import { canadaRegisterLoader, combineRegisters, loadSeed, ukRegisterLoader } fr
 
 const dataDir = fileURLToPath(new URL("../../../data", import.meta.url));
 let dir: string;
-beforeEach(() => { dir = mkdtempSync(join(tmpdir(), "shorebound-reg-")); });
+beforeEach(() => {
+  dir = mkdtempSync(join(tmpdir(), "shorebound-reg-"));
+});
 afterEach(() => rmSync(dir, { recursive: true, force: true }));
 
-const CSV = "Organisation Name,Town/City,County,Type & Rating,Route\nAcme UK Limited,London,,Worker (A rating),Skilled Worker\n";
+const CSV =
+  "Organisation Name,Town/City,County,Type & Rating,Route\nAcme UK Limited,London,,Worker (A rating),Skilled Worker\n";
 const counting = (fail = false) => {
   const calls: string[] = [];
   const f: FetchLike = async (url) => {
     calls.push(url);
     if (fail) return { ok: false, status: 500, json: async () => ({}), text: async () => "" };
     return url.includes("api/content")
-      ? { ok: true, status: 200, json: async () => ({ details: { attachments: [{ url: "https://x/r.csv", content_type: "text/csv" }] } }), text: async () => "" }
+      ? {
+          ok: true,
+          status: 200,
+          json: async () => ({ details: { attachments: [{ url: "https://x/r.csv", content_type: "text/csv" }] } }),
+          text: async () => "",
+        }
       : { ok: true, status: 200, json: async () => ({}), text: async () => CSV };
   };
   return { f, calls };
@@ -32,7 +40,10 @@ describe("seed companies", () => {
       expect(c.token, c.name).toBeTruthy();
       const names = Object.values(c.register ?? {}).flat();
       expect(names.length, `${c.name} needs at least one verified register name`).toBeGreaterThan(0);
-      expect(names.every((n) => n.trim() === n && n.length > 1), c.name).toBe(true);
+      expect(
+        names.every((n) => n.trim() === n && n.length > 1),
+        c.name,
+      ).toBe(true);
     }
   });
 });
@@ -62,8 +73,13 @@ describe("UK register cache", () => {
 });
 
 describe("Canada register cache and combined registers", () => {
-  const pkg = { result: { resources: [{ name: "2026Q2-Employers", format: "XLSX", language: ["en"], url: "https://x/q2.xlsx" }] } };
-  const rows = [["Province/Territory", "Program Stream", "Employer", "Address", "Occupation"], ["ON", "GTS", "Acme Corp", "Toronto", "21231-Software engineers and designers"]];
+  const pkg = {
+    result: { resources: [{ name: "2026Q2-Employers", format: "XLSX", language: ["en"], url: "https://x/q2.xlsx" }] },
+  };
+  const rows = [
+    ["Province/Territory", "Program Stream", "Employer", "Address", "Occupation"],
+    ["ON", "GTS", "Acme Corp", "Toronto", "21231-Software engineers and designers"],
+  ];
   const net = (fail = false) => {
     const calls: string[] = [];
     const f: FetchLike = async (url) => {
@@ -71,7 +87,13 @@ describe("Canada register cache and combined registers", () => {
       if (fail) return { ok: false, status: 503, json: async () => ({}), text: async () => "" };
       return url.includes("package_show")
         ? { ok: true, status: 200, json: async () => pkg, text: async () => "" }
-        : { ok: true, status: 200, json: async () => ({}), text: async () => "", arrayBuffer: async () => new ArrayBuffer(1) };
+        : {
+            ok: true,
+            status: 200,
+            json: async () => ({}),
+            text: async () => "",
+            arrayBuffer: async () => new ArrayBuffer(1),
+          };
     };
     return { f, calls };
   };
@@ -90,7 +112,12 @@ describe("Canada register cache and combined registers", () => {
 
   it("combined loader keeps working when one register fails, and says so", async () => {
     const r = await combineRegisters([
-      { label: "UK", load: async () => { throw new Error("boom"); } },
+      {
+        label: "UK",
+        load: async () => {
+          throw new Error("boom");
+        },
+      },
       { label: "Canada", load: async () => new Map([["CA", new Set(["acme corp"])]]) },
     ])();
     expect(r.index.get("CA")?.size).toBe(1);
@@ -98,6 +125,15 @@ describe("Canada register cache and combined registers", () => {
   });
 
   it("throws only when every register fails", async () => {
-    await expect(combineRegisters([{ label: "UK", load: async () => { throw new Error("a"); } }])()).rejects.toThrow(/UK register unavailable/);
+    await expect(
+      combineRegisters([
+        {
+          label: "UK",
+          load: async () => {
+            throw new Error("a");
+          },
+        },
+      ])(),
+    ).rejects.toThrow(/UK register unavailable/);
   });
 });

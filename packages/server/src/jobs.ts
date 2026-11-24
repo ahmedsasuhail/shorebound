@@ -21,7 +21,18 @@ export function upsertJobs(db: Db, jobs: Job[], now = new Date()): { inserted: n
         update.run(j.title, j.company, posted, j.sponsorship.status, j.relocation.status, json, j.id);
         updated++;
       } else {
-        insert.run(j.id, j.sourceId, j.country, j.title, j.company, posted, now.toISOString(), j.sponsorship.status, j.relocation.status, json);
+        insert.run(
+          j.id,
+          j.sourceId,
+          j.country,
+          j.title,
+          j.company,
+          posted,
+          now.toISOString(),
+          j.sponsorship.status,
+          j.relocation.status,
+          json,
+        );
         inserted++;
       }
     }

@@ -2,27 +2,46 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { JobDTO } from "@shorebound/core";
 
 export interface CatalogCountry {
-  code: string; name: string; region: string; status: "available" | "coming_soon";
-  ease: number | null; confidence: "high" | "medium" | "low" | null; note: string | null;
+  code: string;
+  name: string;
+  region: string;
+  status: "available" | "coming_soon";
+  ease: number | null;
+  confidence: "high" | "medium" | "low" | null;
+  note: string | null;
 }
 export interface Settings {
   countries: string[];
   search: {
-    lookbackDays: number; showUnknownPostedDate: boolean; targetRoles: string[];
-    sort: "newest" | "match" | "confidence"; onlyMatching: boolean; minMatch: number; maxPerCompany: number;
+    lookbackDays: number;
+    sort: "newest" | "match" | "confidence";
+    onlyMatching: boolean;
+    minMatch: number;
+    maxPerCompany: number;
   };
   sponsorship: { excludeNegative: boolean; relocation: "required" | "bonus" | "ignore"; includePossible: boolean };
   sources: { disabled: string[] };
-  schedule: { refreshHours: number };
   appearance: { theme: "system" | "light" | "dark" };
 }
 export interface Profile {
-  skills: string[]; yearsExperience: number | null;
+  skills: string[];
+  yearsExperience: number | null;
   seniority: "intern" | "junior" | "mid" | "senior" | "lead" | "manager";
-  families: string[]; title: string | null; source: "rules" | "user" | "claude";
+  families: string[];
+  title: string | null;
+  source: "rules" | "user" | "claude";
 }
-export interface Feed { jobs: JobDTO[]; total: number; hidden: { notMatching: number; companyCap: number }; needsProfile?: boolean }
-export interface ResumeInfo { originalName: string; bytes: number; uploadedAt: string }
+export interface Feed {
+  jobs: JobDTO[];
+  total: number;
+  hidden: { notMatching: number; companyCap: number };
+  needsProfile?: boolean;
+}
+export interface ResumeInfo {
+  originalName: string;
+  bytes: number;
+  uploadedAt: string;
+}
 export interface RefreshReport {
   startedAt: string;
   sources: { id: string; ok: boolean; seen?: number; kept?: number; inserted?: number; error?: string }[];
@@ -36,7 +55,11 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export const useCatalog = () =>
-  useQuery({ queryKey: ["catalog"], queryFn: () => call<{ countries: CatalogCountry[] }>("/api/catalog"), staleTime: Infinity });
+  useQuery({
+    queryKey: ["catalog"],
+    queryFn: () => call<{ countries: CatalogCountry[] }>("/api/catalog"),
+    staleTime: Infinity,
+  });
 
 export const useSettings = () => useQuery({ queryKey: ["settings"], queryFn: () => call<Settings>("/api/settings") });
 
@@ -44,7 +67,11 @@ export function useSaveSettings() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (patch: Partial<Settings>) =>
-      call<Settings>("/api/settings", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(patch) }),
+      call<Settings>("/api/settings", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(patch),
+      }),
     onMutate: async (patch) => {
       await qc.cancelQueries({ queryKey: ["settings"] });
       const prev = qc.getQueryData<Settings>(["settings"]);
@@ -74,7 +101,8 @@ export function useRefresh() {
   });
 }
 
-export const useResume = () => useQuery({ queryKey: ["resume"], queryFn: () => call<{ resume: ResumeInfo | null }>("/api/resume") });
+export const useResume = () =>
+  useQuery({ queryKey: ["resume"], queryFn: () => call<{ resume: ResumeInfo | null }>("/api/resume") });
 
 export function useUploadResume() {
   const qc = useQueryClient();
@@ -101,26 +129,33 @@ export function useRemoveResume() {
   });
 }
 
-export function timeAgo(iso: string, now = Date.now()): string {
-  const mins = Math.max(0, Math.round((now - new Date(iso).getTime()) / 60000));
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const h = Math.round(mins / 60);
-  if (h < 24) return `${h}h ago`;
-  const d = Math.round(h / 24);
-  return d === 1 ? "yesterday" : `${d}d ago`;
-}
-
-export const useProfile = () => useQuery({ queryKey: ["profile"], queryFn: () => call<{ profile: Profile | null }>("/api/profile") });
+export const useProfile = () =>
+  useQuery({ queryKey: ["profile"], queryFn: () => call<{ profile: Profile | null }>("/api/profile") });
 
 export function useSaveProfile() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (p: Omit<Profile, "source">) =>
-      call<{ profile: Profile }>("/api/profile", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(p) }),
+      call<{ profile: Profile }>("/api/profile", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(p),
+      }),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["profile"] });
       void qc.invalidateQueries({ queryKey: ["jobs"] });
     },
   });
 }
+
+export interface SourceInfo {
+  id: string;
+  label: string;
+  description: string;
+}
+export const useSources = () =>
+  useQuery({
+    queryKey: ["sources"],
+    queryFn: () => call<{ sources: SourceInfo[] }>("/api/sources"),
+    staleTime: Infinity,
+  });

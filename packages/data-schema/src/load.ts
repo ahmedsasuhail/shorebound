@@ -22,9 +22,7 @@ export function loadData(dataDir: string): DataStore {
 
   const catalog = check(CatalogSchema, "catalog.json");
   const countries = new Map<string, Country>();
-  const available = new Set(
-    (catalog?.countries ?? []).filter((c) => c.status === "available").map((c) => c.code),
-  );
+  const available = new Set((catalog?.countries ?? []).filter((c) => c.status === "available").map((c) => c.code));
 
   for (const file of readdirSync(join(dataDir, "countries")).sort()) {
     const code = file.replace(/\.json$/, "").toUpperCase();
@@ -35,11 +33,13 @@ export function loadData(dataDir: string): DataStore {
     countries.set(country.code, country);
   }
   for (const code of available) {
-    if (!countries.has(code)) errors.push(`catalog.json: ${code} is "available" but has no countries/${code.toLowerCase()}.json`);
+    if (!countries.has(code))
+      errors.push(`catalog.json: ${code} is "available" but has no countries/${code.toLowerCase()}.json`);
   }
 
   const MetaOnly = z.looseObject({ _meta: MetaSchema });
-  for (const file of ["origins/in.json", "sources/global.json", "trust/signals.json", "companies/seed.json"]) check(MetaOnly, file);
+  for (const file of ["origins/in.json", "sources/global.json", "trust/signals.json", "companies/seed.json"])
+    check(MetaOnly, file);
 
   if (errors.length) throw new Error(`Data validation failed:\n${errors.join("\n")}`);
   return { catalog: catalog!, countries };

@@ -52,7 +52,9 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
     match: (j) => (j.match?.score ?? 0) + reloc(j) + (j.confidence?.score ?? 0) / 100,
     confidence: (j) => (j.confidence?.score ?? 0) + reloc(j) + (j.match?.score ?? 0) / 100,
   };
-  scored.sort((a, b) => key[o.sort](b) - key[o.sort](a) || new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime());
+  scored.sort(
+    (a, b) => key[o.sort](b) - key[o.sort](a) || new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime(),
+  );
 
   let companyCap = 0;
   const perCompany = new Map<string, number>();

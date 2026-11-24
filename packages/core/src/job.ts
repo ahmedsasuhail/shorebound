@@ -1,10 +1,9 @@
-/** How strongly a job's sponsorship claim is supported (see PLAN.md §5.1). */
+/** How strongly a job's sponsorship claim is supported (see PLAN.md, "Sponsorship"). */
 export type SponsorshipStatus =
   | "confirmed_text" // explicit positive phrase, no negation
   | "confirmed_register" // company is on the country's official sponsor register
   | "visa_source" // listed on a visa-only board or filter
-  | "country_norm" // employer sponsorship is the default in that country
-  | "possible" // talent route likely fits; weak signal
+  | "possible" // weaker signal, e.g. salary meets the visa threshold (Singapore); shown clearly marked
   | "unknown"
   | "negative"; // explicit "no sponsorship" — excluded by default
 
@@ -43,5 +42,13 @@ export type JobDTO = Omit<Job, "postedAt"> & {
     factors: { id: string; label: string; weight: number; value: number | null }[];
     flags: { id: string; label: string; weight: number; hard: boolean }[];
   };
-  analysis?: { isSoftware: boolean; family: string | null; seniority: string; minYears: number | null; skills: string[]; titleSkills: string[]; offStack: boolean };
+  analysis?: {
+    isSoftware: boolean;
+    family: string | null;
+    seniority: string;
+    minYears: number | null;
+    skills: string[];
+    titleSkills: string[];
+    offStack: boolean;
+  };
 };

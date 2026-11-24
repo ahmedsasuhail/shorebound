@@ -1,9 +1,25 @@
+/**
+ * HTTP API for the local app (Fastify, bound to 127.0.0.1 only).
+ *
+ *   GET  /api/catalog     destination countries (researched vs coming soon)
+ *   GET  /api/sources     job sources the user can switch off
+ *   GET  /api/settings    PUT /api/settings (partial update)
+ *   GET  /api/profile     PUT /api/profile (user edits)
+ *   GET  /api/resume      PUT /api/resume (raw bytes + x-filename)   DELETE /api/resume
+ *   GET  /api/jobs        scored, filtered feed (requires a profile)
+ *   POST /api/refresh     fetch all enabled sources (one run at a time)
+ *
+ * When `webDir` is given (production build), the same server also serves the web UI.
+ */
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import fastifyStatic from "@fastify/static";
 import { PROFILE_VERSION, extractProfile, type Profile } from "@shorebound/core";
 import { loadData, type DataStore } from "@shorebound/data-schema";
 import Fastify, { type FastifyInstance } from "fastify";
 import { z } from "zod";
 import { deleteSetting, getSetting, putSetting, type Db } from "./db.js";
-import { buildConnectors } from "./connectors.js";
+import { SOURCE_INFO, buildConnectors } from "./connectors.js";
 import { buildFeed } from "./feed.js";
 import { extractResumeText } from "./resumeText.js";
 import { queryJobs } from "./jobs.js";
@@ -15,6 +31,8 @@ export interface AppDeps {
   db: Db;
   appData: string;
   dataDir: string;
+  /** Built web UI (apps/web/dist). Omitted in development, where Vite serves the UI. */
+  webDir?: string;
   /** Test hook. */
   refresh?: (db: Db, opts: { lookbackDays: number; disabled?: string[] }) => Promise<RefreshReport>;
 }
@@ -31,7 +49,9 @@ const ProfileSchema = z.object({
   skills: z.array(z.string().min(1).max(40)).max(80),
   yearsExperience: z.number().min(0).max(50).nullable(),
   seniority: z.enum(["intern", "junior", "mid", "senior", "lead", "manager"]),
-  families: z.array(z.enum(["frontend", "backend", "fullstack", "mobile", "devops", "data", "qa", "security", "general"])),
+  families: z.array(
+    z.enum(["frontend", "backend", "fullstack", "mobile", "devops", "data", "qa", "security", "general"]),
+  ),
   title: z.string().max(80).nullable(),
 });
 
@@ -63,11 +83,16 @@ export function buildApp(deps: AppDeps): FastifyInstance {
 
   app.get("/api/health", async () => ({ ok: true }));
 
+  app.get("/api/sources", async () => ({ sources: SOURCE_INFO }));
+
   app.get("/api/catalog", async () => ({
     countries: data.catalog.countries.map((c) => {
       const full = data.countries.get(c.code);
       return {
-        code: c.code, name: c.name, region: c.region, status: c.status,
+        code: c.code,
+        name: c.name,
+        region: c.region,
+        status: c.status,
         ease: full?.ease_for_indian_nationals.score ?? null,
         confidence: full?._meta.confidence ?? null,
         note: (c as { note?: string }).note ?? null,
@@ -90,9 +115,7 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     const q = FeedQuery.safeParse(req.query);
     if (!q.success) return reply.code(400).send({ error: "Invalid query" });
     const s = loadSettings(deps.db, enabledDefaults);
-    const countries = q.data.countries !== undefined
-      ? q.data.countries.split(",").filter(Boolean)
-      : s.countries;
+    const countries = q.data.countries !== undefined ? q.data.countries.split(",").filter(Boolean) : s.countries;
     // No profile → no feed. Without a resume there is nothing to judge fit against, and an
     // unranked list of every job would be misleading.
     const profile = await getProfile();
@@ -129,7 +152,10 @@ export function buildApp(deps: AppDeps): FastifyInstance {
   app.post("/api/refresh", async (_req, reply) => {
     if (refreshing) return reply.code(409).send({ error: "A refresh is already running." });
     const s = loadSettings(deps.db, enabledDefaults);
-    const run = deps.refresh ?? ((db, o) => refreshJobs(db, { ...o, connectors: buildConnectors({ dataDir: deps.dataDir, appData: deps.appData }) }));
+    const run =
+      deps.refresh ??
+      ((db, o) =>
+        refreshJobs(db, { ...o, connectors: buildConnectors({ dataDir: deps.dataDir, appData: deps.appData }) }));
     refreshing = run(deps.db, { lookbackDays: s.search.lookbackDays, disabled: s.sources.disabled });
     try {
       return await refreshing;
@@ -169,6 +195,14 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     deleteSetting(deps.db, "profile"); // the profile was derived from this resume
     return { resume: null };
   });
+
+  if (deps.webDir && existsSync(join(deps.webDir, "index.html"))) {
+    void app.register(fastifyStatic, { root: deps.webDir, wildcard: false });
+    // Single-page app: unknown non-API paths get index.html; unknown API paths stay 404 JSON.
+    app.setNotFoundHandler((req, reply) =>
+      req.url.startsWith("/api/") ? reply.code(404).send({ error: "Not found" }) : reply.sendFile("index.html"),
+    );
+  }
 
   return app;
 }

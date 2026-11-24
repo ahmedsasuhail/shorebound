@@ -1,6 +1,6 @@
 {
   "name": "shorebound",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "description": "Find recent visa-sponsored software jobs abroad, ranked by trust. Local-first desktop/web app.",
@@ -13,18 +13,32 @@
     "node": ">=22"
   },
   "scripts": {
+    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm run dev -w @shorebound/server\" \"npm run dev -w @shorebound/web\"",
+    "build": "tsc -b && npm run build -w @shorebound/web",
+    "start": "node --disable-warning=ExperimentalWarning packages/server/dist/main.js",
     "typecheck": "tsc -b && tsc -p apps/web --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:data": "npm run validate -w @shorebound/data-schema",
-    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm run dev -w @shorebound/server\" \"npm run dev -w @shorebound/web\"",
-    "build:web": "npm run build -w @shorebound/web"
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run validate:data"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^24.0.0",
     "concurrently": "^10.0.7",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.8",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
     "tsx": "^4.23.15",
     "typescript": "^5.9.0",
+    "typescript-eslint": "^8.74.0",
     "vitest": "^4.1.12"
   }
 }

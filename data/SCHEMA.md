@@ -173,5 +173,5 @@ Top level also has `recommendations` (build order, LinkedIn/Indeed stance, polit
 - `company_data_sources[]` — free registries / APIs (size, age, funding, filings).
 - `scam_signals[]` — `{id, description, weight, detect: "how the app can detect it"}`.
 - `entity_resolution` — steps to resolve a company name to a domain / registry entity.
-- `confidence_model` — proposed scoring factors and weights (see PLAN.md §5.3).
+- `confidence_model` — proposed scoring factors and weights (see PLAN.md, "Confidence").
 - `sources[]`.
