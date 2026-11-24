@@ -1,7 +1,7 @@
 import type { JobDTO } from "@shorebound/core";
 import { extractProfile } from "@shorebound/core";
 import { describe, expect, it } from "vitest";
-import { buildFeed } from "./feed.js";
+import { buildFeed, dedupeJobs } from "./feed.js";
 
 const now = new Date("2026-11-22T12:00:00Z");
 const mk = (id: string, title: string, company: string, hoursAgo: number, extra: Partial<JobDTO> = {}): JobDTO => ({
@@ -96,5 +96,30 @@ describe("buildFeed", () => {
       mk("reloc", "Senior Backend Engineer", "B", 2, { relocation: { status: "offered" } }),
     ];
     expect(buildFeed(rows, { ...base, sort: "match" }).jobs[0]!.id).toBe("reloc");
+  });
+
+  it("keeps one copy of a job that arrives from two sources, preferring the stronger evidence", () => {
+    const board = mk("an", "Backend Engineer (m/f/d)", "Catawiki", 2, {
+      country: "NL",
+      sourceId: "arbeitnow",
+      sponsorship: { status: "visa_source" },
+    });
+    const own = mk("gh", "Backend Engineer", "Catawiki B.V.", 3, {
+      country: "NL",
+      sourceId: "greenhouse",
+      sponsorship: { status: "confirmed_register" },
+    });
+    const other = mk("x", "Backend Engineer", "Catawiki", 1, { country: "DE" }); // different country: kept
+    expect(
+      dedupeJobs([board, own, other])
+        .map((j) => j.id)
+        .sort(),
+    ).toEqual(["gh", "x"]);
+  });
+
+  it("keeps several same-titled openings from one source (different teams)", () => {
+    const a = mk("1", "Software Engineer 3", "MongoDB", 1, { sourceId: "greenhouse" });
+    const b = mk("2", "Software Engineer 3", "MongoDB", 2, { sourceId: "greenhouse" });
+    expect(dedupeJobs([a, b])).toHaveLength(2);
   });
 });
