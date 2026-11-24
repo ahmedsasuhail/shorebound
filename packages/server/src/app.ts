@@ -1,8 +1,8 @@
-import { extractProfile, type Profile } from "@shorebound/core";
+import { PROFILE_VERSION, extractProfile, type Profile } from "@shorebound/core";
 import { loadData, type DataStore } from "@shorebound/data-schema";
 import Fastify, { type FastifyInstance } from "fastify";
 import { z } from "zod";
-import { getSetting, putSetting, type Db } from "./db.js";
+import { deleteSetting, getSetting, putSetting, type Db } from "./db.js";
 import { buildConnectors } from "./connectors.js";
 import { buildFeed } from "./feed.js";
 import { extractResumeText } from "./resumeText.js";
@@ -43,7 +43,23 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     .map((c) => c.code);
   let refreshing: Promise<RefreshReport> | null = null;
   const easeByCountry = new Map([...data.countries].map(([code, c]) => [code, c.ease_for_indian_nationals.score]));
-  const getProfile = () => getSetting<Profile>(deps.db, "profile") ?? null;
+  /**
+   * Returns the stored profile. A rule-derived profile saved by an older extractor is re-read from the
+   * stored resume (profiles the user edited are never touched).
+   */
+  const getProfile = async (): Promise<Profile | null> => {
+    const stored = getSetting<Profile>(deps.db, "profile") ?? null;
+    if (!stored || stored.source !== "rules" || (stored.version ?? 0) >= PROFILE_VERSION) return stored;
+    const info = getResume(deps.db);
+    if (!info) return stored;
+    try {
+      const fresh = extractProfile(await extractResumeText(resumePath(deps.appData, info)));
+      putSetting(deps.db, "profile", fresh);
+      return fresh;
+    } catch {
+      return stored;
+    }
+  };
 
   app.get("/api/health", async () => ({ ok: true }));
 
@@ -77,6 +93,10 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     const countries = q.data.countries !== undefined
       ? q.data.countries.split(",").filter(Boolean)
       : s.countries;
+    // No profile → no feed. Without a resume there is nothing to judge fit against, and an
+    // unranked list of every job would be misleading.
+    const profile = await getProfile();
+    if (!profile) return { jobs: [], total: 0, hidden: { notMatching: 0, companyCap: 0 }, needsProfile: true };
     const rows = queryJobs(deps.db, {
       countries,
       sinceDays: q.data.sinceDays ?? s.search.lookbackDays,
@@ -86,16 +106,17 @@ export function buildApp(deps: AppDeps): FastifyInstance {
       limit: 5000,
     });
     return buildFeed(rows, {
-      profile: getProfile(),
+      profile,
       easeByCountry,
       sort: s.search.sort,
       onlyMatching: s.search.onlyMatching,
+      minMatch: s.search.minMatch,
       maxPerCompany: s.search.maxPerCompany,
       relocationBonus: s.sponsorship.relocation === "bonus",
     });
   });
 
-  app.get("/api/profile", async () => ({ profile: getProfile() }));
+  app.get("/api/profile", async () => ({ profile: await getProfile() }));
   app.put("/api/profile", async (req, reply) => {
     const parsed = ProfileSchema.safeParse(req.body);
     if (!parsed.success) return reply.code(400).send({ error: parsed.error.issues.map((i) => i.message).join("; ") });
@@ -144,6 +165,7 @@ export function buildApp(deps: AppDeps): FastifyInstance {
   });
   app.delete("/api/resume", async () => {
     removeResume(deps.db, deps.appData);
+    deleteSetting(deps.db, "profile"); // the profile was derived from this resume
     return { resume: null };
   });
 

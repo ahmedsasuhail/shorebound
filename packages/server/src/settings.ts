@@ -15,13 +15,15 @@ export const SettingsSchema = z.object({
       sort: z.enum(["newest", "match", "confidence"]).default("newest"),
       /** Hide non-software roles and weak matches once a profile exists. */
       onlyMatching: z.boolean().default(true),
+      /** Hide jobs below this match score: Broad 40, Balanced 55, Strict 70. */
+      minMatch: z.number().int().min(0).max(100).default(55),
       /** Max jobs per company in the feed so one employer cannot flood it (0 = no cap). */
       maxPerCompany: z.number().int().min(0).max(50).default(3),
     })
     .default(() => ({
       targetRoles: [], mustHaveKeywords: [], excludeKeywords: [], lookbackDays: 7,
       workModes: ["onsite", "hybrid", "remote"] as ("onsite" | "hybrid" | "remote")[], showUnknownPostedDate: false,
-      sort: "newest" as const, onlyMatching: true, maxPerCompany: 3,
+      sort: "newest" as const, onlyMatching: true, minMatch: 55, maxPerCompany: 3,
     })),
   sponsorship: z
     .object({
