@@ -347,7 +347,7 @@ describe("api", () => {
 
   it("lists the job sources the user can switch off", async () => {
     const ids = (await make().inject("/api/sources")).json().sources.map((x: { id: string }) => x.id);
-    expect(ids).toEqual(["arbeitnow", "hackernews", "mycareersfuture", "company-boards"]);
+    expect(ids).toEqual(["arbeitnow", "hackernews", "mycareersfuture", "tokyodev", "company-boards"]);
   });
 
   it("serves the built UI with a single-page fallback, while unknown API paths stay 404", async () => {

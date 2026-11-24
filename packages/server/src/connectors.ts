@@ -9,6 +9,8 @@ import {
   fetchUkRegisterCsv,
   hackerNews,
   myCareersFuture,
+  tokyoDevConnector,
+  type PostedDateCache,
   parseUkRegister,
   type FetchLike,
   type RegisterIndex,
@@ -143,6 +145,19 @@ export function netherlandsRegisterLoader(
   };
 }
 
+/** A small JSON file mapping job path -> posted date, so a source never fetches the same job page twice. */
+export function fileDateCache(file: string): PostedDateCache {
+  const map = new Map<string, string>(existsSync(file) ? Object.entries(JSON.parse(readFileSync(file, "utf8"))) : []);
+  return {
+    get: (path) => (map.has(path) ? new Date(map.get(path)!) : undefined),
+    set: (path, d) => void map.set(path, d.toISOString()),
+    save: () => {
+      mkdirSync(join(file, ".."), { recursive: true });
+      writeFileSync(file, JSON.stringify(Object.fromEntries(map)));
+    },
+  };
+}
+
 /** Merges several register loaders; a failing one is reported as a warning, the rest still apply. */
 export function combineRegisters(
   loaders: { label: string; load: () => Promise<RegisterIndex> }[],
@@ -176,6 +191,11 @@ export const SOURCE_INFO = [
     description: "Government job portal. Uses the visa-eligible salary signal.",
   },
   {
+    id: "tokyodev",
+    label: "TokyoDev (Japan)",
+    description: "English-language developer jobs open to applicants abroad, no Japanese required.",
+  },
+  {
     id: "company-boards",
     label: "Company job boards",
     description:
@@ -192,5 +212,6 @@ export function buildConnectors(o: { dataDir: string; appData: string; fetchImpl
     { label: "Ireland", load: irelandRegisterLoader(o.appData, registerFetch) },
     { label: "Netherlands", load: netherlandsRegisterLoader(o.appData, registerFetch) },
   ]);
-  return [arbeitnow, hackerNews, myCareersFuture, atsConnector(loadSeed(o.dataDir), registers)];
+  const tokyo = tokyoDevConnector(fileDateCache(join(o.appData, "cache", "tokyodev-posted.json")));
+  return [arbeitnow, hackerNews, myCareersFuture, tokyo, atsConnector(loadSeed(o.dataDir), registers)];
 }

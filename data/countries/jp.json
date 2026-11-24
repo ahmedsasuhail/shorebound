@@ -1,0 +1,327 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-25",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred (moj.go.jp/isa, jetro.go.jp, studyinjapan.go.jp, indembassy-tokyo.gov.in). Budget-capped session of 12 tool calls: 7 web searches and 5 page fetches. 2 fetches failed with HTTP 403 (moj.go.jp/isa gijinkoku page, tokyodev.com visa article), so ISA facts come from search snippets of official ISA PDFs and from JETRO/JASSO pages. Job boards were not probed; access notes are inference or carried over from the DE session (2026-11-22), as marked."
+    },
+    "searches_run": 7,
+    "pages_read": 3,
+    "confidence": "medium",
+    "open_questions": [
+      "3-year Indian bachelor's (BCA): the official criterion (via studyinjapan.go.jp) is 'a university graduate who majored in a subject relevant to the work' or 'completed an education equivalent'. No official page found that says whether a 3-year foreign bachelor's counts. In practice a recognised university bachelor's degree is widely reported to qualify regardless of length, but this was not confirmed on an ISA page.",
+      "IT qualification exemption from the degree / 10-year rule (certain Japanese or mutually recognised foreign IT exams) is mentioned only in an old secondary source (TokyoDev 2013). The current list of recognised exams, and whether any Indian certification is on it, was not checked.",
+      "Highly Skilled Professional (i)(b) point table: individual point values (degree, years of experience, salary by age band, age, IT bonus) could not be read on the current ISA points-table PDF this session. Values commonly cited (e.g. bachelor's 10, 7+ years experience 15) are unverified and deliberately not recorded here. Whether a typical senior engineer offer reaches 70 points is therefore not confirmed.",
+      "Certificate of Eligibility (COE) official standard processing period and any HSP fast-track target were not read on an ISA page. '1-3 months' comes only from a secondary guide seen in search results.",
+      "COE fee (if any), visa issuance fee at Japanese missions in India and visa issuance time after COE were not checked.",
+      "Senior salary: TokyoDev 2026 survey gives medians by years of experience only (no seniority, city or percentile breakdown on the page read). Tokyo-specific figures and Japan Dev salary data were not checked.",
+      "Income tax rates (national income tax brackets, local inhabitant tax) were not researched this session.",
+      "Sponsorship and language-requirement phrases are compiled from general familiarity with Japanese job postings, not measured against live listings this session.",
+      "Job-board access (robots.txt / ToS / APIs) for TokyoDev, Japan Dev, GaijinPot Jobs, Daijob and Indeed Japan was not checked. tokyodev.com returned HTTP 403 to the fetch tool, suggesting bot blocking.",
+      "Indian Embassy Tokyo: only a September 2025 fraud-call advisory was found; no Japan-specific fake-job-offer advisory was found."
+    ],
+    "review_by": "2027-05-25"
+  },
+  "code": "JP",
+  "name": "Japan",
+  "region": "east_asia",
+  "tier": "high_pay",
+  "default_enabled": true,
+  "currency": "JPY",
+  "languages": {
+    "official": ["Japanese"],
+    "english_only_tech_jobs": "possible",
+    "note": "English-only software roles exist mainly at international tech companies, foreign-capital firms and startups in Tokyo; niche boards such as TokyoDev and Japan Dev list such roles and let users filter for no Japanese required. Most of the wider job market expects business-level Japanese. Language requirements are not visa rules: a posting asking for Japanese does not mean 'no sponsorship', but it rules out English-only candidates. Typical Japanese-requirement phrases to detect: 'ビジネスレベルの日本語' (business-level Japanese), '日本語ネイティブレベル' (native-level Japanese), '日本語能力試験N1' / 'JLPT N1', 'N2以上' / 'Japanese level N2 or above required', '日本語での業務経験' (work experience in Japanese), 'Japanese not required', '日本語不問' (Japanese not required), '英語のみ可' (English only OK). Daily life outside work (housing, banking, city office) is harder without Japanese. Qualitative inference, not a measured statistic."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 11000000, "high": 12000000, "currency": "JPY", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://2026.surveys.tokyodev.com/"],
+    "note": "TokyoDev 2026 survey of international software developers living in Japan (733 respondents; 648 in the compensation chart). Median annual compensation: overall JPY 9.5M; 4-6 years JPY 7.5M; 7-9 years JPY 11M; 10-12 years JPY 12M; 13-15 years JPY 11M; 16-20 years JPY 13M; over 20 years JPY 17M (text says JPY 16.5M). low = 7-9 year median, high = 10-12 year median, used as a rough proxy for a 7+ year engineer; these are medians, not a range, and not Tokyo-only. The 2025 survey showed a higher median (JPY 13.5M) for developers at international companies without Japan operations. Respondents skew to English-speaking international developers; Japanese domestic firms often pay less."
+  },
+  "income_tax_note": "Progressive national income tax plus local inhabitant tax; rates not researched this session. Social insurance (health and pension) is deducted on top. Highly Skilled Professional status has no special income-tax rate (no tax incentive found this session).",
+  "cost_of_living_note": "Tokyo is the main tech hub; rents are high relative to the rest of Japan. New renters often face up-front costs (deposit, key money, agency fee, guarantor company) and some landlords refuse foreign tenants. Qualitative note, not verified with figures this session.",
+  "visa_routes": [
+    {
+      "id": "jp-engineer-humanities-intl",
+      "name": "Engineer/Specialist in Humanities/International Services (技術・人文知識・国際業務)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "JPY", "period": "year", "as_of": "2026-11", "note": "No fixed amount. The employee must receive 'remuneration that is equivalent to or above that of what a Japanese citizen would receive' for the same work (studyinjapan.go.jp)." },
+      "degree_requirement": "A university graduate who majored in a subject relevant to the work, or completed equivalent education (a post-secondary course at a specialised training college in Japan also qualifies); OR more than 10 years of practical experience relevant to the work (studyinjapan.go.jp, JASSO). Relevance between degree/experience and the job is checked. Some sources mention an IT-qualification exemption; unverified.",
+      "three_year_indian_bachelors_note": "A 3-year BCA is a university bachelor's degree in a computing subject, which is directly relevant to a software role, and is widely reported to satisfy the 'university graduate' criterion regardless of programme length. Not confirmed on an official ISA page this session. With 7+ years (under 10) of experience the experience-only alternative is not yet available, so the degree route is the one to use. Credential evaluation is not a separate step; documents go with the COE application.",
+      "processing_time": "The employer (or its agent) applies for a Certificate of Eligibility (COE) at the regional immigration bureau; a secondary guide lists 1-3 months for this status. After the COE is issued, the candidate applies for the visa at a Japanese embassy/consulate in India (timing not checked). Official standard processing period not verified.",
+      "lottery_or_quota": "None",
+      "path_to_pr": "Period of stay 5 years, 3 years, 1 year or 3 months, renewable. Permanent residence in principle requires 10 years of continuous residence, including at least 5 years on a work or residence status, plus proper fulfilment of public obligations such as tax payments (ISA guidelines, via an ISA document snippet). Switching to Highly Skilled Professional can shorten this to 3 or 1 years.",
+      "employer_cost_note": "Employer sponsors the COE application and supplies company documents; no levy found. Fees (if any) not checked.",
+      "official_url": "https://www.moj.go.jp/isa/applications/status/gijinkoku.html",
+      "verified": false
+    },
+    {
+      "id": "jp-highly-skilled-professional",
+      "name": "Highly Skilled Professional (i)(b) – advanced specialized/technical activities (高度専門職1号ロ)",
+      "type": "points_based",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 3000000, "currency": "JPY", "period": "year", "as_of": "2026-04", "note": "Floor: for HSP (i)(b) and (i)(c), an annual salary below JPY 3 million disqualifies the applicant even if other items total 70+ points (ISA HSP FAQ, April 2026, via search snippet). Points threshold is 70; points come from academic background, professional experience, annual salary (age-banded), age and bonuses (e.g. IT growth field 10, JLPT N2-level Japanese 10, top university 10, per JETRO)." },
+      "degree_requirement": "No mandatory degree; academic background earns points. Must otherwise reach 70 points and qualify for an underlying work activity.",
+      "three_year_indian_bachelors_note": "A bachelor's degree earns academic-background points; a 3-year BCA is expected to count as a bachelor's but this was not confirmed. Point values per item were not verified this session, so whether a given offer reaches 70 cannot be computed from this file.",
+      "processing_time": "JETRO lists 'preferential processing of entry and residence procedures' as a benefit; no target figure was confirmed this session.",
+      "lottery_or_quota": "None",
+      "path_to_pr": "Period of stay 5 years. Permanent residence after 3 years of continuous stay at 70+ points, or after 1 year at 80+ points (ISA HSP FAQ; JETRO). Points need not be maintained at all times, but a renewal can be refused if the total drops below 70. After 3 years in HSP (i), HSP (ii) (indefinite stay) is possible.",
+      "employer_cost_note": "Employer files the COE as for other work statuses; no levy found. Other HSP benefits: spouse may work, parents and domestic workers may accompany under conditions (JETRO).",
+      "official_url": "https://www.moj.go.jp/isa/applications/resources/newimmiact_3_index.html",
+      "verified": false
+    },
+    {
+      "id": "jp-j-skip",
+      "name": "J-Skip – Special Highly-Skilled Professional (特別高度人材制度)",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 20000000, "currency": "JPY", "period": "year", "as_of": "2023-04", "note": "Advanced specialized/technical: master's degree or higher with annual income of JPY 20M or more, OR 10+ years of related work experience with annual income of JPY 20M or more (JETRO). Separate from the points system." },
+      "degree_requirement": "Master's or higher, or 10+ years of related experience (plus the income floor).",
+      "three_year_indian_bachelors_note": "A bachelor's alone does not qualify; with 10+ years of experience and a JPY 20M salary it would. Not relevant for most candidates at 7 years.",
+      "processing_time": null,
+      "lottery_or_quota": "None",
+      "path_to_pr": "Change to HSP (ii) possible after 1 year (JETRO); permanent residence fast-track as for 80-point HSP (not separately verified).",
+      "employer_cost_note": "Not checked.",
+      "official_url": "https://www.moj.go.jp/isa/content/001401537.pdf",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": false,
+    "name": "None",
+    "url": null,
+    "format": "none",
+    "update_frequency": null,
+    "how_to_use": "Japan has no public register of employers allowed to sponsor work visas; any company with a genuine job can apply for a COE for its hire. The app cannot do a register match for Japan and should rely on posting phrases (sponsorship_phrases), niche boards that flag 'applicants abroad / visa sponsorship', and company-trust signals instead.",
+    "verified": false
+  },
+  "sponsorship_phrases": {
+    "positive": [
+      "ビザサポート",
+      "ビザサポートあり",
+      "就労ビザサポート",
+      "ビザ取得支援",
+      "ビザ取得サポート",
+      "在留資格取得支援",
+      "海外在住者応募可",
+      "海外からの応募可",
+      "海外在住の方も応募可能",
+      "引越し支援",
+      "渡日支援",
+      "visa sponsorship",
+      "visa sponsorship available",
+      "visa support",
+      "we sponsor visas",
+      "applicants from abroad welcome",
+      "open to candidates outside Japan",
+      "relocation support",
+      "relocation package",
+      "Highly Skilled Professional visa support"
+    ],
+    "negative": [
+      "ビザサポートなし",
+      "ビザサポート不可",
+      "ビザのサポートは行っておりません",
+      "就労ビザのサポートはできません",
+      "日本在住者のみ",
+      "日本国内在住の方のみ",
+      "国内在住者限定",
+      "海外在住者不可",
+      "就労可能な在留資格をお持ちの方",
+      "日本での就労資格をお持ちの方",
+      "no visa sponsorship",
+      "we are unable to sponsor visas",
+      "must currently reside in Japan",
+      "must be based in Japan",
+      "Japan residents only",
+      "must have a valid Japanese work visa",
+      "must already have the right to work in Japan"
+    ]
+  },
+  "ease_for_indian_nationals": {
+    "score": 3,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "No quota or lottery, no salary floor for the standard work status beyond parity with Japanese staff, any employer can sponsor (no licence), and a relevant bachelor's degree is the normal entry ticket; the HSP route gives a 5-year stay and permanent residence after 1-3 years. Points lost for: the language barrier (English-only roles are a minority, concentrated in Tokyo), uncertainty about how a 3-year BCA is treated (not confirmed officially), a COE step of roughly 1-3 months, and no public register for the app to confirm sponsors.",
+    "factors": {
+      "degree_recognition": "Criterion is 'university graduate' with a relevant major, or 10+ years relevant experience. A 3-year BCA is widely reported to count; not confirmed on an ISA page.",
+      "language_barrier": "High for the general market; moderate for international tech companies where English is the working language. Japanese helps daily life and earns HSP bonus points (N2-level: 10).",
+      "processing_speed": "COE about 1-3 months per a secondary guide, then a consular visa step in India. HSP gets preferential processing (no figure confirmed).",
+      "quota_or_lottery": "None",
+      "employer_willingness": "International tech employers listed on TokyoDev / Japan Dev commonly sponsor; many domestic firms hire only Japanese speakers already in Japan. Qualitative; no statistic gathered.",
+      "attestation_or_paperwork": "Employer files the COE with company documents; candidate supplies degree certificate, transcripts and experience proof. Attestation requirements from the Indian side not checked (see origins/in.json)."
+    }
+  },
+  "relocation_norms": "Visa sponsorship is common at English-speaking international tech companies in Tokyo; some also offer flights, temporary housing or a relocation allowance. Domestic Japanese firms rarely hire from abroad without Japanese ability. Qualitative; not verified with survey data this session.",
+  "job_sites": [
+    {
+      "id": "tokyodev",
+      "name": "TokyoDev",
+      "url": "https://www.tokyodev.com",
+      "kind": "tech_niche",
+      "reputation": "high",
+      "reputation_note": "Curated board of software jobs in Japan for international developers; also runs the annual developer salary survey.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "tokyodev.com returned HTTP 403 to the fetch tool this session, suggesting bot blocking; robots.txt / ToS not checked. Treat as a human-click link. Filters for Japanese level and applicants from abroad are from general familiarity, unverified."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": true, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "japan-dev",
+      "name": "Japan Dev",
+      "url": "https://japan-dev.com",
+      "kind": "tech_niche",
+      "reputation": "high",
+      "reputation_note": "Curated English-language software job board for Japan.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session. Filters listed are from general familiarity, unverified."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": true, "relocation": false, "english": true, "remote": true, "date_posted": false },
+      "english_listings": "most",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "linkedin-jobs-jp",
+      "name": "LinkedIn Jobs (Japan)",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Used by international and foreign-capital employers in Japan.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "linkedin.com robots.txt disallows /jobs/search for generic agents (checked 2026-11-22 in the DE session; same global file). Deep-link only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "gaijinpot-jobs",
+      "name": "GaijinPot Jobs",
+      "url": "https://jobs.gaijinpot.com",
+      "kind": "relocation_niche",
+      "reputation": "medium",
+      "reputation_note": "Long-running board for foreigners in Japan; many teaching and non-tech roles, some IT. Some listings require residence in Japan.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "daijob",
+      "name": "Daijob",
+      "url": "https://www.daijob.com",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Bilingual job board for international / bilingual professionals in Japan; many roles ask for Japanese.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "some",
+      "priority": 6,
+      "verified": false
+    },
+    {
+      "id": "indeed-jp",
+      "name": "Indeed Japan",
+      "url": "https://jp.indeed.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Large aggregator; mostly Japanese-language listings; includes agency duplicates.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session. Deep-link search URLs, e.g. https://jp.indeed.com/jobs?q=software+engineer+visa+sponsorship&fromage=7."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "few",
+      "priority": 4,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    { "name": "OpenWork", "url": "https://www.openwork.jp", "access": "link_only", "note": "Major Japanese employee-review site (Japanese language). Not probed this session." },
+    { "name": "Glassdoor", "url": "https://www.glassdoor.com", "access": "link_only", "note": "Coverage of international firms in Japan; Glassdoor restricts crawlers (see de.json). Link out only." },
+    { "name": "TokyoDev developer survey", "url": "https://2026.surveys.tokyodev.com/", "access": "link_only", "note": "Annual compensation and workplace survey of international developers in Japan." }
+  ],
+  "communities": [
+    { "name": "r/movingtojapan", "url": "https://www.reddit.com/r/movingtojapan/", "note": "Visa and relocation questions, including COE timelines (anecdotal). Not reviewed this session." },
+    { "name": "r/japanlife", "url": "https://www.reddit.com/r/japanlife/", "note": "Day-to-day life for residents (housing, banking, taxes). Not reviewed this session." },
+    { "name": "TokyoDev articles", "url": "https://www.tokyodev.com/articles", "note": "Guides on visas, salaries and job hunting for international developers. Not reviewed this session (fetch blocked)." }
+  ],
+  "scam_warnings": [
+    "The Embassy of India in Tokyo (advisory, September 2025) warns the Indian community in Japan of scam calls from people posing as officials who demand 'penalty' payments under threat of deportation or jail. Ignore such calls.",
+    "Indian missions elsewhere (e.g. Washington) warn of bogus companies with fictitious email and phone contacts that ask job-seekers for payments; the same pattern applies to Japan offers.",
+    "App heuristic: for Japanese work statuses the employer applies for the Certificate of Eligibility. Anyone charging the candidate for a COE, a 'work permit', a 'Japan job guarantee' or a placement fee for a software job is high risk.",
+    "App heuristic: Japan has no sponsor register to check, so verify the employer independently (corporate number on the National Tax Agency corporate-number site, company website, OpenWork / Glassdoor reviews) before sharing passport or degree documents."
+  ],
+  "sources": [
+    { "url": "https://studyinjapan.go.jp/en/work-in-japan/employment/status.html", "title": "Study in Japan (JASSO) – Jobs & Careers in Japan: status of residence", "used_for": "Engineer/Specialist degree or 10-year experience rule, salary parity, periods of stay", "accessed": "2026-11-25" },
+    { "url": "https://www.jetro.go.jp/en/invest/setting_up/section2/page11.html", "title": "JETRO – Points-based preferential immigration treatment for Highly Skilled Foreign Professionals", "used_for": "HSP categories, 70-point threshold, bonus points, preferential treatment, PR after 3 / 1 years, J-Skip criteria", "accessed": "2026-11-25" },
+    { "url": "https://www.moj.go.jp/isa/content/001422763.pdf", "title": "ISA – Highly Skilled Professional FAQ (April 2026) (via search snippet)", "used_for": "JPY 3M salary floor for HSP (i)(b)/(c); PR at 70 points after 3 years / 80 points after 1 year; points need not be maintained", "accessed": "2026-11-25" },
+    { "url": "https://www.moj.go.jp/isa/content/001425346.pdf", "title": "Government of Japan response to a UN body (ISA document) (via search snippet)", "used_for": "Permanent residence guideline: 10 years continuous residence incl. 5 years on work/residence status; HSP reductions", "accessed": "2026-11-25" },
+    { "url": "https://www.moj.go.jp/isa/content/001401537.pdf", "title": "ISA – Japan System for Special Highly-Skilled Professionals (J-Skip) (search result only)", "used_for": "Official URL for J-Skip route", "accessed": "2026-11-25" },
+    { "url": "https://www.moj.go.jp/isa/applications/status/gijinkoku.html", "title": "ISA – 技術・人文知識・国際業務 status page (fetch returned HTTP 403)", "used_for": "Official URL for the Engineer/Specialist route; not read", "accessed": "2026-11-25" },
+    { "url": "https://www.tokyodev.com/articles/japanese-engineering-visa-options", "title": "TokyoDev – Visas for Software Engineers in Japan (via search snippet; fetch returned HTTP 403)", "used_for": "10-year experience alternative, IT-exam exemption mention (older version), relevance of degree", "accessed": "2026-11-25" },
+    { "url": "https://btwvisas.com/visa-guide/japan-work-visa", "title": "Japan work visa guide (secondary, via search snippets; which result held the 1-3 month figure was not pinned)", "used_for": "COE processing about 1-3 months (secondary, unverified)", "accessed": "2026-11-25" },
+    { "url": "https://2026.surveys.tokyodev.com/", "title": "TokyoDev 2026 Developer Survey results", "used_for": "Compensation medians by years of experience", "accessed": "2026-11-25" },
+    { "url": "https://www.tokyodev.com/articles/the-2025-tokyodev-developer-survey-results-are-live", "title": "TokyoDev – 2025 survey results (via search snippet)", "used_for": "2025 median JPY 9.5M; JPY 13.5M at international companies without Japan operations", "accessed": "2026-11-25" },
+    { "url": "https://indembassy-tokyo.gov.in/public_files/assets/pdf/Advisory_on_Fraud_Calls_sep25.pdf", "title": "Embassy of India, Tokyo – Advisory on Fraud Calls (September 2025) (via search snippet)", "used_for": "Scam warning: impersonation calls demanding penalties", "accessed": "2026-11-25" },
+    { "url": "https://indianembassyusa.gov.in/Publicind?id=20", "title": "Embassy of India, Washington – job-offer fraud advisory (via search snippet)", "used_for": "General job-offer fraud pattern", "accessed": "2026-11-25" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt (checked in DE session)", "used_for": "Access stance", "accessed": "2026-11-22" }
+  ]
+}
