@@ -87,12 +87,22 @@ export const myCareersFuture: SourceConnector = {
   },
 };
 
+const sgDate = (d?: string) => {
+  const t = d ? new Date(`${d}T00:00:00+08:00`) : null; // Singapore time
+  return t && !Number.isNaN(t.getTime()) ? t : null;
+};
+
+/**
+ * Returns "old" only when the LISTING position is past the window: results are sorted by newPostingDate
+ * (latest repost), so that is the date that tells us when to stop paging. Whether a job is genuinely new is a
+ * separate check on originalPostingDate: a repost keeps its original date, so an old job can't pose as new.
+ */
 function toJob(raw: RawJob, ctx: FetchContext, stats: FetchResult["stats"]): Job | "old" | null {
-  // originalPostingDate, not newPostingDate: a repost keeps its original date, so an old job can't pose as new.
-  const d = raw.metadata?.originalPostingDate ?? raw.metadata?.newPostingDate;
-  const postedAt = d ? new Date(`${d}T00:00:00+08:00`) : null; // Singapore time
-  if (!postedAt || Number.isNaN(postedAt.getTime()) || postedAt > new Date(ctx.now.getTime() + 86_400_000)) { stats.tooOld++; return null; }
-  if (postedAt < ctx.since) { stats.tooOld++; return "old"; }
+  const listed = sgDate(raw.metadata?.newPostingDate) ?? sgDate(raw.metadata?.originalPostingDate);
+  const postedAt = sgDate(raw.metadata?.originalPostingDate) ?? listed;
+  if (!listed || !postedAt || postedAt > new Date(ctx.now.getTime() + 86_400_000)) { stats.tooOld++; return null; }
+  if (listed < ctx.since) { stats.tooOld++; return "old"; }
+  if (postedAt < ctx.since) { stats.tooOld++; return null; }
   if (!analyzeJob(raw.title, "").isSoftware) { stats.notSoftware = (stats.notSoftware ?? 0) + 1; return null; }
 
   const description = htmlToText(raw.description ?? "");

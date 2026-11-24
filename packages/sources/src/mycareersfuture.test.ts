@@ -59,6 +59,16 @@ describe("MyCareersFuture connector", () => {
     expect(stats.tooOld).toBe(1);
   });
 
+  it("an old repost among new listings does not stop paging (sort key is the latest repost date)", async () => {
+    const repost = job("repost", { metadata: { originalPostingDate: day(40), newPostingDate: day(0), jobDetailsUrl: "u" } });
+    const page0 = [job("a"), repost, ...Array.from({ length: 98 }, (_, i) => job(`p0-${i}`))];
+    const a = api([page0, [job("b")]]);
+    const r = await myCareersFuture.fetchJobs({ fetch: a.f, since, now, delayMs: 0 });
+    expect(a.calls.filter((u) => u.includes("search=software%20engineer")).length).toBe(2); // continued to page 1
+    expect(r.jobs.map((j) => j.sourceJobId)).toContain("b");
+    expect(r.jobs.map((j) => j.sourceJobId)).not.toContain("repost");
+  });
+
   it("stops paging once it reaches jobs older than the window, and dedupes across queries", async () => {
     const full = Array.from({ length: 100 }, (_, i) => job(`n${i}`));
     const mixed = [...full.slice(0, 5).map((j, i) => ({ ...j, uuid: `m${i}` })), job("old", { metadata: { originalPostingDate: day(30), newPostingDate: day(30), jobDetailsUrl: "u" } })];
