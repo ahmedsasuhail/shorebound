@@ -10,7 +10,11 @@ type Page = "feed" | "settings";
 function useTheme(theme: "system" | "light" | "dark" | undefined) {
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const apply = () => document.documentElement.classList.toggle("dark", theme === "dark" || ((theme ?? "system") === "system" && mq.matches));
+    const apply = () =>
+      document.documentElement.classList.toggle(
+        "dark",
+        theme === "dark" || ((theme ?? "system") === "system" && mq.matches),
+      );
     apply();
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
@@ -32,7 +36,8 @@ export function App() {
       <aside className="hidden w-60 shrink-0 flex-col border-r border-line bg-surface/70 p-4 backdrop-blur md:flex">
         <div className="mb-8 flex items-center gap-2.5 px-2 pt-1">
           <motion.div
-            initial={{ rotate: -20, scale: 0.8, opacity: 0 }} animate={{ rotate: 0, scale: 1, opacity: 1 }}
+            initial={{ rotate: -20, scale: 0.8, opacity: 0 }}
+            animate={{ rotate: 0, scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 260, damping: 16 }}
             className="grid h-9 w-9 place-items-center rounded-xl bg-accent text-white shadow-lg shadow-accent/30"
           >
@@ -53,7 +58,11 @@ export function App() {
                 className={`relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors ${active ? "text-accentink" : "text-muted hover:text-ink"}`}
               >
                 {active && (
-                  <motion.span layoutId="nav-pill" className="absolute inset-0 rounded-xl bg-accentsoft" transition={{ type: "spring", stiffness: 400, damping: 32 }} />
+                  <motion.span
+                    layoutId="nav-pill"
+                    className="absolute inset-0 rounded-xl bg-accentsoft"
+                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                  />
                 )}
                 <n.icon size={18} className="relative" />
                 <span className="relative">{n.label}</span>
@@ -70,7 +79,11 @@ export function App() {
         <div className="mx-auto max-w-5xl px-4 pb-24 pt-6 md:px-8 md:pt-8">
           <div className="mb-4 flex gap-2 md:hidden">
             {nav.map((n) => (
-              <button key={n.id} onClick={() => setPage(n.id)} className={`rounded-full px-4 py-1.5 text-sm ${page === n.id ? "bg-accent text-white" : "bg-surface2 text-muted"}`}>
+              <button
+                key={n.id}
+                onClick={() => setPage(n.id)}
+                className={`rounded-full px-4 py-1.5 text-sm ${page === n.id ? "bg-accent text-white" : "bg-surface2 text-muted"}`}
+              >
                 {n.label}
               </button>
             ))}
@@ -78,7 +91,9 @@ export function App() {
           <AnimatePresence mode="wait">
             <motion.div
               key={page}
-              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.18 }}
             >
               {page === "feed" ? <FeedPage goSettings={() => setPage("settings")} /> : <SettingsPage />}
