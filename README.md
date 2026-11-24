@@ -46,19 +46,21 @@ For development (hot reload): `npm run dev` and open http://localhost:5173.
 | Source | Covers | Signal |
 |---|---|---|
 | [Arbeitnow](https://www.arbeitnow.com) API | Mostly UK and EU | Board's visa-sponsorship filter + posting text |
-| Company job boards (Greenhouse, Lever, Ashby) | 30 employers in [`data/companies/seed.json`](data/companies/seed.json) | UK sponsor register, Canada LMIA register, or posting text |
+| Company job boards (Greenhouse, Lever, Ashby) | 38 employers in [`data/companies/seed.json`](data/companies/seed.json) | Official registers (UK sponsor licences, Canada LMIA for software roles, Ireland employment permits, Netherlands IND recognised sponsors), or posting text |
 | Hacker News "Who is hiring?" | Global | "VISA" tag or posting text (strongest early in each month) |
 | MyCareersFuture | Singapore | Posting text, or salary above the Employment Pass bar (*unconfirmed*) |
+| TokyoDev | Japan | Its "Apply from abroad" listing; only jobs that also need no Japanese. Japanese jobs stay listed for months, so few are new each week |
 
 LinkedIn and Indeed are **not** fetched: their terms forbid automated access, even logged out.
 Sources can be switched off in Settings.
 
 ### Countries
 
-11 destinations have researched visa data (US, CA, GB, IE, DE, AE, SA, QA, SG, MY, TH); the rest are listed
-as *coming soon* in [`data/catalog.json`](data/catalog.json). Job coverage is strongest for the UK, Germany,
-Canada and Singapore; Gulf countries, Malaysia and Thailand have researched data but almost no free job
-sources yet.
+14 destinations have researched visa data (US, CA, GB, IE, DE, NL, FR, JP, AE, SA, QA, SG, MY, TH); the rest
+are listed as *coming soon* in [`data/catalog.json`](data/catalog.json). Job coverage is strongest for the UK,
+Germany, the Netherlands, France, Ireland, Canada and Singapore; Japan gets a few new jobs a month; Gulf countries,
+Malaysia and Thailand have researched data but almost no free, permitted job sources yet. Newly added countries
+are not switched on automatically for existing users: tick them in Settings → Countries.
 
 ## Development
 

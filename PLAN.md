@@ -13,8 +13,9 @@ your machine.
 | Area | In v1 |
 |---|---|
 | Profile | Resume upload (PDF/DOCX/TXT/MD) → local rule-based profile (skills, years, level, role families); editable; re-read automatically when the extractor improves. No resume → no feed. |
-| Sources | Arbeitnow, Hacker News "Who is hiring?", MyCareersFuture (Singapore), company job boards (Greenhouse/Lever/Ashby, 30 employers). Each can be switched off. |
-| Registers | UK Home Office Skilled Worker sponsor register; Canada positive-LMIA employers for software occupations (last 4 quarters). Disk-cached, fall back to old copies. |
+| Sources | Arbeitnow, Hacker News "Who is hiring?", MyCareersFuture (Singapore), TokyoDev (Japan), company job boards (Greenhouse/Lever/Ashby, 38 employers). Each can be switched off. |
+| Registers | UK Home Office Skilled Worker sponsor register; Canada positive-LMIA employers for software occupations (last 4 quarters); Ireland companies issued employment permits (latest year); Netherlands IND recognised sponsors. Disk-cached, fall back to old copies. |
+| Countries | 14 researched: US, CA, GB, IE, DE, NL, FR, JP, AE, SA, QA, SG, MY, TH. |
 | Sponsorship | Rule-based classifier (negation-aware, English plus common German/Arabic phrases); register matches; Singapore salary signal shown as *unconfirmed*. |
 | Ranking | Match score (title + core stack led, hard caps for wrong roles); confidence meter with scam signals and visible coverage; sort by newest / best fit / most trusted; strictness; max 3 per company. |
 | UI | Feed with filters and animated cards, detail drawer with evidence and "why" panel, onboarding, settings (resume, profile, countries, search, sources, appearance), light/dark. |
@@ -54,10 +55,11 @@ Model: [`data/trust/signals.json`](data/trust/signals.json).
 Ordered roughly by value. Each is independent of the v1 core.
 
 1. **Staffing-agency filter**: many Singapore results are contract/agency postings.
-2. **More registers**: Netherlands IND recognised sponsors, Ireland employment-permit employers, US (DOL LCA
-   data; the USCIS H-1B hub was unreliable in 2026).
-3. **More countries**: research the *coming soon* entries in `data/catalog.json`; free sources for the Gulf,
-   Malaysia and Thailand.
+2. **More registers**: US (DOL LCA data; the USCIS H-1B hub was unreliable in 2026). (Ireland and the Netherlands
+   were added in Nov 2026.)
+3. **More countries**: research the *coming soon* entries in `data/catalog.json` (Australia needs a free source
+   first: none is permitted today); free sources for the Gulf, Malaysia and Thailand. Considered and skipped:
+   Germany's federal Jobsuche API (no descriptions in results, German postings rarely mention visas).
 4. **Keyword filters**: target roles, must-have and excluded keywords, work mode (remote/hybrid/onsite).
 5. **Scheduled refresh and notifications** for new high-fit jobs.
 6. **Application tracker** (saved → applied → interviewing → offer).
