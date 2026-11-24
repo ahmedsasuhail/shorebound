@@ -8,6 +8,7 @@ apps/
     src/pages/         FeedPage, SettingsPage
     src/components/    JobCard, JobDrawer, Meters (confidence ring, "why" panel), Onboarding, ResumeCard, …
     src/lib/format.ts  pure display helpers (timeAgo, country names, refresh summary)
+    src/theme/         OKLCH→sRGB + WCAG contrast helpers; palette.test.ts guards the colour tokens in index.css
     src/hooks/         useNow (ticking clock so components stay pure)
     src/api.ts         typed fetch + React Query hooks for every endpoint
 packages/
@@ -38,8 +39,8 @@ Refresh ─► connectors (polite: identifying User-Agent, 1 req/s per source, 3
             └─ sponsorship + relocation: classify(text) and/or register match
           ─► SQLite upsert (jobs older than 30 days pruned)
 
-GET /api/jobs ─► needs a profile (from the resume) ─► SQL filters (countries, window, negatives, relocation)
-              ─► buildFeed: analyzeJob → matchScore (fit) + confidenceScore (trust) → hide poor fits
+GET /api/jobs ─► needs a profile (from the resume) ─► SQL filters (countries, window, no "no sponsorship", relocation)
+              ─► buildFeed: analyzeJob → matchScore (fit) + confidenceScore (trust) → discard ≤5% matches, hide poor fits
                  → sort (newest | best fit | most trusted) → max N per company
 ```
 
@@ -55,6 +56,12 @@ GET /api/jobs ─► needs a profile (from the resume) ─► SQL filters (count
 - **Local-first.** Data lives in the OS app-data folder; the server binds to 127.0.0.1 only.
 - **Data is reviewed, not guessed.** Register names in the company seed are exact matches verified against
   the live registers; unknown research facts are `null`, never invented.
+
+## Colour system
+
+Tokens live in `apps/web/src/index.css` as OKLCH (light and dark). `palette.test.ts` parses them and fails on any
+WCAG AA text-contrast (4.5:1) or mark-contrast (3:1) regression, on out-of-gamut values, and on status colours that
+would differ by hue alone. Status colours always ship with an icon and a label.
 
 ## Tests
 

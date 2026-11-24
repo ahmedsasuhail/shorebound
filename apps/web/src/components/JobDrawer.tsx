@@ -76,7 +76,19 @@ export function JobDrawer({ job, onClose }: { job: JobDTO | null; onClose: () =>
 
             <div className="flex-1 space-y-4 overflow-y-auto p-5">
               <WhyPanel job={job} />
-              {job.sponsorship.evidence && <Evidence label="Sponsorship evidence" text={job.sponsorship.evidence} />}
+              {job.sponsorship.status === "confirmed_register" && (
+                <div className="rounded-xl border border-info/40 bg-infosoft p-3.5 text-[13px] text-infoink">
+                  <b>The posting does not mention visas or relocation.</b> It is listed because the employer is on an
+                  official sponsor register, so it is allowed to sponsor. Whether this particular role is sponsored is
+                  something to confirm with the employer.
+                </div>
+              )}
+              {job.sponsorship.evidence && (
+                <Evidence
+                  label={job.sponsorship.status === "confirmed_register" ? "Why it is listed" : "Sponsorship evidence"}
+                  text={job.sponsorship.evidence}
+                />
+              )}
               {job.relocation.evidence && <Evidence label="Relocation evidence" text={job.relocation.evidence} />}
               <div>
                 <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted">Description</h3>
@@ -91,7 +103,7 @@ export function JobDrawer({ job, onClose }: { job: JobDTO | null; onClose: () =>
                 href={job.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-transform hover:scale-[1.01] active:scale-[0.99]"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-semibold text-onaccent shadow-lg shadow-accent/30 transition-transform hover:scale-[1.01] active:scale-[0.99]"
               >
                 Open original posting <ArrowUpRight size={16} />
               </a>

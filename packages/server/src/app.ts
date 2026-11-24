@@ -40,7 +40,6 @@ export interface AppDeps {
 const FeedQuery = z.object({
   countries: z.string().optional(), // comma separated
   sinceDays: z.coerce.number().int().min(1).max(30).optional(),
-  excludeNegative: z.enum(["true", "false"]).optional(),
   relocation: z.enum(["offered", "any"]).optional(),
   q: z.string().max(100).optional(),
 });
@@ -123,7 +122,6 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     const rows = queryJobs(deps.db, {
       countries,
       sinceDays: q.data.sinceDays ?? s.search.lookbackDays,
-      excludeNegative: q.data.excludeNegative ? q.data.excludeNegative === "true" : s.sponsorship.excludeNegative,
       relocation: q.data.relocation ?? (s.sponsorship.relocation === "required" ? "offered" : "any"),
       q: q.data.q,
       limit: 5000,
@@ -132,11 +130,11 @@ export function buildApp(deps: AppDeps): FastifyInstance {
       profile,
       easeByCountry,
       sort: s.search.sort,
-      onlyMatching: s.search.onlyMatching,
       minMatch: s.search.minMatch,
       maxPerCompany: s.search.maxPerCompany,
       relocationBonus: s.sponsorship.relocation === "bonus",
       includePossible: s.sponsorship.includePossible,
+      includeRegister: s.sponsorship.includeRegister,
     });
   });
 

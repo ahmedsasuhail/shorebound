@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { SponsorshipStatus } from "../job.js";
 import { analyzeJob, extractProfile, type Profile } from "./analyze.js";
 import { confidenceScore, detectScams } from "./confidence.js";
 import { matchScore } from "./match.js";
@@ -197,6 +198,12 @@ describe("confidence", () => {
       confidenceScore({ ...base, sponsorship: "confirmed_text" }).score,
     );
   });
+  it("an employer-level register match ranks below explicit sponsorship text, above a visa-filtered board", () => {
+    const score = (sponsorship: SponsorshipStatus) => confidenceScore({ ...base, sponsorship }).score;
+    expect(score("confirmed_text")).toBeGreaterThan(score("confirmed_register"));
+    expect(score("confirmed_register")).toBeGreaterThan(score("visa_source"));
+  });
+
   it("caps explicit no-sponsorship at 5", () => {
     expect(confidenceScore({ ...base, sponsorship: "negative" }).score).toBeLessThanOrEqual(5);
   });

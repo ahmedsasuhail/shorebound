@@ -12,10 +12,10 @@ export function Pill({
   children: ReactNode;
 }) {
   const tones = {
-    good: "bg-emerald-500/12 text-emerald-700 dark:text-emerald-300 ring-emerald-500/25",
-    info: "bg-sky-500/12 text-sky-700 dark:text-sky-300 ring-sky-500/25",
-    warn: "bg-amber-500/14 text-amber-700 dark:text-amber-300 ring-amber-500/30",
-    bad: "bg-rose-500/12 text-rose-700 dark:text-rose-300 ring-rose-500/25",
+    good: "bg-goodsoft text-goodink ring-good/30",
+    info: "bg-infosoft text-infoink ring-info/30",
+    warn: "bg-cautionsoft text-cautionink ring-caution/40",
+    bad: "bg-badsoft text-badink ring-bad/30",
     muted: "bg-surface2 text-muted ring-line",
   } as const;
   return (
@@ -37,9 +37,10 @@ export function SponsorshipBadge({ job }: { job: JobDTO }) {
         </Pill>
       );
     case "confirmed_register":
+      // Employer-level: the company is licensed/approved, but the posting itself does not say it sponsors.
       return (
-        <Pill tone="good" icon={<BadgeCheck size={12} />}>
-          Registered sponsor
+        <Pill tone="info" icon={<BadgeCheck size={12} />}>
+          Employer on sponsor register
         </Pill>
       );
     case "visa_source":
@@ -83,7 +84,7 @@ export function RelocationBadge({ job }: { job: JobDTO }) {
 
 /** Flag emoji do not render on Windows, so use a code chip. */
 export function CountryChip({ code, active, onClick }: { code: string; active?: boolean; onClick?: () => void }) {
-  const cls = `inline-flex h-6 min-w-8 items-center justify-center rounded-md px-1.5 text-[11px] font-semibold tracking-wide ${active ? "bg-accent text-white" : "bg-surface2 text-muted"}`;
+  const cls = `inline-flex h-6 min-w-8 items-center justify-center rounded-md px-1.5 text-[11px] font-semibold tracking-wide ${active ? "bg-accent text-onaccent" : "bg-surface2 text-muted"}`;
   return onClick ? (
     <button onClick={onClick} className={cls}>
       {code}

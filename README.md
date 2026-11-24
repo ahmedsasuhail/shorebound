@@ -35,9 +35,9 @@ For development (hot reload): `npm run dev` and open http://localhost:5173.
 | | |
 |---|---|
 | **Fresh only** | Real posting dates, default last 7 days, newest first (or sort by best fit / most trusted). |
-| **Sponsorship signal required** | Explicit posting text, an official sponsor register (UK Skilled Worker licence, Canadian LMIA for software roles), a visa-filtered board, or, for Singapore, a salary above the Employment Pass bar (clearly marked *unconfirmed*). "No sponsorship" / "must already live there" jobs are hidden. |
+| **Sponsorship signal required** | Explicit posting text; a visa-filtered board; an **employer** on an official sponsor register (UK Skilled Worker licence, Canadian LMIA for software roles: the posting itself may not mention visas, so these are marked and can be hidden); or, for Singapore, a salary above the Employment Pass bar (marked *unconfirmed*). "No sponsorship" / "must already live there" jobs are always discarded. |
 | **Relocation** | Employer-paid relocation is detected and can be a bonus or a requirement. |
-| **Fit to your resume** | Match score led by the job title and your core stack; wrong specialty, other languages, junior roles and platform/CMS roles are capped. Strictness: Broad / Balanced / Strict. |
+| **Fit to your resume** | Match score led by the job title and your core stack; wrong specialty, other languages, junior roles and platform/CMS roles are capped. Strictness: Broad / Balanced / Strict. Non-engineering roles (recruiters, sales...) are discarded outright. |
 | **Confidence meter** | Sponsorship evidence, ease of moving from India, posting freshness, plus scam checks (fees, WhatsApp-only contact, "come on a visit visa"...). Factors without free data are shown as missing, never guessed. |
 | **Private** | Resume, settings and jobs live in your OS app-data folder (`%APPDATA%\Shorebound`, `~/Library/Application Support/Shorebound`, `~/.config/shorebound`). |
 

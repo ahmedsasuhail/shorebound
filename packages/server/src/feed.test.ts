@@ -27,7 +27,6 @@ const base = {
   profile,
   easeByCountry: new Map([["DE", 4]]),
   sort: "newest" as const,
-  onlyMatching: true,
   maxPerCompany: 3,
   relocationBonus: true,
   now,
@@ -43,11 +42,8 @@ describe("buildFeed", () => {
 
   it("keeps newest-first by default and can sort by match", () => {
     const rows = [mk("grad", "Graduate Software Engineer", "A", 1), mk("senior", "Senior Backend Engineer", "B", 5)];
-    expect(buildFeed(rows, { ...base, onlyMatching: false }).jobs.map((j) => j.id)).toEqual(["grad", "senior"]);
-    expect(buildFeed(rows, { ...base, onlyMatching: false, sort: "match" }).jobs.map((j) => j.id)).toEqual([
-      "senior",
-      "grad",
-    ]);
+    expect(buildFeed(rows, { ...base, minMatch: 0 }).jobs.map((j) => j.id)).toEqual(["grad", "senior"]);
+    expect(buildFeed(rows, { ...base, minMatch: 0, sort: "match" }).jobs.map((j) => j.id)).toEqual(["senior", "grad"]);
   });
 
   it("without a profile nothing is hidden and match is null", () => {
@@ -63,6 +59,35 @@ describe("buildFeed", () => {
     ];
     expect(buildFeed(rows, base).jobs.map((j) => j.id)).toEqual(["sure", "maybe"]);
     expect(buildFeed(rows, { ...base, includePossible: false }).jobs.map((j) => j.id)).toEqual(["sure"]);
+  });
+
+  it("employer-level register matches can be excluded, and rank below explicit text when sorting by trust", () => {
+    const rows = [
+      mk("register", "Senior Backend Engineer", "A", 1, { sponsorship: { status: "confirmed_register" } }),
+      mk("text", "Senior Backend Engineer", "B", 2, { sponsorship: { status: "confirmed_text" } }),
+    ];
+    expect(buildFeed(rows, { ...base, sort: "confidence" }).jobs.map((j) => j.id)).toEqual(["text", "register"]);
+    expect(buildFeed(rows, { ...base, includeRegister: false }).jobs.map((j) => j.id)).toEqual(["text"]);
+  });
+
+  it("discards non-engineering roles (match 5) outright, without counting them as hidden poor fits", () => {
+    const rows = [mk("rec", "Technical Recruiter", "A", 1), mk("be", "Senior Backend Engineer", "B", 2)];
+    const f = buildFeed(rows, { ...base, minMatch: 0 });
+    expect(f.jobs.map((j) => j.id)).toEqual(["be"]);
+    expect(f.hidden.notMatching).toBe(0);
+  });
+
+  it("explicit no-sponsorship jobs are never listed", () => {
+    const rows = [mk("no", "Senior Backend Engineer", "A", 1, { sponsorship: { status: "negative" } })];
+    expect(buildFeed(rows, { ...base, minMatch: 0 }).jobs).toEqual([]);
+  });
+
+  it("counts how many listed jobs offer relocation", () => {
+    const rows = [
+      mk("a", "Senior Backend Engineer", "A", 1, { relocation: { status: "offered" } }),
+      mk("b", "Senior Backend Engineer", "B", 2),
+    ];
+    expect(buildFeed(rows, base).relocationOffered).toBe(1);
   });
 
   it("relocation offered breaks ties upward when sorting by match", () => {

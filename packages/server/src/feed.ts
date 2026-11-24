@@ -4,13 +4,14 @@ export interface FeedOptions {
   profile: Profile | null;
   easeByCountry: Map<string, number>;
   sort: "newest" | "match" | "confidence";
-  onlyMatching: boolean;
-  /** Jobs scoring below this are hidden when `onlyMatching` is on. */
+  /** Strictness: jobs scoring below this are hidden (counted as "poor fit"). */
   minMatch: number;
   maxPerCompany: number;
   relocationBonus: boolean;
   /** Keep jobs whose sponsorship status is only "possible" (weaker signal). */
   includePossible?: boolean;
+  /** Keep jobs whose only signal is an employer-level register match. */
+  includeRegister?: boolean;
   limit?: number;
   now?: Date;
 }
@@ -19,7 +20,15 @@ export interface Feed {
   jobs: JobDTO[];
   total: number;
   hidden: { notMatching: number; companyCap: number };
+  /** How many of the listed jobs state employer-offered relocation. */
+  relocationOffered: number;
 }
+
+/**
+ * Jobs scoring at or below this are discarded outright and not even counted: 5 is what non-engineering roles
+ * (recruiters, sales, designers...) get, so they are noise, not "weak matches".
+ */
+export const DISCARD_AT_OR_BELOW = 5;
 
 /** Scores, filters, sorts and caps jobs. Newest-first stays the default (user requirement). */
 export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
@@ -27,10 +36,14 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   let notMatching = 0;
   const scored: JobDTO[] = [];
   for (const j of rows) {
+    // Explicit "no sponsorship" is never listed (connectors already drop it; this guards older stored rows).
+    if (j.sponsorship.status === "negative") continue;
     if (o.includePossible === false && j.sponsorship.status === "possible") continue;
+    if (o.includeRegister === false && j.sponsorship.status === "confirmed_register") continue;
     const analysis = analyzeJob(j.title, j.description);
     const match = o.profile ? matchScore(o.profile, analysis) : null;
-    if (o.onlyMatching && match && match.score < o.minMatch) {
+    if (match && match.score <= DISCARD_AT_OR_BELOW) continue;
+    if (match && match.score < o.minMatch) {
       notMatching++;
       continue;
     }
@@ -68,5 +81,11 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
       })
     : scored;
 
-  return { jobs: capped.slice(0, o.limit ?? 200), total: capped.length, hidden: { notMatching, companyCap } };
+  const jobs = capped.slice(0, o.limit ?? 200);
+  return {
+    jobs,
+    total: capped.length,
+    hidden: { notMatching, companyCap },
+    relocationOffered: capped.filter((j) => j.relocation.status === "offered").length,
+  };
 }

@@ -40,7 +40,7 @@ export function ResumeCard() {
           <button
             onClick={() => remove.mutate()}
             aria-label="Remove resume"
-            className="rounded-lg p-2 text-muted hover:bg-rose-500/10 hover:text-rose-500"
+            className="rounded-lg p-2 text-muted hover:bg-badsoft hover:text-badink"
           >
             <Trash2 size={16} />
           </button>
@@ -71,8 +71,8 @@ export function ResumeCard() {
           <p className="mt-1 text-xs text-muted">PDF, DOCX, TXT or MD · up to 10 MB</p>
         </motion.div>
       )}
-      {upload.error && <p className="mt-3 text-sm text-rose-500">{(upload.error as Error).message}</p>}
-      {upload.data?.parseError && <p className="mt-3 text-sm text-amber-600">{upload.data.parseError}</p>}
+      {upload.error && <p className="mt-3 text-sm text-badink">{(upload.error as Error).message}</p>}
+      {upload.data?.parseError && <p className="mt-3 text-sm text-cautionink">{upload.data.parseError}</p>}
       <p className="mt-3 flex items-center gap-1.5 text-xs text-muted">
         <Lock size={12} /> Read on this machine only. Nothing is uploaded anywhere.
       </p>

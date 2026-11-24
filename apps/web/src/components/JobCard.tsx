@@ -6,11 +6,11 @@ import { CountryChip, RelocationBadge, SponsorshipBadge } from "./Badges";
 import { ConfidenceRing, MatchPill } from "./Meters";
 
 const RAIL: Record<string, string> = {
-  confirmed_text: "bg-emerald-500",
-  confirmed_register: "bg-emerald-500",
-  visa_source: "bg-sky-500",
-  possible: "bg-amber-400",
-  negative: "bg-rose-500",
+  confirmed_text: "bg-good",
+  confirmed_register: "bg-info",
+  visa_source: "bg-info",
+  possible: "bg-caution",
+  negative: "bg-bad",
 };
 
 export function JobCard({ job, index, now, onOpen }: { job: JobDTO; index: number; now: number; onOpen: () => void }) {
@@ -35,7 +35,7 @@ export function JobCard({ job, index, now, onOpen }: { job: JobDTO; index: numbe
           <CountryChip code={job.country} />
           <h3 className="truncate text-[15px] font-semibold tracking-tight">{job.title}</h3>
           {fresh && (
-            <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+            <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-onaccent">
               New
             </span>
           )}
@@ -67,7 +67,7 @@ export function JobCard({ job, index, now, onOpen }: { job: JobDTO; index: numbe
         target="_blank"
         rel="noreferrer noopener"
         onClick={(e) => e.stopPropagation()}
-        className="hidden h-9 shrink-0 items-center gap-1 self-center rounded-xl bg-surface2 px-3 text-xs font-semibold text-accentink transition-colors hover:bg-accent hover:text-white sm:inline-flex"
+        className="hidden h-9 shrink-0 items-center gap-1 self-center rounded-xl bg-surface2 px-3 text-xs font-semibold text-accentink transition-colors hover:bg-accent hover:text-onaccent sm:inline-flex"
       >
         Apply <ArrowUpRight size={14} />
       </a>

@@ -15,11 +15,14 @@ export interface Settings {
   search: {
     lookbackDays: number;
     sort: "newest" | "match" | "confidence";
-    onlyMatching: boolean;
     minMatch: number;
     maxPerCompany: number;
   };
-  sponsorship: { excludeNegative: boolean; relocation: "required" | "bonus" | "ignore"; includePossible: boolean };
+  sponsorship: {
+    relocation: "required" | "bonus" | "ignore";
+    includePossible: boolean;
+    includeRegister: boolean;
+  };
   sources: { disabled: string[] };
   appearance: { theme: "system" | "light" | "dark" };
 }
@@ -35,6 +38,7 @@ export interface Feed {
   jobs: JobDTO[];
   total: number;
   hidden: { notMatching: number; companyCap: number };
+  relocationOffered: number;
   needsProfile?: boolean;
 }
 export interface ResumeInfo {
