@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { atsConnector, parseAshby, parseGreenhouse, parseLever, type SeedCompany } from "./ats.js";
-import { fetchUkRegisterCsv, normalizeOrg, parseCsv, parseUkRegister, type RegisterIndex } from "./registers.js";
+import { fetchCanadaLmia, fetchUkRegisterCsv, normalizeOrg, parseCsv, parseLmiaRows, parseUkRegister, type RegisterIndex } from "./registers.js";
 import type { FetchLike } from "./types.js";
 
 const now = new Date("2026-11-22T12:00:00Z");
@@ -111,5 +111,62 @@ describe("UK register", () => {
     const r = await fetchUkRegisterCsv(f);
     expect(r.updatedAt).toBe("2026-11-19");
     expect(parseUkRegister(r.csv).size).toBe(2);
+  });
+});
+
+describe("Canada LMIA register", () => {
+  const rows: unknown[][] = [
+    ["Employers Who Were Issued a Positive LMIA ... April to June 2026", null, null, null, null, null, null, null],
+    ["Province/Territory", "Program Stream", "Employer", "Address", "Occupation", "Incorporate Status", "Approved LMIAs", "Approved Positions"],
+    ["Ontario", "Global Talent Stream", "Stripe", "Toronto, ON", "21231-Software engineers and designers", "Unknown", 1, 2],
+    ["Ontario", "High Wage", "Cohere Inc.", "Toronto, ON", "21232-Software developers and programmers", "Unknown", 1, 1],
+    ["Ontario", "High Wage", "Cohere Inc.", "Toronto, ON", "21211-Data scientists", "Unknown", 1, 1],
+    ["Alberta", "High Wage", "Farm Ltd.", "Red Deer, AB", "85100-Livestock labourers", "Unknown", 1, 5],
+    ["Ontario", "High Wage", "Pixel Co", "Ottawa, ON", "2174-Computer programmers and interactive media developers", "Unknown", 1, 1],
+    ["Ontario", "High Wage", "Shop Inc", "Toronto, ON", "21234-Web developers and programmers", "Unknown", 1, 1],
+  ];
+
+  it("keeps only employers with SOFTWARE occupations (by NOC code or title)", () => {
+    expect([...parseLmiaRows(rows)].sort()).toEqual(["cohere inc.", "pixel co", "shop inc", "stripe"]);
+  });
+
+  it("rejects an unexpected sheet layout", () => {
+    expect(() => parseLmiaRows([["nothing"]])).toThrow(/header row not found/);
+  });
+
+  it("downloads the latest N quarters (newest first) and merges them", async () => {
+    const seen: string[] = [];
+    const f: FetchLike = async (url) => {
+      seen.push(url);
+      return url.includes("package_show")
+        ? { ok: true, status: 200, text: async () => "", json: async () => ({ result: { resources: [
+            { name: "2025Q4-Employers Who Were Issued...", format: "XLSX", language: ["en"], url: "https://x/q4.xlsx" },
+            { name: "2026Q1-Employers Who Were Issued...", format: "XLSX", language: ["en"], url: "https://x/q1.xlsx" },
+            { name: "2026Q1-Employeurs...", format: "XLSX", language: ["fr"], url: "https://x/q1fr.xlsx" },
+            { name: "2020Q3-Employers...", format: "CSV", language: ["en"], url: "https://x/old.csv" },
+            { name: "2025Q3-Employers Who Were Issued...", format: "XLSX", language: ["en"], url: "https://x/q3.xlsx" },
+          ] } }) }
+        : { ok: true, status: 200, text: async () => "", json: async () => ({}), arrayBuffer: async () => new ArrayBuffer(1) };
+    };
+    const read = async () => rows;
+    const r = await fetchCanadaLmia(f, { quarters: 2, read });
+    expect(r.quarters).toEqual(["2026Q1", "2025Q4"]);
+    expect(seen.filter((u) => u.endsWith(".xlsx"))).toEqual(["https://x/q1.xlsx", "https://x/q4.xlsx"]);
+    expect(r.names.has("stripe")).toBe(true);
+  });
+
+  it("a Canadian job at an LMIA employer becomes 'registered' with Canada-specific evidence", async () => {
+    const co: SeedCompany = { name: "Stripe", ats: "greenhouse", token: "stripe", register: { CA: ["Stripe"] } };
+    const regs = async () => new Map([["CA", new Set([normalizeOrg("Stripe")])]]);
+    const { jobs } = await run(co, { jobs: [gh({ location: { name: "Toronto, Canada" } })] }, regs);
+    expect(jobs[0]).toMatchObject({ country: "CA", sponsorship: { status: "confirmed_register" } });
+    expect(jobs[0]!.sponsorship.evidence).toMatch(/Labour Market Impact Assessment/);
+  });
+
+  it("partial register failure still works: result may carry warnings", async () => {
+    const regs = async () => ({ index: REGISTER, warnings: ["Canada register unavailable (offline)."] });
+    const r = await run(acme(), { jobs: [gh()] }, regs);
+    expect(r.jobs).toHaveLength(1);
+    expect(r.warnings).toContain("Canada register unavailable (offline).");
   });
 });

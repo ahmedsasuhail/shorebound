@@ -56,3 +56,61 @@ export async function fetchUkRegisterCsv(fetchFn: FetchLike): Promise<{ csv: str
   if (!file.ok) throw new Error(`UK register download returned HTTP ${file.status}`);
   return { csv: await file.text(), updatedAt: doc.public_updated_at ?? "" };
 }
+
+// ── Canada: Temporary Foreign Worker Program, positive LMIA employers ─────────
+
+export type SheetReader = (data: Uint8Array) => Promise<unknown[][]>;
+
+/** Software occupations in the LMIA data (NOC 2021: 21230-21234; NOC 2016/2011: 2173-2175). */
+const SOFTWARE_OCC = /^(?:2123[0-4]|217[3-5])\b|software|programmer|web developer|computer systems developer/i;
+
+/**
+ * Employers who received a positive LMIA for a SOFTWARE occupation. The sheet has a title row, then the
+ * header "Province/Territory | Program Stream | Employer | Address | Occupation | ...".
+ */
+export function parseLmiaRows(rows: unknown[][]): Set<string> {
+  const h = rows.findIndex((r) => r[0] === "Province/Territory");
+  if (h < 0) throw new Error("Unexpected LMIA format (header row not found).");
+  const head = rows[h]!.map((c) => String(c ?? ""));
+  const emp = head.findIndex((c) => /^employer$/i.test(c));
+  const occ = head.findIndex((c) => /^occupation$/i.test(c));
+  if (emp < 0 || occ < 0) throw new Error("Unexpected LMIA format (Employer/Occupation columns missing).");
+  const names = new Set<string>();
+  for (const r of rows.slice(h + 1)) if (r[emp] && SOFTWARE_OCC.test(String(r[occ] ?? ""))) names.add(normalizeOrg(String(r[emp])));
+  return names;
+}
+
+const defaultSheetReader: SheetReader = async (data) => {
+  const { default: readXlsxFile } = await import("read-excel-file/node");
+  const sheets = (await readXlsxFile(Buffer.from(data))) as unknown as { data: unknown[][] }[];
+  return sheets[0]?.data ?? [];
+};
+
+const LMIA_DATASET = "https://open.canada.ca/data/api/3/action/package_show?id=90fed587-1364-4f33-a9ee-208181dc0b97";
+
+/** Downloads the latest `quarters` English XLSX files from open.canada.ca and merges their software employers. */
+export async function fetchCanadaLmia(
+  fetchFn: FetchLike,
+  opts: { quarters?: number; read?: SheetReader; delayMs?: number } = {},
+): Promise<{ names: Set<string>; quarters: string[] }> {
+  const read = opts.read ?? defaultSheetReader;
+  const meta = await fetchFn(LMIA_DATASET, { headers: { "User-Agent": USER_AGENT, Accept: "application/json" } });
+  if (!meta.ok) throw new Error(`open.canada.ca returned HTTP ${meta.status}`);
+  const pkg = (await meta.json()) as { result?: { resources?: { name?: string | { en?: string }; format?: string; language?: string[]; url?: string }[] } };
+  const files = (pkg.result?.resources ?? [])
+    .filter((r) => r.format === "XLSX" && r.language?.includes("en") && r.url)
+    .map((r) => ({ q: /^(\d{4}Q\d)/.exec(typeof r.name === "string" ? r.name : (r.name?.en ?? ""))?.[1], url: r.url! }))
+    .filter((f): f is { q: string; url: string } => Boolean(f.q))
+    .sort((a, b) => b.q.localeCompare(a.q))
+    .slice(0, opts.quarters ?? 4);
+  if (!files.length) throw new Error("No LMIA employer files found on open.canada.ca.");
+
+  const names = new Set<string>();
+  for (const [i, f] of files.entries()) {
+    if (i > 0 && opts.delayMs) await new Promise((r) => setTimeout(r, opts.delayMs));
+    const res = await fetchFn(f.url, { headers: { "User-Agent": USER_AGENT } });
+    if (!res.ok || !res.arrayBuffer) throw new Error(`LMIA ${f.q} download returned HTTP ${res.status}`);
+    for (const n of parseLmiaRows(await read(new Uint8Array(await res.arrayBuffer())))) names.add(n);
+  }
+  return { names, quarters: files.map((f) => f.q) };
+}
