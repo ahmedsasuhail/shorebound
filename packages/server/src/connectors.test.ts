@@ -4,7 +4,13 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { FetchLike } from "@shorebound/sources";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { canadaRegisterLoader, combineRegisters, loadSeed, ukRegisterLoader } from "./connectors.js";
+import {
+  canadaRegisterLoader,
+  combineRegisters,
+  irelandRegisterLoader,
+  loadSeed,
+  ukRegisterLoader,
+} from "./connectors.js";
 
 const dataDir = fileURLToPath(new URL("../../../data", import.meta.url));
 let dir: string;
@@ -135,5 +141,30 @@ describe("Canada register cache and combined registers", () => {
         },
       ])(),
     ).rejects.toThrow(/UK register unavailable/);
+  });
+});
+
+describe("Ireland register cache", () => {
+  const rows = [["Acme Ireland Limited", 1, 1]];
+  const ok: FetchLike = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({}),
+    text: async () => "",
+    arrayBuffer: async () => new ArrayBuffer(1),
+  });
+  const down: FetchLike = async () => ({ ok: false, status: 503, json: async () => ({}), text: async () => "" });
+
+  it("downloads, caches, and falls back to the cached copy when the site is down", async () => {
+    expect(
+      (await irelandRegisterLoader(dir, ok, undefined, async () => rows)()).get("IE")?.has("acme ireland limited"),
+    ).toBe(true);
+    const old = new Date(Date.now() - 30 * 86_400_000);
+    utimesSync(join(dir, "registers", "ie.json"), old, old);
+    expect((await irelandRegisterLoader(dir, down, undefined, async () => rows)()).get("IE")?.size).toBe(1);
+  });
+
+  it("throws when there is no cache and the site is down", async () => {
+    await expect(irelandRegisterLoader(dir, down)()).rejects.toThrow(/not found/);
   });
 });

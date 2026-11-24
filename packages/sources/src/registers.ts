@@ -131,3 +131,47 @@ export async function fetchCanadaLmia(
   }
   return { names, quarters: files.map((f) => f.q) };
 }
+
+// ── Ireland: Department of Enterprise, "Permits issued to companies" ─────────
+
+/**
+ * One row per company with monthly counts of employment permits issued that year. The first column holds the
+ * company name; the header row and the "Grand Total" row are skipped. Permits are company-level (any occupation),
+ * so a match means "this employer actively hires non-EU workers", not that a given role is sponsored.
+ */
+export function parseIrelandPermitRows(rows: unknown[][]): Set<string> {
+  const names = new Set<string>();
+  for (const r of rows) {
+    const name = typeof r[0] === "string" ? r[0].trim() : "";
+    const total = Number(r[r.length - 1] ?? 0);
+    if (!name || /^grand total$/i.test(name) || !(total > 0)) continue;
+    names.add(normalizeOrg(name));
+  }
+  if (names.size === 0) throw new Error("Unexpected Ireland permits format (no company rows).");
+  return names;
+}
+
+const IE_FILE = (year: number) =>
+  `https://www.enterprise.gov.ie/en/publications/publication-files/permits-issued-to-companies-${year}.xlsx`;
+
+/**
+ * Downloads the newest published year (this year's file appears once the department publishes it, so it falls
+ * back to last year). Returns the year used.
+ */
+export async function fetchIrelandPermits(
+  fetchFn: FetchLike,
+  opts: { now?: Date; read?: SheetReader } = {},
+): Promise<{ names: Set<string>; year: number }> {
+  const read = opts.read ?? defaultSheetReader;
+  const thisYear = (opts.now ?? new Date()).getFullYear();
+  const errors: string[] = [];
+  for (const year of [thisYear, thisYear - 1]) {
+    const res = await fetchFn(IE_FILE(year), { headers: { "User-Agent": USER_AGENT } });
+    if (!res.ok || !res.arrayBuffer) {
+      errors.push(`${year}: HTTP ${res.status}`);
+      continue;
+    }
+    return { names: parseIrelandPermitRows(await read(new Uint8Array(await res.arrayBuffer()))), year };
+  }
+  throw new Error(`Ireland permits file not found (${errors.join(", ")}).`);
+}

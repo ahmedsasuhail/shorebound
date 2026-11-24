@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { atsConnector, parseAshby, parseGreenhouse, parseLever, type SeedCompany } from "./ats.js";
 import {
   fetchCanadaLmia,
+  fetchIrelandPermits,
+  parseIrelandPermitRows,
   fetchUkRegisterCsv,
   normalizeOrg,
   parseCsv,
@@ -309,5 +311,54 @@ describe("Canada LMIA register", () => {
     const r = await run(acme(), { jobs: [gh()] }, regs);
     expect(r.jobs).toHaveLength(1);
     expect(r.warnings).toContain("Canada register unavailable (offline).");
+  });
+});
+
+describe("Ireland permits register", () => {
+  const rows: unknown[][] = [
+    [null, "January", "February", "Grand Total"],
+    ["Grand Total", 3798, 2994, 31044],
+    ["Stripe Technology Company Limited", 1, 1, 34],
+    ["Datadog Ireland Limited", 1, null, 4],
+    ["Empty Ltd", null, null, 0],
+  ];
+
+  it("keeps companies with at least one permit; skips header and total rows", () => {
+    expect([...parseIrelandPermitRows(rows)].sort()).toEqual([
+      "datadog ireland limited",
+      "stripe technology company limited",
+    ]);
+  });
+
+  it("falls back to last year when this year's file is not published yet", async () => {
+    const urls: string[] = [];
+    const f: FetchLike = async (url) => {
+      urls.push(url);
+      return url.includes("2026")
+        ? { ok: false, status: 404, json: async () => ({}), text: async () => "" }
+        : {
+            ok: true,
+            status: 200,
+            json: async () => ({}),
+            text: async () => "",
+            arrayBuffer: async () => new ArrayBuffer(1),
+          };
+    };
+    const r = await fetchIrelandPermits(f, { now: new Date("2026-11-25"), read: async () => rows });
+    expect(r.year).toBe(2025);
+    expect(urls.map((u) => u.slice(-9))).toEqual(["2026.xlsx", "2025.xlsx"]);
+  });
+
+  it("an Irish job at a permit-holding employer gets Ireland-specific evidence", async () => {
+    const co: SeedCompany = {
+      name: "Stripe",
+      ats: "greenhouse",
+      token: "stripe",
+      register: { IE: ["Stripe Technology Company Limited"] },
+    };
+    const regs = async () => new Map([["IE", new Set([normalizeOrg("Stripe Technology Company Limited")])]]);
+    const { jobs } = await run(co, { jobs: [gh({ location: { name: "Dublin, Ireland" } })] }, regs);
+    expect(jobs[0]).toMatchObject({ country: "IE", sponsorship: { status: "confirmed_register" } });
+    expect(jobs[0]!.sponsorship.evidence).toMatch(/Irish employment permits/);
   });
 });

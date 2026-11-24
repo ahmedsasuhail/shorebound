@@ -1,5 +1,5 @@
 {
-  "_about": "Starter list of employers with public job-board APIs. 'register' maps a country to the exact organisation name(s) on that country's official sponsor register, so a job in that country at that company counts as 'registered sponsor'. Add companies here (verify the register name first; never use fuzzy matches). Canada: names are as listed in the LMIA positive-employers data for software occupations (NOC 2123x), last four quarters to 2026Q2.",
+  "_about": "Starter list of employers with public job-board APIs. 'register' maps a country to the exact organisation name(s) on that country's official sponsor register, so a job in that country at that company counts as 'registered sponsor'. Add companies here (verify the register name first; never use fuzzy matches). Canada: names are as listed in the LMIA positive-employers data for software occupations (NOC 2123x), last four quarters to 2026Q2. Ireland: names exactly as in the Department of Enterprise 'Permits issued to companies 2025' file (one, 'Tines Security Services Limited,', keeps the source's trailing comma).",
   "_meta": {
     "schema_version": 1,
     "researched_on": "2026-11-23",
@@ -11,7 +11,7 @@
     },
     "confidence": "high",
     "open_questions": [
-      "GB and CA have register importers; other countries need explicit sponsorship text",
+      "GB, CA and IE have register importers; other countries need explicit sponsorship text",
       "Board tokens can change if a company switches ATS",
       "LMIA approval is an employer-level signal for temporary foreign workers, not proof a given role is sponsored"
     ],
@@ -28,6 +28,10 @@
         ],
         "CA": [
           "Stripe"
+        ],
+        "IE": [
+          "Stripe Technology Company Limited",
+          "Stripe Payments Europe Limited"
         ]
       }
     },
@@ -41,6 +45,9 @@
         ],
         "CA": [
           "Airbnb Canada Inc"
+        ],
+        "IE": [
+          "Airbnb Ireland Unlimited Company"
         ]
       }
     },
@@ -50,6 +57,9 @@
       "token": "datadog",
       "register": {
         "GB": [
+          "Datadog Ireland Limited"
+        ],
+        "IE": [
           "Datadog Ireland Limited"
         ]
       }
@@ -81,6 +91,9 @@
       "register": {
         "GB": [
           "MongoDB UK Limited"
+        ],
+        "IE": [
+          "MongoDB Limited"
         ]
       }
     },
@@ -91,6 +104,9 @@
       "register": {
         "GB": [
           "Twilio UK Limited"
+        ],
+        "IE": [
+          "Twilio Ireland Limited"
         ]
       }
     },
@@ -137,6 +153,9 @@
         ],
         "CA": [
           "Okta"
+        ],
+        "IE": [
+          "Okta Identity Ireland Limited"
         ]
       }
     },
@@ -147,6 +166,9 @@
       "register": {
         "GB": [
           "Squarespace UK Limited"
+        ],
+        "IE": [
+          "Squarespace Ireland Limited"
         ]
       }
     },
@@ -170,6 +192,9 @@
         ],
         "CA": [
           "Pinterest Canada Limited"
+        ],
+        "IE": [
+          "Pinterest Europe Limited"
         ]
       }
     },
@@ -340,6 +365,56 @@
       "register": {
         "CA": [
           "Faire"
+        ]
+      }
+    },
+    {
+      "name": "Intercom",
+      "ats": "greenhouse",
+      "token": "intercom",
+      "register": {
+        "IE": [
+          "Intercom R&D Unlimited Company"
+        ]
+      }
+    },
+    {
+      "name": "Toast",
+      "ats": "greenhouse",
+      "token": "toast",
+      "register": {
+        "IE": [
+          "Toasttab Ireland Limited"
+        ]
+      }
+    },
+    {
+      "name": "Tines",
+      "ats": "greenhouse",
+      "token": "tines",
+      "register": {
+        "IE": [
+          "Tines Security Services Limited,"
+        ]
+      }
+    },
+    {
+      "name": "Wayflyer",
+      "ats": "ashby",
+      "token": "wayflyer",
+      "register": {
+        "IE": [
+          "Wayflyer Limited"
+        ]
+      }
+    },
+    {
+      "name": "Flipdish",
+      "ats": "greenhouse",
+      "token": "flipdish",
+      "register": {
+        "IE": [
+          "Flipdish Ltd"
         ]
       }
     }
