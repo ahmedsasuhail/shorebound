@@ -30,12 +30,58 @@ export interface Feed {
  */
 export const DISCARD_AT_OR_BELOW = 5;
 
+/** Stronger evidence wins when the same job arrives from two sources. */
+const EVIDENCE_RANK: Record<JobDTO["sponsorship"]["status"], number> = {
+  confirmed_text: 5,
+  confirmed_register: 4,
+  visa_source: 3,
+  possible: 2,
+  unknown: 1,
+  negative: 0,
+};
+
+const normalize = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(
+      /\b(?:b\.?v\.?|gmbh|ltd|limited|inc|sas|ag|\(?[mfwdx]\/[mfwdx](?:\/[mfwdx])?\)?|\(all genders\)|h\/f|f\/h)\b/g,
+      " ",
+    )
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+/**
+ * The same posting often appears on a job board AND on the employer's own board (e.g. Arbeitnow and Greenhouse).
+ * Jobs are grouped by company + title + country; when a group spans several sources, only the jobs from the source
+ * with the strongest sponsorship evidence are kept. Several jobs from ONE source all stay: an employer can genuinely
+ * post three "Software Engineer 3" roles for different teams.
+ */
+export function dedupeJobs(rows: JobDTO[]): JobDTO[] {
+  const groups = new Map<string, JobDTO[]>();
+  for (const j of rows) {
+    const key = `${normalize(j.company)}|${normalize(j.title)}|${j.country}`;
+    groups.set(key, [...(groups.get(key) ?? []), j]);
+  }
+  const out: JobDTO[] = [];
+  for (const group of groups.values()) {
+    const best = group.reduce((a, b) => {
+      const ra = EVIDENCE_RANK[a.sponsorship.status];
+      const rb = EVIDENCE_RANK[b.sponsorship.status];
+      return rb > ra || (rb === ra && b.postedAt > a.postedAt) ? b : a;
+    });
+    out.push(...group.filter((j) => j.sourceId === best.sourceId));
+  }
+  return out;
+}
+
 /** Scores, filters, sorts and caps jobs. Newest-first stays the default (user requirement). */
 export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   const now = o.now ?? new Date();
   let notMatching = 0;
   const scored: JobDTO[] = [];
-  for (const j of rows) {
+  for (const j of dedupeJobs(rows)) {
     // Explicit "no sponsorship" is never listed (connectors already drop it; this guards older stored rows).
     if (j.sponsorship.status === "negative") continue;
     if (o.includePossible === false && j.sponsorship.status === "possible") continue;

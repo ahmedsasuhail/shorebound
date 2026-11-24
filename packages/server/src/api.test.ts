@@ -347,7 +347,7 @@ describe("api", () => {
 
   it("lists the job sources the user can switch off", async () => {
     const ids = (await make().inject("/api/sources")).json().sources.map((x: { id: string }) => x.id);
-    expect(ids).toEqual(["arbeitnow", "hackernews", "mycareersfuture", "company-boards"]);
+    expect(ids).toEqual(["arbeitnow", "hackernews", "mycareersfuture", "tokyodev", "company-boards"]);
   });
 
   it("serves the built UI with a single-page fallback, while unknown API paths stay 404", async () => {
@@ -358,5 +358,17 @@ describe("api", () => {
     expect((await app.inject("/")).body).toContain("Shorebound");
     expect((await app.inject("/settings")).body).toContain("Shorebound");
     expect((await app.inject("/api/nope")).statusCode).toBe(404);
+  });
+
+  it("on startup, an existing user's settings gain the countries added since (Netherlands, France, Japan)", async () => {
+    putSetting(db, "app", { countries: ["GB", "DE"] }); // settings saved before those countries existed
+    const s = (await make().inject("/api/settings")).json();
+    expect(s.countries).toEqual(expect.arrayContaining(["GB", "DE", "NL", "FR", "JP"]));
+    expect(s.countriesReviewedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+
+  it("the catalog marks newly added countries with their date", async () => {
+    const nl = (await make().inject("/api/catalog")).json().countries.find((c: { code: string }) => c.code === "NL");
+    expect(nl).toMatchObject({ status: "available", since: "2026-11-25" });
   });
 });

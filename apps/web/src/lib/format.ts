@@ -1,12 +1,13 @@
 import type { RefreshReport } from "../api";
 
-/** Display names for country codes used in the feed (flag emoji do not render on Windows). */
+/** Display names for country codes used in the feed (flag emoji do not render on Windows). Unknown codes show as-is. */
 export const COUNTRY_NAMES: Record<string, string> = {
   US: "United States",
   CA: "Canada",
   GB: "United Kingdom",
   IE: "Ireland",
   DE: "Germany",
+  JP: "Japan",
   AE: "UAE",
   SA: "Saudi Arabia",
   QA: "Qatar",

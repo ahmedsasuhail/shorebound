@@ -1,0 +1,311 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-25",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred (ind.nl, business.gov.nl). Budget-capped session: 4 web searches (the search tool reported running one extra internal query on one of them) and 6 page fetches (one ind.nl Blue Card URL returned 404). Job boards were not probed this session; their access notes are inference or carried over from the DE session (2026-11-22), as marked."
+    },
+    "searches_run": 4,
+    "pages_read": 6,
+    "confidence": "medium",
+    "open_questions": [
+      "30% ruling 2026 salary norm: business.gov.nl lists EUR 46,107 (EUR 35,048 for under-30 with a master's) for 2026, while secondary sources (iamexpat, Grant Thornton, lawandmore) give the indexed 2026 figure as EUR 48,013 (EUR 36,497). The business.gov.nl figures may be pre-indexation. Confirm on belastingdienst.nl.",
+      "30% ruling 2027 cut to 27%: business.gov.nl says rulings that started before 1 January 2024 keep 30% for 5 years. Secondary sources disagree on transitional details (e.g. whether 2024 starters keep the old salary norm). Not checked on belastingdienst.nl.",
+      "EU Blue Card NL degree rule: the IND Blue Card page URL tried returned 404. Search snippets of the IND page and advisers (Cardon, iamexpat) say: higher-education diploma from a programme of at least 3 years (evaluated by Nuffic/IDW), or 5 years of relevant experience, or 3 years in the last 7 for IT specialists/managers. Not read on an official page this session.",
+      "EU Blue Card NL: whether the employer must be a recognised sponsor (it can apply without, per general knowledge), contract-length minimum, fee and processing time were not confirmed on ind.nl this session.",
+      "Highly skilled migrant fee EUR 423 was read on ind.nl but the page did not state the year it applies to. The recognised-sponsor application fee (one-off, paid by employer) was not checked.",
+      "Permanent residence: ind.nl says a 5-year permit holder can apply for permanent residence. The civic integration (inburgering) / Dutch language level required for permanent residence or naturalisation was not verified this session.",
+      "MVV (entry visa) collection timing at Dutch missions in India: no official figure found. IND noted the MVV issue-form procedure changed in March/April 2026.",
+      "IND public register download format: the 'Public register Work' page shows an HTML table (Organisation, KvK number). The fetch saw no CSV/XLSX/PDF link in the first 100,000 characters of a ~510,000-character page. A download may exist further down.",
+      "2026 Box 1 income tax brackets and rates were not researched this session.",
+      "Senior-specific salary band: levels.fyi Netherlands page shows all-level percentiles only (median shown rounded as EUR 97.6K); used as a proxy.",
+      "Job-board access (robots.txt / ToS / APIs) for werk.nl, Indeed NL, IamExpat Jobs and Undutchables was not checked. Whether the Arbeitnow API includes many Netherlands listings was not checked."
+    ],
+    "review_by": "2027-05-25"
+  },
+  "code": "NL",
+  "name": "Netherlands",
+  "region": "europe",
+  "tier": "high_pay",
+  "default_enabled": true,
+  "currency": "EUR",
+  "languages": {
+    "official": ["Dutch"],
+    "english_only_tech_jobs": "common",
+    "note": "English is the working language at many international tech employers in Amsterdam, Rotterdam, Utrecht and Eindhoven, and many Dutch people speak English well. Some local firms and government-linked employers ask for Dutch. Qualitative inference, not a measured statistic."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 97600, "high": 165880, "currency": "EUR", "period": "year", "as_of": "2026-11" },
+    "source_urls": ["https://www.levels.fyi/t/software-engineer/locations/netherlands"],
+    "note": "Levels.fyi Netherlands, Software Engineer total compensation, all levels (1,381 data points, updated 2026-11-24): p25 EUR 74,805, median about EUR 97,600 (shown as EUR 97.6K), p75 EUR 132,560, p90 EUR 165,880. low = median and high = p90 are used as a rough senior proxy. This is total comp (incl. bonus and equity) and skews to large tech companies that report to levels.fyi. Many Dutch employers pay less; base salaries are often paid with an 8% holiday allowance on top."
+  },
+  "income_tax_note": "Progressive Box 1 income tax; 2026 brackets not researched this session. 30% ruling (expat scheme): in 2026 employers may still pay up to 30% of wages tax-free to qualifying incoming employees. From 1 January 2027 the maximum drops to 27% (rulings started before 1 January 2024 keep 30% for their 5 years). Salary norm for 2026: business.gov.nl lists EUR 46,107 (EUR 35,048 for under-30s with a master's); secondary sources give the indexed 2026 figure as EUR 48,013 (EUR 36,497). From 2027: EUR 50,436 (EUR 38,388), per business.gov.nl, before indexation. Secondary sources cite a 2026 cap based on the WNT norm (EUR 262,000). Confirm the norm with belastingdienst.nl.",
+  "cost_of_living_note": "Severe rental housing shortage, especially in Amsterdam and Utrecht; expect high rents and competition for flats. Municipal registration (BRP) is needed to get a BSN. Qualitative note, not verified with figures this session.",
+  "visa_routes": [
+    {
+      "id": "nl-highly-skilled-migrant",
+      "name": "Highly skilled migrant (kennismigrant)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": true,
+      "salary_threshold": { "amount": 5942, "currency": "EUR", "period": "month", "as_of": "2026-01", "note": "2026 gross monthly salary, holiday allowance (vakantiegeld) not counted: EUR 5,942 for age 30 or older; EUR 4,357 for under 30; reduced criterion EUR 3,122 (for recent graduates after a Dutch study/search year, not relevant for experienced hires). Amounts change every 1 January. Salary must also be in line with the market rate for the job." },
+      "degree_requirement": "None. The IND highly-skilled-migrant page lists no degree requirement; eligibility is driven by salary and a recognised-sponsor employer.",
+      "three_year_indian_bachelors_note": "Not relevant: no degree is required, so a 3-year BCA/BSc is no obstacle. No credential evaluation needed for the permit itself.",
+      "processing_time": "Legal limit 90 days (extendable). For applications by a recognised sponsor the IND target is 2 weeks if the application is complete. MVV (entry visa) collection at a Dutch mission in India adds time; no official figure found.",
+      "lottery_or_quota": "None",
+      "path_to_pr": "Permit valid for the length of the contract, up to 5 years. After 5 years of residence a permanent residence permit can be applied for. Civic integration / Dutch language requirements for that step not verified this session.",
+      "employer_cost_note": "The employer applies and pays the application fee (EUR 423 on ind.nl, year not stated, paid by direct debit). The employer must first be recognised by the IND as a sponsor (separate one-off fee, not checked).",
+      "official_url": "https://ind.nl/en/residence-permits/work/highly-skilled-migrant",
+      "verified": true
+    },
+    {
+      "id": "nl-eu-blue-card",
+      "name": "EU Blue Card (Netherlands)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 5942, "currency": "EUR", "period": "month", "as_of": "2026-01", "note": "2026 gross monthly salary per the IND required-amounts page, holiday allowance not counted. Reduced criterion EUR 4,754 (e.g. recent graduates). In 2026 the standard Blue Card threshold equals the 30+ highly-skilled-migrant threshold, so for an age-30+ engineer the Blue Card has no salary advantage." },
+      "degree_requirement": "Per search snippets of ind.nl and advisers (not read on ind.nl this session): higher-education diploma from a programme of at least 3 years, relevant to the job and evaluated by Nuffic/IDW; or 5 years of relevant professional experience; or, for IT specialists and IT managers, 3 years of relevant experience within the last 7 years. Contract of at least 6 months (adviser source).",
+      "three_year_indian_bachelors_note": "A 3-year BCA appears to meet the 'at least 3 years' programme length, subject to Nuffic/IDW evaluation. An engineer with 7+ years of IT experience can instead use the IT-specialist experience route (3 of the last 7 years). For most candidates the highly-skilled-migrant route is simpler, as it needs no degree at all.",
+      "processing_time": null,
+      "lottery_or_quota": "None",
+      "path_to_pr": "Not verified this session. The Blue Card brings EU intra-mobility rights; Dutch permanent residence after 5 years as for other permits (unverified for Blue Card holders).",
+      "employer_cost_note": "Not verified this session.",
+      "official_url": "https://ind.nl/en/residence-permits/work/european-blue-card-residence-permit",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": true,
+    "name": "IND Public Register Recognised Sponsors – Public register Work (regular labour and highly skilled migrants)",
+    "url": "https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants",
+    "format": "html",
+    "update_frequency": "Monthly (\"The public registers are updated once a month\"); last updated 3 November 2026 when read.",
+    "how_to_use": "The page is a large HTML table with two columns: Organisation and KVK (Chamber of Commerce) number. Parse the table into (name, kvk) pairs once a month. Match company names after normalising: lowercase, strip legal forms (B.V., BV, N.V., Holding, Nederland/Netherlands), punctuation and extra spaces. Listed names are legal entity names, often different from brand or trade names (e.g. '<Brand> Netherlands B.V.'), so use the KvK number as the stable key and resolve brand names via the KvK register or the company's website imprint where possible. Recognised-sponsor status is required for the highly-skilled-migrant route, so an unmatched employer is a strong 'may not sponsor' signal. A download file (CSV/XLSX) was not seen; re-check.",
+    "verified": true
+  },
+  "sponsorship_phrases": {
+    "positive": [
+      "kennismigrant",
+      "kennismigrantenregeling",
+      "kennismigrantenvisum",
+      "erkend referent",
+      "visumsponsoring",
+      "visum sponsoring",
+      "verhuisvergoeding",
+      "relocatiepakket",
+      "hulp bij relocatie",
+      "30%-regeling",
+      "Engelstalige werkomgeving",
+      "highly skilled migrant",
+      "visa sponsorship",
+      "we sponsor visas",
+      "relocation package",
+      "relocation support",
+      "30% ruling",
+      "recognised sponsor"
+    ],
+    "negative": [
+      "geen sponsoring",
+      "geen visumsponsoring",
+      "geen sponsoring mogelijk",
+      "werkvergunning vereist",
+      "in het bezit van een geldige werkvergunning",
+      "je mag in Nederland werken",
+      "woonachtig in Nederland",
+      "vloeiend Nederlands",
+      "Nederlands op moedertaalniveau",
+      "uitstekende beheersing van de Nederlandse taal",
+      "must be eligible to work in the Netherlands",
+      "must have the right to work in the Netherlands",
+      "valid EU work permit required",
+      "no visa sponsorship",
+      "we are unable to sponsor visas",
+      "fluent Dutch required"
+    ]
+  },
+  "ease_for_indian_nationals": {
+    "score": 4,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "The highly-skilled-migrant route needs no degree, so a 3-year Indian bachelor's is no obstacle. It has no quota, an employer-paid fee and a 2-week IND target for complete applications from recognised sponsors. English-only tech jobs are common and the 30% ruling (27% from 2027) improves net pay. Points lost for: only IND recognised sponsors can hire on this route, which narrows the employer pool; the 2026 threshold (EUR 5,942/month for 30+) excludes some mid-level offers; and the rental housing shortage is severe.",
+    "factors": {
+      "degree_recognition": "Not needed for highly skilled migrant. Blue Card needs a 3-year+ diploma or IT experience (3 of last 7 years), per unverified snippets.",
+      "language_barrier": "Low for tech roles at international employers; Dutch matters for some local employers, daily life and later integration requirements.",
+      "processing_speed": "Fast: IND target of 2 weeks for complete recognised-sponsor applications (legal maximum 90 days). MVV collection in India adds time.",
+      "quota_or_lottery": "None",
+      "employer_willingness": "Large recognised-sponsor register (thousands of organisations) including many international tech employers. Only sponsors on the register can use the highly-skilled-migrant route. Qualitative; no statistic gathered.",
+      "attestation_or_paperwork": "Employer files the application. Birth certificate legalisation/apostille may be needed for municipal registration (not verified this session; see origins/in.json). Degree evaluation only for the Blue Card."
+    }
+  },
+  "relocation_norms": "International tech employers in the Netherlands commonly offer visa handling (they must file it anyway), a relocation budget or lump sum, temporary housing and help applying for the 30% ruling. Smaller local firms offer less. Qualitative; not verified with survey data this session.",
+  "job_sites": [
+    {
+      "id": "werk-nl",
+      "name": "werk.nl (UWV)",
+      "url": "https://www.werk.nl",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Public employment service (UWV) vacancy database. Mostly Dutch-language listings.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session. Treat as a human-click link until robots.txt and any API are checked."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "few",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "linkedin-jobs-nl",
+      "name": "LinkedIn Jobs (Netherlands)",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Widely used by international tech employers in the Netherlands.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "linkedin.com robots.txt disallows /jobs/search for generic agents (checked 2026-11-22 in the DE session; same global file). Deep-link only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "most",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "indeed-nl",
+      "name": "Indeed Nederland",
+      "url": "https://nl.indeed.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Large aggregator; includes staffing-agency duplicates.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session. Deep-link search URLs, e.g. https://nl.indeed.com/jobs?q=software+engineer+visa+sponsorship&fromage=7."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "arbeitnow-nl",
+      "name": "Arbeitnow",
+      "url": "https://www.arbeitnow.com",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Europe-focused board with a free public JSON API (verified in the DE session); Netherlands coverage not measured.",
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://www.arbeitnow.com/blog/job-board-api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Same API as in de.json (GET https://www.arbeitnow.com/api/job-board-api?page=N). Filter by location containing Netherlands / Dutch city names. Access stance from the DE session (2026-11-22); not re-checked."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "iamexpat-jobs-nl",
+      "name": "IamExpat Jobs",
+      "url": "https://www.iamexpat.nl/career/jobs-netherlands",
+      "kind": "relocation_niche",
+      "reputation": "medium",
+      "reputation_note": "Expat-focused board for English-speaking roles in the Netherlands.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session; URL path not verified."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "undutchables-nl",
+      "name": "Undutchables",
+      "url": "https://www.undutchables.nl",
+      "kind": "recruiter",
+      "reputation": "medium",
+      "reputation_note": "Recruitment agency specialised in international (non-Dutch-speaking) candidates in the Netherlands.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": true, "remote": false, "date_posted": false },
+      "english_listings": "most",
+      "priority": 6,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    { "name": "Glassdoor Nederland", "url": "https://www.glassdoor.nl", "access": "link_only", "note": "Not probed this session; Glassdoor restricts crawlers (see de.json). Link out only." },
+    { "name": "Levels.fyi", "url": "https://www.levels.fyi/t/software-engineer/locations/netherlands", "access": "link_only", "note": "Compensation data by company for the Netherlands." }
+  ],
+  "communities": [
+    { "name": "r/Netherlands", "url": "https://www.reddit.com/r/Netherlands/", "note": "Large expat subreddit; housing, 30% ruling and IND threads. Not reviewed this session." },
+    { "name": "r/cscareerquestionsEU", "url": "https://www.reddit.com/r/cscareerquestionsEU/", "note": "European software career threads incl. Dutch salaries and kennismigrant experiences. Not reviewed this session." },
+    { "name": "Expat.com Netherlands forum", "url": "https://www.expat.com/en/forum/europe/netherlands/", "note": "Has threads on highly-skilled-migrant processing timelines (anecdotal)." }
+  ],
+  "scam_warnings": [
+    "The Embassy of India in The Hague (renewed advisory, 2026) warns of fake calls and emails impersonating the embassy, the Dutch foreign ministry and the IND, asking for personal or financial information. Ignore such requests.",
+    "Other European missions in India (Norway, Denmark, Finland) warn of fake job offers and fake work permits; a job offer you never applied for and any fee charged for a job are red flags.",
+    "App heuristic: for the highly-skilled-migrant route only an IND recognised sponsor can apply, and the employer pays the IND fee. An 'employer' not on the IND public register, or anyone charging the candidate for a permit, visa or 'job guarantee', is high risk.",
+    "App heuristic: the IND does not phone people demanding payments or threatening deportation; treat such calls as fraud (consistent with the Indian embassy advisory)."
+  ],
+  "sources": [
+    { "url": "https://ind.nl/en/required-amounts-income-requirements", "title": "IND – Required amounts income requirements (2026)", "used_for": "2026 highly skilled migrant (30+, under-30, reduced) and EU Blue Card thresholds; holiday allowance not counted", "accessed": "2026-11-25" },
+    { "url": "https://ind.nl/en/residence-permits/work/highly-skilled-migrant", "title": "IND – Highly skilled migrant", "used_for": "Recognised-sponsor requirement, no degree condition listed, EUR 423 fee paid by employer, 90-day limit, 5-year validity, permanent residence after 5 years", "accessed": "2026-11-25" },
+    { "url": "https://ind.nl/en/after-your-application/decision-periods", "title": "IND – Decision periods (via search snippet)", "used_for": "2-week target for complete recognised-sponsor applications", "accessed": "2026-11-25" },
+    { "url": "https://ind.nl/en/residence-permits/work/european-blue-card-residence-permit", "title": "IND – European Blue Card residence permit (via search snippet only)", "used_for": "Blue Card diploma / experience rules (unverified snippet)", "accessed": "2026-11-25" },
+    { "url": "https://www.cardon.nl/blog/the-eu-blue-card-netherlands-in-6-steps", "title": "Cardon – EU Blue Card Netherlands (2026) (via search snippet)", "used_for": "Corroboration of EUR 5,942 / 4,754 Blue Card thresholds; 6-month contract minimum", "accessed": "2026-11-25" },
+    { "url": "https://www.iamexpat.nl/expat-info/dutch-expat-news/summer-update-major-changes-eu-blue-card-explained", "title": "IamExpat – Major changes to EU Blue Card explained (via search snippet)", "used_for": "Blue Card IT-specialist experience route (3 of last 7 years); 5-year experience alternative", "accessed": "2026-11-25" },
+    { "url": "https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants", "title": "IND – Public register Work (recognised sponsors)", "used_for": "Register columns, monthly update, last update 3 Nov 2026", "accessed": "2026-11-25" },
+    { "url": "https://business.gov.nl/amendment/30-percent-ruling-compensation-down-to-27-percent/", "title": "Business.gov.nl – 30 percent ruling compensation down to 27 percent", "used_for": "30% in 2026, 27% from 2027, transitional rule, salary norms", "accessed": "2026-11-25" },
+    { "url": "https://www.iamexpat.nl/expat-info/taxation/30-percent-ruling", "title": "IamExpat – 30% ruling (via search snippet)", "used_for": "Indexed 2026 salary norm EUR 48,013 / 36,497 (secondary, conflicts with business.gov.nl)", "accessed": "2026-11-25" },
+    { "url": "https://lawandmore.eu/30-ruling-netherlands/", "title": "Law & More – 30% ruling and the switch to 27% (via search snippet)", "used_for": "2026 cap EUR 262,000 (WNT norm); transitional-rule commentary", "accessed": "2026-11-25" },
+    { "url": "https://www.levels.fyi/t/software-engineer/locations/netherlands", "title": "Levels.fyi – Software Engineer salaries in the Netherlands", "used_for": "Salary percentiles", "accessed": "2026-11-25" },
+    { "url": "https://www.indianembassynetherlands.gov.in/page/public-advisory/", "title": "Embassy of India, The Hague – Public advisory (via search snippet)", "used_for": "Scam warning: impersonation of embassy / Dutch ministry / IND", "accessed": "2026-11-25" },
+    { "url": "https://um.dk/indien/en/travel-and-residence/practical-information/fraudulent-job-offers-in-denmark/", "title": "Embassy of Denmark in India – Fraudulent job offers (via search snippet)", "used_for": "Regional scam pattern context", "accessed": "2026-11-25" },
+    { "url": "https://www.expat.com/en/forum/europe/netherlands/1037245-km-hsm-visa-processing-timeline-at-ind.html", "title": "Expat.com forum – KM/HSM processing timeline (anecdotal, via search snippet)", "used_for": "Community link; anecdotal timing only", "accessed": "2026-11-25" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt (checked in DE session)", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://www.arbeitnow.com/api/job-board-api", "title": "Arbeitnow job board API (checked in DE session)", "used_for": "API format and terms", "accessed": "2026-11-22" }
+  ]
+}

@@ -72,6 +72,8 @@ describe("inferCountry", () => {
     ["Cambridge, United States", "US"],
     ["Dublin", "IE"],
     ["Dubai", "AE"],
+    ["Tokyo", "JP"],
+    ["Osaka, Japan", "JP"],
     ["San Francisco, CA", "US"],
   ])("%s → %s", (loc, code) => expect(inferCountry(loc)).toBe(code));
 

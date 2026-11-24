@@ -49,6 +49,11 @@ export const CatalogSchema = z.object({
       name: z.string(),
       region: z.string(),
       status: z.enum(["available", "coming_soon"]),
+      /** YYYY-MM-DD the country became available, for countries added after v1. */
+      since: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .optional(),
     }),
   ),
 });

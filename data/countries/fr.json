@@ -1,0 +1,351 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-25",
+    "generated_by": {
+      "model": "claude-opus-5-5",
+      "harness": "Claude Code (research subagent)",
+      "effort": "not exposed to model",
+      "method": "web search + page reads; official sources preferred (service-public.gouv.fr, impots.gouv.fr, welcometofrance.com, france-visas.gouv.fr). Budget-capped session of 12 tool calls: 6 web searches and 6 page fetches. Of the fetches, one service-public.fr URL returned a 301 redirect to service-public.gouv.fr, one was a second read (later part) of the same service-public page, and one levels.fyi Paris URL had no data. Pages read in full: service-public F16922 (carte talent), impots.gouv.fr (impatriate regime), levels.fyi France. Other facts come from search-result snippets and are marked as such. Job boards were not probed this session; access notes are inference or carried over from the DE session (2026-11-22), as marked."
+    },
+    "searches_run": 6,
+    "pages_read": 6,
+    "confidence": "medium",
+    "open_questions": [
+      "EU Blue Card France: service-public says 3 years of experience within the last 7 is enough 'in listed professions'. Whether software engineers (ICT professionals) are on that list was not confirmed on an official page this session.",
+      "EU Blue Card France: whether a 3-year Indian BCA needs a formal comparability statement (France Education international / ENIC-NARIC France) or is accepted as is by the prefecture/consulate was not checked.",
+      "Decree n° 2026-1001 of 26 October 2026 (in force 30 October 2026) changes Blue Card validity, intra-EU mobility, job-loss rules and some prefecture processing times. Only search snippets were read; the exact new rules and any new decision deadlines should be read on legifrance.gouv.fr.",
+      "The EUR 39,582 reference salary comes from an arrêté of August 2025 (service-public cites 'Arrêté du 21 août 2025'; a secondary source says 29 August 2025). Whether a new arrêté changed it for 2026 or 2027 was not checked. The Blue Card figure EUR 59,373 = 1.5 x 39,582 (one secondary source links it to décret n° 2026-308).",
+      "Carte de séjour 'salarié' route: minimum salary, the employer tax amount (taxe employeur) and the current list of shortage occupations (métiers en tension, arrêté of 21 May 2025 per a service-public snippet) were not read. Whether software developer roles are on the Île-de-France shortage list is unknown.",
+      "Carte de résident (10 years): the exact eligibility for talent-card holders (5 years of residence) and for EU Blue Card holders (EU long-term resident status, possible aggregation of residence in other EU states) were not read on an official page. Language level B1 and the civic exam apply to a first carte de résident (service-public / justice.fr snippets); whether talent holders are exempt from either is not confirmed (a non-official blog was contradictory).",
+      "Whether the employer foreign-worker tax applies to the Blue Card (service-public states the exemption for the salarié qualifié card) was not confirmed.",
+      "Long-stay visa processing in India: france-visas gives a general 15 days (up to 45) decision time; no talent-specific or India-specific figure was found. VFS appointment wait times not checked.",
+      "2026 French income tax brackets and social-contribution rates were not researched this session.",
+      "Senior-specific salary band for Paris: levels.fyi shows only a Paris median (EUR 74,524) and France-wide percentiles; no senior-level split was visible.",
+      "Job-board access (robots.txt / ToS / APIs) for Welcome to the Jungle, France Travail, Indeed France and APEC was not checked. The France Travail job-offers API is known to exist via francetravail.io but its terms and key process were not read. Arbeitnow coverage of French listings not measured.",
+      "No official India-facing scam advisory for France (French embassy in India or Embassy of India in Paris) was read this session."
+    ],
+    "review_by": "2027-05-25"
+  },
+  "code": "FR",
+  "name": "France",
+  "region": "europe",
+  "tier": "high_pay",
+  "default_enabled": true,
+  "currency": "EUR",
+  "languages": {
+    "official": ["French"],
+    "english_only_tech_jobs": "possible",
+    "note": "English-only engineering roles exist in Paris, mostly at international tech companies, well-funded start-ups/scale-ups and foreign-owned firms, but French is the default working language at many local employers, consultancies (ESN) and in day-to-day admin. Expect many postings to ask for French. French at B1 is also required later for the 10-year carte de résident. Qualitative inference, not a measured statistic."
+  },
+  "salary": {
+    "senior_swe_annual_gross": { "low": 74524, "high": 103764, "currency": "EUR", "period": "year", "as_of": "2026-11" },
+    "source_urls": [
+      "https://www.levels.fyi/t/software-engineer/locations/france"
+    ],
+    "note": "Levels.fyi France, Software Engineer total compensation, all levels (1,082 data points, updated 2026-11-24): p25 EUR 47,258, median EUR 61,040, p75 EUR 77,549, p90 EUR 103,764. Paris median shown as EUR 74,524 (no Paris percentiles). low = Paris median, high = France-wide p90, used as a rough senior proxy; the Paris p90 is likely higher. Figures are total comp (incl. bonus/equity) and skew to large tech companies; base salaries at local firms and ESN consultancies are often lower. Note the EU Blue Card threshold (EUR 59,373 gross base) is below the Paris median total comp, but a base-only offer may not reach it."
+  },
+  "income_tax_note": "Progressive income tax plus substantial employee social contributions; 2026 brackets not researched this session. Impatriate regime (régime des impatriés, art. 155 B CGI, impots.gouv.fr, last modified 2026-04-08): for employees recruited directly from abroad (or moved within a group) who were not tax-domiciled in France in the 5 civil years before starting. The impatriation premium is exempt from income tax; if the contract does not set one, it can be taken as a flat 30% of remuneration. Runs until 31 December of the 8th civil year after taking up duties. Combined exemptions capped at 50% of total remuneration (or 20% cap on the foreign-activity part). Remaining taxable pay must be at least a reference pay for comparable roles. Not available to people who came to France on their own initiative.",
+  "cost_of_living_note": "Paris rents are high and the rental market is competitive; landlords usually ask for a rental file (dossier) with French payslips, an employment contract and often a guarantor, which is hard for new arrivals, so temporary or corporate housing is common for the first months. Qualitative note, not verified with figures this session.",
+  "visa_routes": [
+    {
+      "id": "fr-talent-eu-blue-card",
+      "name": "Talent – EU Blue Card (carte de séjour « talent – carte bleue européenne »)",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 59373, "currency": "EUR", "period": "year", "as_of": "2025-08", "note": "Gross annual salary of at least 1.5 x the reference average gross salary (EUR 39,582, set by an arrêté of August 2025) = EUR 59,373, per service-public.gouv.fr F16922 (checked 2026-06-01, read 2026-11-25). Gross, not net. Check for a newer arrêté before relying on it." },
+      "degree_requirement": "Diploma from at least 3 years of higher education, OR 5 years of relevant professional experience; in listed professions, 3 years of experience gained in the 7 years before applying is enough. Employment contract of at least 6 months.",
+      "three_year_indian_bachelors_note": "A 3-year BCA is a 3-year higher-education diploma, so on the face of the service-public text it meets the degree condition. Whether a comparability statement is required was not checked. A senior engineer with 7+ years of experience also meets the 5-years-of-experience alternative, independent of the degree.",
+      "processing_time": "Long-stay visa: France-Visas says decisions usually take 15 days, up to 45 days in special cases (general figure, not talent- or India-specific); add VFS appointment time. Residence card: filed online on ANEF within 2 months of arrival when entering on a long-stay visa; prefecture silence after 90 days counts as implicit refusal (30 days if already holding another EU state's Blue Card). Decree 2026-1001 (in force 30 October 2026) changed some processing rules; not read.",
+      "lottery_or_quota": "None",
+      "path_to_pr": "Card valid for the contract length up to 4 years (contract of 2+ years), or contract + 3 months up to 2 years. Renewable. A 10-year carte de résident can be sought later; for a first carte de résident, French at B1 and a civic exam (required since 1 January 2026) apply. Blue Card holders also have EU intra-mobility rights (move to another EU state after 12 months). Exact residence-duration rules for the carte de résident / EU long-term resident status not verified this session.",
+      "employer_cost_note": "No work authorisation needed (service-public). Fees on the applicant side: long-stay visa EUR 99, then residence card EUR 350 (EUR 300 tax + EUR 50 stamp duty, paid by timbre fiscal); renewal EUR 250 per welcometofrance (qualified-employee page). Employers often reimburse these; not a legal rule. Whether the employer foreign-worker tax applies was not confirmed.",
+      "official_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F16922",
+      "verified": true
+    },
+    {
+      "id": "fr-talent-innovative-company",
+      "name": "Talent – qualified employee, innovative-company track (« talent – salarié qualifié », parcours entreprise innovante)",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 39582, "currency": "EUR", "period": "year", "as_of": "2025-08", "note": "Gross annual salary of at least EUR 39,582 (reference average gross salary), per service-public F16922." },
+      "degree_requirement": "No separate diploma condition listed on service-public. The employer must be a jeune entreprise innovante (JEI) or a company recognised as innovative by the Ministry of the Economy, and the job must be directly linked to the company's R&D project.",
+      "three_year_indian_bachelors_note": "Not an obstacle: no diploma condition is listed for this track. The constraint is the employer type (JEI / recognised innovative company) and an R&D-linked role.",
+      "processing_time": "Long-stay talent visa: usually 15 days, up to 45 (France-Visas general figure). Residence card via ANEF; prefecture silence after 4 months counts as implicit refusal for the salarié qualifié card.",
+      "lottery_or_quota": "None",
+      "path_to_pr": "Card valid for the contract length, up to 4 years; renewable. First carte de résident (10 years) requires French B1 and the civic exam; exact residence-duration rules not verified this session.",
+      "employer_cost_note": "No work authorisation needed. Applicant fees: visa EUR 99, card EUR 350 (EUR 300 + EUR 50 stamp). Service-public states the employer foreign-worker tax exemption for the salarié qualifié card; assumed to cover this track, not confirmed.",
+      "official_url": "https://www.welcometofrance.com/en/fiche/talent-passport-jei",
+      "verified": true
+    },
+    {
+      "id": "fr-talent-qualified-employee",
+      "name": "Talent – qualified employee, French-degree track (« talent – salarié qualifié », parcours salarié qualifié)",
+      "type": "talent",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": 39582, "currency": "EUR", "period": "year", "as_of": "2025-08", "note": "Gross annual salary of at least EUR 39,582, per service-public F16922. Contract longer than 3 months." },
+      "degree_requirement": "A diploma at least equivalent to a master's obtained in France, or a level-1 diploma labelled by the Conférence des grandes écoles from a nationally accredited institution.",
+      "three_year_indian_bachelors_note": "Not eligible with a 3-year Indian bachelor's: this track needs a master's-level diploma obtained in France. Listed so the app can explain why the 'passeport talent' mentioned in postings may not fit; use the Blue Card or innovative-company track instead.",
+      "processing_time": "Prefecture silence after 4 months counts as implicit refusal (service-public).",
+      "lottery_or_quota": "None",
+      "path_to_pr": "Card valid for the contract length, up to 4 years; renewable. Carte de résident rules as above (B1 French, civic exam).",
+      "employer_cost_note": "No work authorisation needed and the employer is exempt from the foreign-worker employment tax (service-public). Applicant fees EUR 99 visa + EUR 350 card.",
+      "official_url": "https://www.welcometofrance.com/en/fiche/talent-passport-qualified-employee",
+      "verified": true
+    },
+    {
+      "id": "fr-salarie-work-authorisation",
+      "name": "Employee residence card with work authorisation (carte de séjour « salarié »)",
+      "type": "employer_sponsored",
+      "requires_job_offer": true,
+      "requires_licensed_sponsor": false,
+      "salary_threshold": { "amount": null, "currency": "EUR", "period": "year", "as_of": "2026-11", "note": "Not researched this session." },
+      "degree_requirement": "No specific degree rule found this session; the employer must obtain a work authorisation (autorisation de travail) through ANEF for each new contract.",
+      "three_year_indian_bachelors_note": "Degree not the constraint on this route; the labour-market test and employer paperwork are. Fallback when the offer is below the Blue Card threshold and the employer is not a JEI.",
+      "processing_time": "Work authorisation: prefecture silence after 2 months counts as implicit rejection (service-public F2728 snippet). Then the long-stay visa (usually 15 to 45 days). Overall slower and less certain than talent routes.",
+      "lottery_or_quota": "No quota, but a labour-market test: the job must have been advertised with the public employment service (France Travail) for 3 consecutive weeks within the 6 months before the request with no suitable applicant, unless the occupation is on the shortage list (métiers en tension).",
+      "path_to_pr": "Multi-year card after the first year, then carte de résident; first multi-year card and first carte de résident need the civic exam and French-language proof (levels per service-public F34501; not read in full). Not verified in detail this session.",
+      "employer_cost_note": "Employer applies for the work authorisation and pays an employer tax for authorisations over 3 months (amount not researched). Heavy fines for employing someone without authorisation.",
+      "official_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2728",
+      "verified": false
+    }
+  ],
+  "sponsor_register": {
+    "exists": false,
+    "name": "",
+    "url": "",
+    "format": "none",
+    "update_frequency": "",
+    "how_to_use": "France has no public register of employers approved to hire foreign workers; talent and Blue Card routes need no employer licence. The app cannot match employers against a register. Use posting text (sponsorship_phrases), company size/age signals and past hiring of international staff instead. A JEI (jeune entreprise innovante) status, relevant to the innovative-company talent track, is a tax status not published as an open list (not checked).",
+    "verified": false
+  },
+  "sponsorship_phrases": {
+    "positive": [
+      "passeport talent",
+      "carte bleue européenne",
+      "sponsoring visa",
+      "sponsorisation de visa",
+      "accompagnement visa",
+      "accompagnement dans les démarches de visa",
+      "prise en charge du visa",
+      "aide à la relocalisation",
+      "accompagnement à la relocalisation",
+      "package de relocation",
+      "environnement anglophone",
+      "équipe internationale",
+      "visa sponsorship",
+      "we sponsor visas",
+      "Talent Passport",
+      "EU Blue Card",
+      "relocation package",
+      "relocation support",
+      "English-speaking team",
+      "French not required"
+    ],
+    "negative": [
+      "pas de sponsoring visa",
+      "pas de sponsorisation de visa",
+      "nous ne sponsorisons pas de visa",
+      "autorisation de travail requise",
+      "autorisation de travail en France requise",
+      "titulaire d'une autorisation de travail",
+      "titre de séjour valide",
+      "être autorisé à travailler en France",
+      "français courant",
+      "français courant exigé",
+      "maîtrise du français indispensable",
+      "français langue maternelle",
+      "must be eligible to work in France",
+      "must have the right to work in France",
+      "valid French work permit required",
+      "no visa sponsorship",
+      "we are unable to sponsor visas",
+      "fluent French required"
+    ]
+  },
+  "ease_for_indian_nationals": {
+    "score": 3,
+    "scale": "1 (hard) – 5 (easy)",
+    "rationale": "The EU Blue Card is reachable for senior engineers in Paris: EUR 59,373 gross threshold, no quota, no employer licence or work authorisation, and a 3-year bachelor's or 5 years of experience qualifies. The innovative-company talent track (EUR 39,582, no diploma condition) helps at JEI start-ups. Points lost for: the main 'passeport talent – salarié qualifié' track needs a French master's, so it does not fit a 3-year Indian degree; English-only jobs are a minority and French is needed for daily life and, at B1 plus a civic exam, for the 10-year card; prefecture/ANEF processing is slow and changed again in October 2026; base salaries at many local employers fall below the Blue Card threshold.",
+    "factors": {
+      "degree_recognition": "Blue Card: 3-year higher-education diploma or 5 years' experience (or 3 of last 7 years in listed professions). Salarié qualifié track needs a master's from France. Innovative-company track lists no diploma condition.",
+      "language_barrier": "Medium to high. English-only roles exist at international firms and start-ups in Paris; many employers, admin and housing require French. B1 French for the first carte de résident.",
+      "processing_speed": "Visa usually 15 days (up to 45). Residence card via ANEF afterwards; implicit refusal deadlines of 90 days (Blue Card) or 4 months (salarié qualifié) show that prefecture processing can be long.",
+      "quota_or_lottery": "None",
+      "employer_willingness": "No register to measure it. Large tech companies and funded start-ups in Paris do hire non-EU engineers on talent/Blue Card routes because no labour-market test applies; many local firms and ESN consultancies prefer candidates already authorised to work. Qualitative; no statistic gathered.",
+      "attestation_or_paperwork": "Degree and civil-status documents may need translation/apostille (see origins/in.json); comparability statement for the BCA not confirmed. Applicant pays visa EUR 99 and card EUR 350 unless the employer reimburses."
+    }
+  },
+  "relocation_norms": "International tech employers and scale-ups in Paris commonly cover visa/talent-passport filing through an immigration provider and offer a relocation budget or temporary housing; the impatriate tax regime is often applied for recruits from abroad. Smaller local firms and ESN consultancies offer less. Qualitative; not verified with survey data this session.",
+  "job_sites": [
+    {
+      "id": "welcometothejungle-fr",
+      "name": "Welcome to the Jungle",
+      "url": "https://www.welcometothejungle.com/fr/jobs",
+      "kind": "tech_niche",
+      "reputation": "high",
+      "reputation_note": "Leading French board for start-up and tech roles, with company profile pages; many Paris tech employers post here.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session. Treat as a human-click link until robots.txt and ToS are checked. Many employers on it use ATS boards (see sources/global.json) that can be read directly."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": false },
+      "english_listings": "some",
+      "priority": 1,
+      "verified": false
+    },
+    {
+      "id": "france-travail",
+      "name": "France Travail (ex-Pôle emploi)",
+      "url": "https://candidat.francetravail.fr/offres/emploi",
+      "kind": "government",
+      "reputation": "high",
+      "reputation_note": "Public employment service. Job offers for work-authorisation cases must be advertised here (labour-market test). Mostly French-language listings.",
+      "access": {
+        "method": "official_api",
+        "auth": "free_key",
+        "docs_url": "https://francetravail.io",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "A job-offers API is published via the francetravail.io developer portal (registration for a free key), from general knowledge; terms, rate limits and endpoint not read this session. Verify before building."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "few",
+      "priority": 4,
+      "verified": false
+    },
+    {
+      "id": "linkedin-jobs-fr",
+      "name": "LinkedIn Jobs (France)",
+      "url": "https://www.linkedin.com/jobs/",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Widely used by international and tech employers in Paris.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "prohibits automated access",
+        "notes": "linkedin.com robots.txt disallows /jobs/search for generic agents (checked 2026-11-22 in the DE session; same global file). Deep-link only."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 2,
+      "verified": false
+    },
+    {
+      "id": "indeed-fr",
+      "name": "Indeed France",
+      "url": "https://fr.indeed.com",
+      "kind": "aggregator",
+      "reputation": "medium",
+      "reputation_note": "Large aggregator; includes staffing-agency and ESN duplicates.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session. Deep-link search URLs, e.g. https://fr.indeed.com/jobs?q=software+engineer+visa+sponsorship&fromage=7 (URL pattern assumed from other Indeed country sites)."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "few",
+      "priority": 3,
+      "verified": false
+    },
+    {
+      "id": "arbeitnow-fr",
+      "name": "Arbeitnow",
+      "url": "https://www.arbeitnow.com",
+      "kind": "job_board",
+      "reputation": "medium",
+      "reputation_note": "Europe-focused board with a free public JSON API (verified in the DE session); France coverage not measured.",
+      "access": {
+        "method": "official_api",
+        "auth": "none",
+        "docs_url": "https://www.arbeitnow.com/blog/job-board-api",
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "allows",
+        "notes": "Same API as in de.json (GET https://www.arbeitnow.com/api/job-board-api?page=N). Filter by location containing France / French city names. Access stance from the DE session (2026-11-22); not re-checked."
+      },
+      "posted_date_available": true,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": true, "date_posted": true },
+      "english_listings": "some",
+      "priority": 5,
+      "verified": false
+    },
+    {
+      "id": "apec-fr",
+      "name": "APEC (Association pour l'emploi des cadres)",
+      "url": "https://www.apec.fr",
+      "kind": "job_board",
+      "reputation": "high",
+      "reputation_note": "Job board for managerial/professional (cadre) roles, run by a joint employer-union body; mostly French-language listings.",
+      "access": {
+        "method": "link_only",
+        "auth": "none",
+        "docs_url": null,
+        "rate_limit": null,
+        "logged_out_works": true,
+        "robots_or_tos": "unclear",
+        "notes": "Not probed this session."
+      },
+      "posted_date_available": null,
+      "filters": { "visa_sponsorship": false, "relocation": false, "english": false, "remote": false, "date_posted": false },
+      "english_listings": "few",
+      "priority": 6,
+      "verified": false
+    }
+  ],
+  "review_sources": [
+    { "name": "Glassdoor France", "url": "https://www.glassdoor.fr", "access": "link_only", "note": "Not probed this session; Glassdoor restricts crawlers (see de.json). Link out only." },
+    { "name": "Levels.fyi", "url": "https://www.levels.fyi/t/software-engineer/locations/france", "access": "link_only", "note": "Compensation data by company for France; Paris median shown." },
+    { "name": "Welcome to the Jungle company pages", "url": "https://www.welcometothejungle.com/fr/companies", "access": "link_only", "note": "Employer-produced profiles (team, culture, office photos); useful for legitimacy checks, not independent reviews. Not probed this session." }
+  ],
+  "communities": [
+    { "name": "r/cscareerquestionsEU", "url": "https://www.reddit.com/r/cscareerquestionsEU/", "note": "European software career threads incl. Paris salaries and talent-passport experiences. Not reviewed this session." },
+    { "name": "r/paris", "url": "https://www.reddit.com/r/paris/", "note": "City subreddit; housing and expat admin threads. Not reviewed this session." },
+    { "name": "Expat.com France forum", "url": "https://www.expat.com/en/forum/europe/france/", "note": "Threads on prefecture/ANEF timelines (anecdotal). Not reviewed this session." }
+  ],
+  "scam_warnings": [
+    "App heuristic: talent-passport and Blue Card fees are paid to the French state (visa EUR 99 via France-Visas/VFS, card EUR 350 by timbre fiscal). Anyone asking the candidate to pay an 'agent', 'employer' or 'embassy contact' for a job, work permit or 'guaranteed visa' is high risk.",
+    "App heuristic: France has no sponsor register, so the app cannot confirm sponsorship from a register. Check the company in the French business registry (SIREN/SIRET) and that the posting domain matches the company's own site.",
+    "App heuristic: residence applications are made online on the official ANEF portal (administration-etrangers-en-france.interieur.gouv.fr) and visas on france-visas.gouv.fr; look-alike sites charging for 'assistance' or 'priority appointments' are a known pattern for visa services generally (not verified for France this session).",
+    "Other European missions in India (Norway, Denmark, Finland; see nl.json) warn of fake job offers and fake work permits; a job offer you never applied for and any fee charged for a job are red flags."
+  ],
+  "sources": [
+    { "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F16922", "title": "Service-Public – Carte talent : carte de séjour pluriannuelle d'un étranger en France (vérifié 01/06/2026)", "used_for": "Salarié qualifié, entreprise innovante and Blue Card conditions; EUR 39,582 and EUR 59,373 thresholds; diploma/experience rules; card validity; EUR 350 fee; ANEF filing; 90-day / 4-month implicit refusal; no work authorisation; reference to arrêté of 21 August 2025", "accessed": "2026-11-25" },
+    { "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2728?lang=en", "title": "Service-Public – Authorization to work for a foreign employee in France (via search snippet)", "used_for": "Work authorisation per contract, 3-week France Travail advertising test, shortage-list exception, 2-month implicit rejection, employer tax", "accessed": "2026-11-25" },
+    { "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F34501?lang=fr", "title": "Service-Public – Carte de résident et carte pluriannuelle : connaissance du français (via search snippet)", "used_for": "French-language requirement for first carte de résident incl. talent holders after 5 years", "accessed": "2026-11-25" },
+    { "url": "https://www.justice.fr/fiche/carte-resident-carte-sejour-pluriannuellecomment-justifier-votre-connaissance-francais", "title": "Justice.fr – Justifier de sa connaissance du français (via search snippet)", "used_for": "B1 level for a first carte de résident", "accessed": "2026-11-25" },
+    { "url": "https://www.interieur.gouv.fr/actualites/communiques-de-presse/a-partir-du-1er-janvier-2026-reussite-a-lexamen-civique-sera-necessaire-pour-obtenir-carte-de-sejour", "title": "Ministère de l'Intérieur – Examen civique obligatoire à partir du 1er janvier 2026 (via search snippet)", "used_for": "Civic exam for first multi-year card / carte de résident since 2026", "accessed": "2026-11-25" },
+    { "url": "https://www.service-public.gouv.fr/particuliers/actualites/A19128", "title": "Service-Public actualité – Titres de séjour (décret n° 2026-1001) (via search snippet)", "used_for": "Decree of 26 October 2026, in force 30 October 2026", "accessed": "2026-11-25" },
+    { "url": "https://www.banquedesterritoires.fr/autorisations-de-sejour-et-de-travail-des-etrangers-de-pays-tiers-un-decret-applique-la-directive", "title": "Banque des Territoires – décret applying the single-permit directive (via search snippet)", "used_for": "Decree 2026-1001 changes to Blue Card validity, mobility and job loss", "accessed": "2026-11-25" },
+    { "url": "https://www.jobbatical.com/blog/france-salary-threshold-eu-blue-card", "title": "Jobbatical – France EU Blue Card salary threshold (secondary, via search snippet)", "used_for": "Corroboration of EUR 39,582 reference and EUR 59,373 Blue Card threshold; arrêté of 29 August 2025 (date conflicts with service-public)", "accessed": "2026-11-25" },
+    { "url": "https://www.impots.gouv.fr/international-particulier/le-regime-des-impatries", "title": "impots.gouv.fr – Le régime des impatriés (modifié 08/04/2026)", "used_for": "Impatriate regime eligibility, 30% flat option, 8-year duration, 50%/20% caps", "accessed": "2026-11-25" },
+    { "url": "https://www.welcometofrance.com/en/fiche/talent-passport-qualified-employee", "title": "Welcome to France – Talent: qualified employees (via search snippet)", "used_for": "EUR 99 visa, EUR 300 + EUR 50 card fees, EUR 250 renewal, apply up to 3 months before arrival", "accessed": "2026-11-25" },
+    { "url": "https://www.welcometofrance.com/en/fiche/talent-passport-jei", "title": "Welcome to France – Talent: innovative company (JEI) (via search snippet)", "used_for": "Official page for the innovative-company track", "accessed": "2026-11-25" },
+    { "url": "https://france-visas.gouv.fr/en/la-demarche", "title": "France-Visas – The visa application process (via search snippet)", "used_for": "Visa decision usually 15 days, up to 45 days", "accessed": "2026-11-25" },
+    { "url": "https://france-visas.gouv.fr/en/inde", "title": "France-Visas – India (via search snippet)", "used_for": "Fees in EUR converted to INR; VFS Global centres; non-refundable fees", "accessed": "2026-11-25" },
+    { "url": "https://www.levels.fyi/t/software-engineer/locations/france", "title": "Levels.fyi – Software Engineer salaries in France", "used_for": "Salary percentiles and Paris median", "accessed": "2026-11-25" },
+    { "url": "https://www.linkedin.com/robots.txt", "title": "LinkedIn robots.txt (checked in DE session)", "used_for": "Access stance", "accessed": "2026-11-22" },
+    { "url": "https://www.arbeitnow.com/api/job-board-api", "title": "Arbeitnow job board API (checked in DE session)", "used_for": "API format and terms", "accessed": "2026-11-22" }
+  ]
+}

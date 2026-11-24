@@ -27,6 +27,7 @@ import {
 import { CountryChip } from "../components/Badges";
 import { ResumeCard } from "../components/ResumeCard";
 import { Field, Section, Segmented } from "../components/Section";
+import { useNow } from "../hooks/useNow";
 
 const REGIONS: Record<string, string> = {
   north_america: "North America",
@@ -146,8 +147,12 @@ function ProfileCard() {
   );
 }
 
-function CountryCard({ c, on, toggle }: { c: CatalogCountry; on: boolean; toggle: () => void }) {
+/** A country added within this many days shows a "New" badge. */
+const NEW_FOR_DAYS = 45;
+
+function CountryCard({ c, on, toggle, now }: { c: CatalogCountry; on: boolean; toggle: () => void; now: number }) {
   const soon = c.status === "coming_soon";
+  const isNew = !soon && c.since !== null && now - new Date(c.since).getTime() < NEW_FOR_DAYS * 86_400_000;
   return (
     <button
       disabled={soon}
@@ -157,7 +162,14 @@ function CountryCard({ c, on, toggle }: { c: CatalogCountry; on: boolean; toggle
     >
       <CountryChip code={c.code} active={on && !soon} />
       <div className="min-w-0 flex-1">
-        <div className="truncate text-sm font-medium">{c.name}</div>
+        <div className="flex items-center gap-1.5">
+          <span className="truncate text-sm font-medium">{c.name}</span>
+          {isNew && (
+            <span className="rounded-full bg-accent px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-onaccent">
+              New
+            </span>
+          )}
+        </div>
         <div className="text-[11px] text-muted">
           {soon ? "Coming soon" : `Ease from India ${c.ease}/5 · ${c.confidence} confidence`}
         </div>
@@ -231,6 +243,7 @@ const IncludeHide = ({ value, onChange }: { value: boolean; onChange: (v: boolea
 );
 
 function CountriesPanel() {
+  const now = useNow();
   const settings = useSettings();
   const catalog = useCatalog();
   const save = useSaveSettings();
@@ -266,7 +279,13 @@ function CountriesPanel() {
             <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted">{g.label}</h3>
             <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
               {g.items.map((c) => (
-                <CountryCard key={c.code} c={c} on={s.countries.includes(c.code)} toggle={() => toggle(c.code)} />
+                <CountryCard
+                  key={c.code}
+                  c={c}
+                  now={now}
+                  on={s.countries.includes(c.code)}
+                  toggle={() => toggle(c.code)}
+                />
               ))}
             </div>
           </div>

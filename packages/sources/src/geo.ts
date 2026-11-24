@@ -140,6 +140,13 @@ const CITIES: Record<string, string> = {
   doha: "QA",
   "kuala lumpur": "MY",
   bangkok: "TH",
+  tokyo: "JP",
+  osaka: "JP",
+  kyoto: "JP",
+  fukuoka: "JP",
+  yokohama: "JP",
+  nagoya: "JP",
+  sapporo: "JP",
   // North America
   toronto: "CA",
   vancouver: "CA",

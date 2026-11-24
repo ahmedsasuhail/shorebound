@@ -43,13 +43,13 @@ export interface Profile {
 
 const TECH_WORD = String.raw`software|front[- ]?end|back[- ]?end|full[- ]?stack|web|mobile|ios|android|platform|cloud|devops|dev ops|site reliability|sre|data|ml|machine learning|ai|infrastructure|security|qa|test|automation|embedded|application|integration|api|javascript|typescript|node(?:\.?js)?|react|angular|vue|java|python|golang|go|ruby|php|\.net|c#|c\+\+|rust|scala|kotlin|swift|wordpress|salesforce|solutions`;
 const SOFTWARE_TITLE = new RegExp(
-  String.raw`\b(?:${TECH_WORD})\b[\w\s/&().,-]{0,30}\b(?:engineer|developer|architect|programmer|lead)\b|\b(?:developer|programmer|swe|sde|sre)\b|\bsoftware\b|\b(?:engineer|developer)\b[\s\w,/-]{0,25}\b(?:${TECH_WORD})\b`,
+  String.raw`\b(?:${TECH_WORD})\b[\w\s/&().,-]{0,30}\b(?:engineer|developer|architect|programmer|lead)\b|\b(?:developer|programmer|swe|sde|sre|d[ée]veloppeu(?:r|se)|ontwikkelaar|(?:software)?entwickler(?:in)?|ing[ée]nieur logiciel)\b|\bsoftware\b|\b(?:engineer|developer)\b[\s\w,/-]{0,25}\b(?:${TECH_WORD})\b`,
   "i",
 );
 const OFF_STACK_TITLE =
   /\b(?:wordpress|shopify|salesforce|sap|abap|servicenow|dynamics|magento|drupal|wix|webflow|sitecore|netsuite|workday|mainframe|cobol)\b/i;
 const NON_SOFTWARE_TITLE =
-  /\b(?:solutions? (?:architect|engineer|consultant)|sales engineer|customer engineer|technical account|(?:technical|it|customer|application) support|support engineer|field engineer|pre-?sales|implementation (?:consultant|engineer|specialist)|quant\w*|researcher|data scientist|recruit\w*|talent acquisition|sales|account (?:executive|manager)|marketing|copywriter|writer|hr\b|human resources|accountant|finance|financial|legal|lawyer|nurse|chef|venture|consultant|customer (?:success|support|service)|designer|mechanical|civil|electrical|chemical|quantitative researcher|trader|analyst)\b/i;
+  /\b(?:solutions? (?:architect|engineer|consultant)|sales engineer|customer engineer|business develop\w*|technical account|(?:technical|it|customer|application) support|support engineer|field engineer|pre-?sales|implementation (?:consultant|engineer|specialist)|quant\w*|researcher|data scientist|recruit\w*|talent acquisition|sales|account (?:executive|manager)|marketing|copywriter|writer|hr\b|human resources|accountant|finance|financial|legal|lawyer|nurse|chef|venture|consultant|customer (?:success|support|service)|designer|mechanical|civil|electrical|chemical|quantitative researcher|trader|analyst)\b/i;
 
 function familyOf(title: string, skills: string[]): RoleFamily | null {
   const t = title.toLowerCase();
@@ -70,7 +70,13 @@ function familyOf(title: string, skills: string[]): RoleFamily | null {
 
 export function seniorityOf(title: string): Seniority {
   const t = title.toLowerCase();
-  if (/\bintern(?:ship)?\b|werkstudent|working student|praktikum/.test(t)) return "intern";
+  // English, German, Dutch (stagiair) and French (stage, stagiaire, alternance) internship wording.
+  if (
+    /\bintern(?:ship)?\b|werkstudent|working student|praktik(?:um|ant)|stagiai?re?\b|\balternan(?:ce|t)\b|^stage\b|\bstage\s*[-–:(]/.test(
+      t,
+    )
+  )
+    return "intern";
   if (/graduate|\bgrad\b|new grad|entry[- ]level|junior|\bjr\.?\b|trainee|apprentice|\b20\d\d\b/.test(t))
     return "junior";
   if (/head of|director|\bvp\b|vice president|engineering manager|manager/.test(t)) return "manager";

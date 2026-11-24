@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { atsConnector, parseAshby, parseGreenhouse, parseLever, type SeedCompany } from "./ats.js";
 import {
   fetchCanadaLmia,
+  fetchIrelandPermits,
+  parseNetherlandsRegister,
+  parseIrelandPermitRows,
   fetchUkRegisterCsv,
   normalizeOrg,
   parseCsv,
@@ -309,5 +312,78 @@ describe("Canada LMIA register", () => {
     const r = await run(acme(), { jobs: [gh()] }, regs);
     expect(r.jobs).toHaveLength(1);
     expect(r.warnings).toContain("Canada register unavailable (offline).");
+  });
+});
+
+describe("Ireland permits register", () => {
+  const rows: unknown[][] = [
+    [null, "January", "February", "Grand Total"],
+    ["Grand Total", 3798, 2994, 31044],
+    ["Stripe Technology Company Limited", 1, 1, 34],
+    ["Datadog Ireland Limited", 1, null, 4],
+    ["Empty Ltd", null, null, 0],
+  ];
+
+  it("keeps companies with at least one permit; skips header and total rows", () => {
+    expect([...parseIrelandPermitRows(rows)].sort()).toEqual([
+      "datadog ireland limited",
+      "stripe technology company limited",
+    ]);
+  });
+
+  it("falls back to last year when this year's file is not published yet", async () => {
+    const urls: string[] = [];
+    const f: FetchLike = async (url) => {
+      urls.push(url);
+      return url.includes("2026")
+        ? { ok: false, status: 404, json: async () => ({}), text: async () => "" }
+        : {
+            ok: true,
+            status: 200,
+            json: async () => ({}),
+            text: async () => "",
+            arrayBuffer: async () => new ArrayBuffer(1),
+          };
+    };
+    const r = await fetchIrelandPermits(f, { now: new Date("2026-11-25"), read: async () => rows });
+    expect(r.year).toBe(2025);
+    expect(urls.map((u) => u.slice(-9))).toEqual(["2026.xlsx", "2025.xlsx"]);
+  });
+
+  it("an Irish job at a permit-holding employer gets Ireland-specific evidence", async () => {
+    const co: SeedCompany = {
+      name: "Stripe",
+      ats: "greenhouse",
+      token: "stripe",
+      register: { IE: ["Stripe Technology Company Limited"] },
+    };
+    const regs = async () => new Map([["IE", new Set([normalizeOrg("Stripe Technology Company Limited")])]]);
+    const { jobs } = await run(co, { jobs: [gh({ location: { name: "Dublin, Ireland" } })] }, regs);
+    expect(jobs[0]).toMatchObject({ country: "IE", sponsorship: { status: "confirmed_register" } });
+    expect(jobs[0]!.sponsorship.evidence).toMatch(/Irish employment permits/);
+  });
+});
+
+describe("Netherlands IND register", () => {
+  const page =
+    "<table><tr><th>Organisation</th><th>KVK (Chamber of Commerce) number</th></tr><tr><td>Filler 0 B.V.</td><td>0</td></tr><tr><td>Filler 1 B.V.</td><td>1</td></tr><tr><td>Filler 2 B.V.</td><td>2</td></tr><tr><td>Filler 3 B.V.</td><td>3</td></tr><tr><td>Filler 4 B.V.</td><td>4</td></tr><tr><td>Filler 5 B.V.</td><td>5</td></tr><tr><td>Filler 6 B.V.</td><td>6</td></tr><tr><td>Filler 7 B.V.</td><td>7</td></tr><tr><td>Filler 8 B.V.</td><td>8</td></tr><tr><td>Filler 9 B.V.</td><td>9</td></tr><tr><td>Filler 10 B.V.</td><td>10</td></tr><tr><td>Filler 11 B.V.</td><td>11</td></tr><tr><td>Filler 12 B.V.</td><td>12</td></tr><tr><td>Filler 13 B.V.</td><td>13</td></tr><tr><td>Filler 14 B.V.</td><td>14</td></tr><tr><td>Filler 15 B.V.</td><td>15</td></tr><tr><td>Filler 16 B.V.</td><td>16</td></tr><tr><td>Filler 17 B.V.</td><td>17</td></tr><tr><td>Filler 18 B.V.</td><td>18</td></tr><tr><td>Filler 19 B.V.</td><td>19</td></tr><tr><td>Filler 20 B.V.</td><td>20</td></tr><tr><td>Filler 21 B.V.</td><td>21</td></tr><tr><td>Filler 22 B.V.</td><td>22</td></tr><tr><td>Filler 23 B.V.</td><td>23</td></tr><tr><td>Filler 24 B.V.</td><td>24</td></tr><tr><td>Filler 25 B.V.</td><td>25</td></tr><tr><td>Filler 26 B.V.</td><td>26</td></tr><tr><td>Filler 27 B.V.</td><td>27</td></tr><tr><td>Filler 28 B.V.</td><td>28</td></tr><tr><td>Filler 29 B.V.</td><td>29</td></tr><tr><td>Filler 30 B.V.</td><td>30</td></tr><tr><td>Filler 31 B.V.</td><td>31</td></tr><tr><td>Filler 32 B.V.</td><td>32</td></tr><tr><td>Filler 33 B.V.</td><td>33</td></tr><tr><td>Filler 34 B.V.</td><td>34</td></tr><tr><td>Filler 35 B.V.</td><td>35</td></tr><tr><td>Filler 36 B.V.</td><td>36</td></tr><tr><td>Filler 37 B.V.</td><td>37</td></tr><tr><td>Filler 38 B.V.</td><td>38</td></tr><tr><td>Filler 39 B.V.</td><td>39</td></tr><tr><td>Filler 40 B.V.</td><td>40</td></tr><tr><td>Filler 41 B.V.</td><td>41</td></tr><tr><td>Filler 42 B.V.</td><td>42</td></tr><tr><td>Filler 43 B.V.</td><td>43</td></tr><tr><td>Filler 44 B.V.</td><td>44</td></tr><tr><td>Filler 45 B.V.</td><td>45</td></tr><tr><td>Filler 46 B.V.</td><td>46</td></tr><tr><td>Filler 47 B.V.</td><td>47</td></tr><tr><td>Filler 48 B.V.</td><td>48</td></tr><tr><td>Filler 49 B.V.</td><td>49</td></tr><tr><td>Filler 50 B.V.</td><td>50</td></tr><tr><td>Filler 51 B.V.</td><td>51</td></tr><tr><td>Filler 52 B.V.</td><td>52</td></tr><tr><td>Filler 53 B.V.</td><td>53</td></tr><tr><td>Filler 54 B.V.</td><td>54</td></tr><tr><td>Filler 55 B.V.</td><td>55</td></tr><tr><td>Filler 56 B.V.</td><td>56</td></tr><tr><td>Filler 57 B.V.</td><td>57</td></tr><tr><td>Filler 58 B.V.</td><td>58</td></tr><tr><td>Filler 59 B.V.</td><td>59</td></tr><tr><td>Filler 60 B.V.</td><td>60</td></tr><tr><td>Filler 61 B.V.</td><td>61</td></tr><tr><td>Filler 62 B.V.</td><td>62</td></tr><tr><td>Filler 63 B.V.</td><td>63</td></tr><tr><td>Filler 64 B.V.</td><td>64</td></tr><tr><td>Filler 65 B.V.</td><td>65</td></tr><tr><td>Filler 66 B.V.</td><td>66</td></tr><tr><td>Filler 67 B.V.</td><td>67</td></tr><tr><td>Filler 68 B.V.</td><td>68</td></tr><tr><td>Filler 69 B.V.</td><td>69</td></tr><tr><td>Filler 70 B.V.</td><td>70</td></tr><tr><td>Filler 71 B.V.</td><td>71</td></tr><tr><td>Filler 72 B.V.</td><td>72</td></tr><tr><td>Filler 73 B.V.</td><td>73</td></tr><tr><td>Filler 74 B.V.</td><td>74</td></tr><tr><td>Filler 75 B.V.</td><td>75</td></tr><tr><td>Filler 76 B.V.</td><td>76</td></tr><tr><td>Filler 77 B.V.</td><td>77</td></tr><tr><td>Filler 78 B.V.</td><td>78</td></tr><tr><td>Filler 79 B.V.</td><td>79</td></tr><tr><td>Filler 80 B.V.</td><td>80</td></tr><tr><td>Filler 81 B.V.</td><td>81</td></tr><tr><td>Filler 82 B.V.</td><td>82</td></tr><tr><td>Filler 83 B.V.</td><td>83</td></tr><tr><td>Filler 84 B.V.</td><td>84</td></tr><tr><td>Filler 85 B.V.</td><td>85</td></tr><tr><td>Filler 86 B.V.</td><td>86</td></tr><tr><td>Filler 87 B.V.</td><td>87</td></tr><tr><td>Filler 88 B.V.</td><td>88</td></tr><tr><td>Filler 89 B.V.</td><td>89</td></tr><tr><td>Filler 90 B.V.</td><td>90</td></tr><tr><td>Filler 91 B.V.</td><td>91</td></tr><tr><td>Filler 92 B.V.</td><td>92</td></tr><tr><td>Filler 93 B.V.</td><td>93</td></tr><tr><td>Filler 94 B.V.</td><td>94</td></tr><tr><td>Filler 95 B.V.</td><td>95</td></tr><tr><td>Filler 96 B.V.</td><td>96</td></tr><tr><td>Filler 97 B.V.</td><td>97</td></tr><tr><td>Filler 98 B.V.</td><td>98</td></tr><tr><td>Filler 99 B.V.</td><td>99</td></tr><tr><td>Filler 100 B.V.</td><td>100</td></tr><tr><td>Filler 101 B.V.</td><td>101</td></tr><tr><td>Filler 102 B.V.</td><td>102</td></tr><tr><td>Filler 103 B.V.</td><td>103</td></tr><tr><td>Filler 104 B.V.</td><td>104</td></tr><tr><td>Filler 105 B.V.</td><td>105</td></tr><tr><td>Filler 106 B.V.</td><td>106</td></tr><tr><td>Filler 107 B.V.</td><td>107</td></tr><tr><td>Filler 108 B.V.</td><td>108</td></tr><tr><td>Filler 109 B.V.</td><td>109</td></tr><tr><td>Filler 110 B.V.</td><td>110</td></tr><tr><td>Filler 111 B.V.</td><td>111</td></tr><tr><td>Filler 112 B.V.</td><td>112</td></tr><tr><td>Filler 113 B.V.</td><td>113</td></tr><tr><td>Filler 114 B.V.</td><td>114</td></tr><tr><td>Filler 115 B.V.</td><td>115</td></tr><tr><td>Filler 116 B.V.</td><td>116</td></tr><tr><td>Filler 117 B.V.</td><td>117</td></tr><tr><td>Filler 118 B.V.</td><td>118</td></tr><tr><td>Filler 119 B.V.</td><td>119</td></tr><tr><td>Adyen N.V.</td><td>34259528</td></tr><tr><td>&quot;AAE&quot; Advanced &amp; Co B.V.</td><td>1</td></tr></table>";
+
+  it("reads organisation names from the register table, decoding entities and skipping the header", () => {
+    const names = parseNetherlandsRegister(page);
+    expect(names.has("adyen n.v.")).toBe(true);
+    expect(names.has('"aae" advanced & co b.v.')).toBe(true);
+    expect(names.has("organisation")).toBe(false);
+  });
+
+  it("rejects a page that does not look like the register", () => {
+    expect(() => parseNetherlandsRegister("<table><tr><td>Only one</td></tr></table>")).toThrow(/too few/);
+  });
+
+  it("a Dutch job at a recognised sponsor gets Netherlands-specific evidence", async () => {
+    const co: SeedCompany = { name: "Adyen", ats: "greenhouse", token: "adyen", register: { NL: ["Adyen N.V."] } };
+    const regs = async () => new Map([["NL", new Set([normalizeOrg("Adyen N.V.")])]]);
+    const { jobs } = await run(co, { jobs: [gh({ location: { name: "Amsterdam" } })] }, regs);
+    expect(jobs[0]).toMatchObject({ country: "NL", sponsorship: { status: "confirmed_register" } });
+    expect(jobs[0]!.sponsorship.evidence).toMatch(/IND recognised sponsor/);
   });
 });

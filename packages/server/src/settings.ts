@@ -31,6 +31,8 @@ const SponsorshipSchema = z.object({
 export const SettingsSchema = z.object({
   /** Enabled destination countries (ISO alpha-2); defaults come from data/countries/*.json. */
   countries: z.array(z.string().length(2)).default([]),
+  /** YYYY-MM-DD the country list was last checked for newly added countries (see reconcileNewCountries). */
+  countriesReviewedAt: z.string().optional(),
   search: SearchSchema.default(() => SearchSchema.parse({})),
   sponsorship: SponsorshipSchema.default(() => SponsorshipSchema.parse({})),
   /** Source ids (see packages/server/src/connectors.ts) the user switched off. */
@@ -57,4 +59,21 @@ export function updateSettings(db: Db, enabledCountries: string[], patch: Partia
   const next = SettingsSchema.parse({ ...loadSettings(db, enabledCountries), ...patch });
   putSetting(db, KEY, next);
   return next;
+}
+
+/**
+ * Countries added in an app update (catalog entries with `since`) would stay invisible to existing users, whose
+ * stored country list predates them. On startup, add every newly available, enabled-by-default country the user has
+ * not been offered yet, once. Afterwards the user's choice wins: unticking a country is never undone.
+ */
+export function reconcileNewCountries(
+  s: Settings,
+  added: { code: string; since: string; defaultEnabled: boolean }[],
+  today: string,
+): { settings: Settings; addedCodes: string[] } {
+  const reviewed = s.countriesReviewedAt ?? "0000-00-00";
+  const addedCodes = added
+    .filter((c) => c.defaultEnabled && c.since > reviewed && !s.countries.includes(c.code))
+    .map((c) => c.code);
+  return { settings: { ...s, countries: [...s.countries, ...addedCodes], countriesReviewedAt: today }, addedCodes };
 }
