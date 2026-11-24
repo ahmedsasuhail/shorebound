@@ -58,17 +58,62 @@ export const SKILLS: Record<string, RegExp> = {
 
 /** Canonical skills found in text, in taxonomy order. */
 export function findSkills(text: string): string[] {
-  return Object.entries(SKILLS).filter(([, re]) => re.test(text)).map(([k]) => k);
+  return Object.entries(SKILLS)
+    .filter(([, re]) => re.test(text))
+    .map(([k]) => k);
 }
 
 export const FRONTEND = new Set(["react", "next.js", "angular", "vue", "html", "css", "javascript", "typescript"]);
-export const BACKEND = new Set(["node.js", "nestjs", "express", "java", "kotlin", "go", "python", "c#", "php", "ruby", "scala", "rust", "graphql", "rest api", "sql", "postgresql", "mysql", "mongodb", "redis", "kafka", "rabbitmq", "microservices"]);
+export const BACKEND = new Set([
+  "node.js",
+  "nestjs",
+  "express",
+  "java",
+  "kotlin",
+  "go",
+  "python",
+  "c#",
+  "php",
+  "ruby",
+  "scala",
+  "rust",
+  "graphql",
+  "rest api",
+  "sql",
+  "postgresql",
+  "mysql",
+  "mongodb",
+  "redis",
+  "kafka",
+  "rabbitmq",
+  "microservices",
+]);
 
 /**
  * Languages and frameworks define a stack. Supporting skills (databases, cloud, tooling) appear in
  * almost every posting, so they must not drive a match on their own.
  */
 export const CORE_SKILLS = new Set([
-  "javascript", "typescript", "python", "java", "kotlin", "go", "rust", "c#", "c++", "php", "ruby", "scala", "swift",
-  "react", "react native", "next.js", "angular", "vue", "node.js", "nestjs", "express", "graphql",
+  "javascript",
+  "typescript",
+  "python",
+  "java",
+  "kotlin",
+  "go",
+  "rust",
+  "c#",
+  "c++",
+  "php",
+  "ruby",
+  "scala",
+  "swift",
+  "react",
+  "react native",
+  "next.js",
+  "angular",
+  "vue",
+  "node.js",
+  "nestjs",
+  "express",
+  "graphql",
 ]);

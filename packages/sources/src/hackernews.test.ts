@@ -7,16 +7,31 @@ const since = new Date(now.getTime() - 7 * 86_400_000);
 const iso = (d: number) => new Date(now.getTime() - d * 86_400_000).toISOString();
 
 const hit = (id: string, text: string, daysAgo = 1, parent = "100") => ({
-  objectID: id, created_at: iso(daysAgo), created_at_i: Math.floor((now.getTime() - daysAgo * 86_400_000) / 1000),
-  author: "a", parent_id: parent, story_id: "100", comment_text: text,
+  objectID: id,
+  created_at: iso(daysAgo),
+  created_at_i: Math.floor((now.getTime() - daysAgo * 86_400_000) / 1000),
+  author: "a",
+  parent_id: parent,
+  story_id: "100",
+  comment_text: text,
 });
 
-const api = (comments: unknown[]): FetchLike => async (url) => ({
-  ok: true, status: 200, text: async () => "",
-  json: async () => (url.includes("author_whoishiring")
-    ? { hits: [{ objectID: "100", title: "Ask HN: Who is hiring? (November 2026)" }, { objectID: "99", title: "Ask HN: Who wants to be hired? (November 2026)" }] }
-    : { hits: comments }),
-});
+const api =
+  (comments: unknown[]): FetchLike =>
+  async (url) => ({
+    ok: true,
+    status: 200,
+    text: async () => "",
+    json: async () =>
+      url.includes("author_whoishiring")
+        ? {
+            hits: [
+              { objectID: "100", title: "Ask HN: Who is hiring? (November 2026)" },
+              { objectID: "99", title: "Ask HN: Who wants to be hired? (November 2026)" },
+            ],
+          }
+        : { hits: comments },
+  });
 const run = (comments: unknown[]) => hackerNews.fetchJobs({ fetch: api(comments), since, now, delayMs: 0 });
 
 describe("parsePost", () => {
@@ -55,7 +70,13 @@ describe("hackerNews connector", () => {
       hit("6", "Echo | Software Engineer | London | No visa sponsorship"),
     ]);
     expect(jobs.map((j) => j.sourceJobId)).toEqual(["1"]);
-    expect(jobs[0]).toMatchObject({ company: "Acme", title: "Senior Backend Engineer", country: "GB", sourceId: "hackernews", url: "https://news.ycombinator.com/item?id=1" });
+    expect(jobs[0]).toMatchObject({
+      company: "Acme",
+      title: "Senior Backend Engineer",
+      country: "GB",
+      sourceId: "hackernews",
+      url: "https://news.ycombinator.com/item?id=1",
+    });
     expect(jobs[0]!.sponsorship.status).toBe("confirmed_text");
     expect(jobs[0]!.relocation.status).toBe("offered");
     expect(stats).toMatchObject({ seen: 5, notSoftware: 1, unknownCountry: 1, noSponsorshipSignal: 2 });
@@ -68,7 +89,9 @@ describe("hackerNews connector", () => {
   });
 
   it("marks remote posts and decodes HTML entities", async () => {
-    const { jobs } = await run([hit("1", "Acme | Software Engineer | Remote (US) | VISA<p>Tom &amp; Jerry&#x27;s stack")]);
+    const { jobs } = await run([
+      hit("1", "Acme | Software Engineer | Remote (US) | VISA<p>Tom &amp; Jerry&#x27;s stack"),
+    ]);
     expect(jobs[0]).toMatchObject({ country: "US", workMode: "remote" });
     expect(jobs[0]!.description).toContain("Tom & Jerry's stack");
   });
@@ -76,10 +99,26 @@ describe("hackerNews connector", () => {
   it("reports a failing thread as a warning and keeps the rest", async () => {
     let n = 0;
     const f: FetchLike = async (url) => {
-      if (url.includes("author_whoishiring")) return { ok: true, status: 200, text: async () => "", json: async () => ({ hits: [{ objectID: "100", title: "Ask HN: Who is hiring? (November 2026)" }, { objectID: "98", title: "Ask HN: Who is hiring? (October 2026)" }] }) };
+      if (url.includes("author_whoishiring"))
+        return {
+          ok: true,
+          status: 200,
+          text: async () => "",
+          json: async () => ({
+            hits: [
+              { objectID: "100", title: "Ask HN: Who is hiring? (November 2026)" },
+              { objectID: "98", title: "Ask HN: Who is hiring? (October 2026)" },
+            ],
+          }),
+        };
       return ++n === 1
         ? { ok: false, status: 500, text: async () => "", json: async () => ({}) }
-        : { ok: true, status: 200, text: async () => "", json: async () => ({ hits: [hit("1", "Acme | Software Engineer | London | VISA")] }) };
+        : {
+            ok: true,
+            status: 200,
+            text: async () => "",
+            json: async () => ({ hits: [hit("1", "Acme | Software Engineer | London | VISA")] }),
+          };
     };
     const r = await hackerNews.fetchJobs({ fetch: f, since, now, delayMs: 0 });
     expect(r.jobs).toHaveLength(1);

@@ -33,14 +33,18 @@ describe("skills taxonomy", () => {
     expect(s).not.toContain("java");
   });
   it("finds canonical skills from aliases", () => {
-    expect(findSkills("Experience with Golang, k8s and Postgres")).toEqual(expect.arrayContaining(["go", "kubernetes", "postgresql", "sql"]));
+    expect(findSkills("Experience with Golang, k8s and Postgres")).toEqual(
+      expect.arrayContaining(["go", "kubernetes", "postgresql", "sql"]),
+    );
   });
 });
 
 describe("extractProfile", () => {
   const p = extractProfile(RESUME, now);
   it("reads skills, stated years, seniority and families", () => {
-    expect(p.skills).toEqual(expect.arrayContaining(["typescript", "node.js", "nestjs", "react", "aws", "docker", "rabbitmq"]));
+    expect(p.skills).toEqual(
+      expect.arrayContaining(["typescript", "node.js", "nestjs", "react", "aws", "docker", "rabbitmq"]),
+    );
     expect(p.skills).not.toContain("java");
     expect(p.skills).not.toContain("go");
     expect(p.yearsExperience).toBe(7);
@@ -99,7 +103,9 @@ describe("matchScore", () => {
   const p: Profile = extractProfile(RESUME, now);
   const score = (title: string, desc: string) => matchScore(p, analyzeJob(title, desc)).score;
   it("ranks a senior Node/TypeScript backend role high", () => {
-    expect(score("Senior Backend Engineer", "TypeScript, Node.js, NestJS, AWS, Docker, PostgreSQL. 5+ years experience.")).toBeGreaterThanOrEqual(80);
+    expect(
+      score("Senior Backend Engineer", "TypeScript, Node.js, NestJS, AWS, Docker, PostgreSQL. 5+ years experience."),
+    ).toBeGreaterThanOrEqual(80);
   });
   it("ranks a graduate role low even with matching skills", () => {
     expect(score("Graduate Software Engineer 2027", "React and TypeScript")).toBeLessThan(65);
@@ -108,13 +114,17 @@ describe("matchScore", () => {
     expect(score("Talent Acquisition Specialist", "Recruit engineers")).toBe(5);
   });
   it("penalises roles asking for far more experience", () => {
-    expect(score("Senior Backend Engineer", "Node.js. 12+ years of experience")).toBeLessThan(score("Senior Backend Engineer", "Node.js. 5+ years of experience"));
+    expect(score("Senior Backend Engineer", "Node.js. 12+ years of experience")).toBeLessThan(
+      score("Senior Backend Engineer", "Node.js. 5+ years of experience"),
+    );
   });
   it("one matching skill out of one listed is not a perfect skills score", () => {
     expect(score("Platform QA Chapter Lead", "CI/CD pipelines")).toBeLessThan(75);
   });
   it("prefers matching stack over a different one", () => {
-    expect(score("Senior Software Engineer", "Node.js TypeScript React AWS")).toBeGreaterThan(score("Senior Software Engineer", "Scala Spark Kafka Rust C++"));
+    expect(score("Senior Software Engineer", "Node.js TypeScript React AWS")).toBeGreaterThan(
+      score("Senior Software Engineer", "Scala Spark Kafka Rust C++"),
+    );
   });
 });
 
@@ -142,11 +152,15 @@ describe("relevance: real misses from a live feed must stay out of a full-stack 
   ])("shows: %s", (title, desc) => expect(score(title, desc)).toBeGreaterThanOrEqual(75));
 
   it("incidental supporting skills (SQL, MySQL, observability) do not carry a job", () => {
-    expect(score("Senior Software Engineer", "SQL, MySQL, Redis, observability, Docker, CI/CD")).toBeLessThan(HIDE_BELOW + 10);
+    expect(score("Senior Software Engineer", "SQL, MySQL, Redis, observability, Docker, CI/CD")).toBeLessThan(
+      HIDE_BELOW + 10,
+    );
   });
 
   it("a title naming a language you lack is capped even if the description mentions yours", () => {
-    expect(score("Senior Rust Engineer", "We use Rust. Some TypeScript tooling and React dashboards.")).toBeLessThanOrEqual(40);
+    expect(
+      score("Senior Rust Engineer", "We use Rust. Some TypeScript tooling and React dashboards."),
+    ).toBeLessThanOrEqual(40);
   });
 
   it("explains why: names the stack mismatch", () => {
@@ -164,7 +178,14 @@ describe("profile families need real evidence", () => {
 });
 
 describe("confidence", () => {
-  const base = { ease: 4, postedAt: new Date(now.getTime() - 3_600_000), now, descriptionLength: 2000, hasCompany: true, text: "Great team." };
+  const base = {
+    ease: 4,
+    postedAt: new Date(now.getTime() - 3_600_000),
+    now,
+    descriptionLength: 2000,
+    hasCompany: true,
+    text: "Great team.",
+  };
   it("explicit sponsorship + easy country + fresh posting → high, with partial coverage", () => {
     const r = confidenceScore({ ...base, sponsorship: "confirmed_text" });
     expect(r.band).toBe("high");
@@ -172,13 +193,19 @@ describe("confidence", () => {
     expect(r.factors.find((f) => f.id === "company_reputation")?.value).toBeNull();
   });
   it("visa-filtered board scores below explicit text", () => {
-    expect(confidenceScore({ ...base, sponsorship: "visa_source" }).score).toBeLessThan(confidenceScore({ ...base, sponsorship: "confirmed_text" }).score);
+    expect(confidenceScore({ ...base, sponsorship: "visa_source" }).score).toBeLessThan(
+      confidenceScore({ ...base, sponsorship: "confirmed_text" }).score,
+    );
   });
   it("caps explicit no-sponsorship at 5", () => {
     expect(confidenceScore({ ...base, sponsorship: "negative" }).score).toBeLessThanOrEqual(5);
   });
   it("hard scam flags cap at 10", () => {
-    const r = confidenceScore({ ...base, sponsorship: "confirmed_text", text: "Pay the visa processing fee of Rs 50,000 to confirm." });
+    const r = confidenceScore({
+      ...base,
+      sponsorship: "confirmed_text",
+      text: "Pay the visa processing fee of Rs 50,000 to confirm.",
+    });
     expect(r.score).toBeLessThanOrEqual(10);
     expect(r.flags.map((f) => f.id)).toContain("fee_demanded");
   });
@@ -190,6 +217,8 @@ describe("confidence", () => {
     ["Share your passport copy and Aadhaar to proceed", "early_sensitive_data_request"],
   ])("detects: %s", (text, id) => expect(detectScams(text).map((f) => f.id)).toContain(id));
   it("does not flag ordinary postings", () => {
-    expect(detectScams("We offer visa sponsorship, relocation support and a learning budget. Apply via our careers page.")).toEqual([]);
+    expect(
+      detectScams("We offer visa sponsorship, relocation support and a learning budget. Apply via our careers page."),
+    ).toEqual([]);
   });
 });

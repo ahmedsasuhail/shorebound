@@ -1,7 +1,7 @@
 import type { RelocationStatus } from "../job.js";
 
 /**
- * Rule-based sponsorship & relocation classifier (PLAN.md §5.1–5.2).
+ * Rule-based sponsorship & relocation classifier (PLAN.md, "Sponsorship").
  *
  * Text is split into clauses. Each clause gets a verdict per dimension
  * (negative rules first, then hedges, then positives). The LAST definite verdict wins,
@@ -33,7 +33,10 @@ const VISA_TERM = String.raw`(?:visas?|work[- ]?permits?|employment pass|employm
 const SPONSOR_NEG: RegExp[] = [
   new RegExp(String.raw`\b${NEGATION}\b(?:\W+\w+){0,5}?\W+(?:visa\s+)?sponsor`, "i"),
   // "no visa support", "cannot offer visa assistance", "no work permit help"
-  new RegExp(String.raw`\b${NEGATION}\b(?:\W+\w+){0,4}?\W+(?:visa|work[- ]?permit|immigration)\s+(?:support|assistance|help|handling)\b`, "i"),
+  new RegExp(
+    String.raw`\b${NEGATION}\b(?:\W+\w+){0,4}?\W+(?:visa|work[- ]?permit|immigration)\s+(?:support|assistance|help|handling)\b`,
+    "i",
+  ),
   /\bsponsor\w*\s+(?:is\s+|are\s+|will\s+)?(?:not|no longer)\s+(?:be\s+)?(?:available|provided|offered|possible|supported)/i,
   /\b(?:requir|need)\w*\s+(?:visa\s+)?sponsorship\b[^.]{0,40}\b(?:not|cannot|ineligible|unable)\b/i,
   /\b(?:must|should|need to|required to)\s+(?:\w+\s+){0,3}(?:have|hold|possess)\s+(?:\w+\s+){0,3}right to work\b/i,
@@ -65,7 +68,10 @@ const SPONSOR_POS: RegExp[] = [
   /\b(?:visa|work[- ]?permit|immigration)\s+(?:sponsorship|support|assistance)\b/i,
   /\blicensed sponsor\b/i,
   new RegExp(String.raw`\bsponsor(?:s|ed|ing)?\b[^.]{0,40}\b${VISA_TERM}`, "i"),
-  new RegExp(String.raw`\b${VISA_TERM}\b[^.]{0,40}\b(?:sponsored|provided|arranged|handled|covered|supported|processed)\b`, "i"),
+  new RegExp(
+    String.raw`\b${VISA_TERM}\b[^.]{0,40}\b(?:sponsored|provided|arranged|handled|covered|supported|processed)\b`,
+    "i",
+  ),
   new RegExp(String.raw`\b(?:handle|arrange|process|take care of)\w*\s+(?:\w+\s+){0,2}${VISA_TERM}`, "i"),
   /(?<!event |conference |meetup |hackathon |corporate |brand |sports |marketing )\bsponsorship\b/i,
   // German
@@ -90,7 +96,9 @@ const RELOC_NEG: RegExp[] = [
   /\brelocation\s+(?:is\s+|will\s+)?not\s+(?:be\s+)?(?:provided|offered|available|covered|supported)/i,
 ];
 
-const RELOC_HEDGE: RegExp[] = [/\b(?:may|might|possible|possibly|optional|depending|negotiable|case[- ]by[- ]case|subject to)\b/i];
+const RELOC_HEDGE: RegExp[] = [
+  /\b(?:may|might|possible|possibly|optional|depending|negotiable|case[- ]by[- ]case|subject to)\b/i,
+];
 
 const HOUSING = String.raw`(?:temporary\s+)?(?:housing|accommodation|flights?|air\s*tickets?)`;
 const RELOC_POS: RegExp[] = [
@@ -123,9 +131,23 @@ function relocationVerdict(clause: string): Verdict {
 // ── Structured & country-specific forms (checked on the whole text) ─────────
 
 const COUNTRY_ALIASES: Record<string, string> = {
-  uk: "GB", "united kingdom": "GB", britain: "GB", us: "US", usa: "US", "united states": "US",
-  canada: "CA", ireland: "IE", germany: "DE", uae: "AE", dubai: "AE", "saudi arabia": "SA", saudi: "SA",
-  qatar: "QA", singapore: "SG", malaysia: "MY", thailand: "TH",
+  uk: "GB",
+  "united kingdom": "GB",
+  britain: "GB",
+  us: "US",
+  usa: "US",
+  "united states": "US",
+  canada: "CA",
+  ireland: "IE",
+  germany: "DE",
+  uae: "AE",
+  dubai: "AE",
+  "saudi arabia": "SA",
+  saudi: "SA",
+  qatar: "QA",
+  singapore: "SG",
+  malaysia: "MY",
+  thailand: "TH",
 };
 
 function structured(text: string, label: RegExp): "yes" | "no" | null {
@@ -156,7 +178,8 @@ function clauses(text: string): string[] {
 }
 
 /** "…could not sponsor visas, but now we can." — a bare affirmation reverses the previous negative. */
-const BARE_AFFIRMATION = /^(?:and\s+)?(?:now\s+)?(?:we|they|the company)\s+(?:now\s+)?(?:can|do|will|does)(?:\s+now)?[.!]?$/i;
+const BARE_AFFIRMATION =
+  /^(?:and\s+)?(?:now\s+)?(?:we|they|the company)\s+(?:now\s+)?(?:can|do|will|does)(?:\s+now)?[.!]?$/i;
 
 function decide(list: string[], verdictFn: (c: string) => Verdict) {
   let definite: { v: "pos" | "neg"; clause: string } | null = null;

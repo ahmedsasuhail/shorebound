@@ -9,7 +9,7 @@ export interface MatchResult {
 const W = { family: 25, skills: 40, seniority: 20, years: 15 } as const;
 
 /**
- * How well a job fits the user's profile (separate from confidence; PLAN.md §5.4).
+ * How well a job fits the user's profile (separate from confidence; PLAN.md, "Match score").
  *
  * Design: the TITLE and the CORE STACK (languages/frameworks) decide. Supporting skills
  * (SQL, AWS, Docker, CI/CD...) appear in almost every posting, so they only add a little.
@@ -24,7 +24,8 @@ export function matchScore(p: Profile, a: JobAnalysis): MatchResult {
   let fam: number;
   const f = a.family ?? "general";
   const mine = new Set(p.families);
-  if (f === "general") fam = 0.7; // "Software Engineer": fits if the stack does
+  if (f === "general")
+    fam = 0.7; // "Software Engineer": fits if the stack does
   else if (mine.has(f)) fam = 1;
   else if (f === "fullstack" && (mine.has("frontend") || mine.has("backend"))) fam = 0.8;
   else if ((f === "frontend" || f === "backend") && mine.has("fullstack")) fam = 1;

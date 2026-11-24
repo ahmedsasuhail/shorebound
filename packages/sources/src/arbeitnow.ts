@@ -75,9 +75,7 @@ function normalize(raw: RawJob, postedAt: Date, country: string): Job {
         ? { status: "confirmed_text" as const, evidence: c.sponsorshipEvidence }
         : { status: "visa_source" as const, evidence: "Listed under Arbeitnow's visa-sponsorship filter." };
   const relocation =
-    c.relocation === "none"
-      ? { status: "none" as const }
-      : { status: c.relocation, evidence: c.relocationEvidence };
+    c.relocation === "none" ? { status: "none" as const } : { status: c.relocation, evidence: c.relocationEvidence };
 
   return {
     id: `arbeitnow:${raw.slug}`,

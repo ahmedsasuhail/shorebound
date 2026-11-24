@@ -37,7 +37,9 @@ interface RawJob {
 /** "ACME PTE. LTD." → "Acme Pte. Ltd." (the portal stores many names in capitals). */
 export function tidyCompany(name: string): string {
   const n = name.trim();
-  return n === n.toUpperCase() && /[A-Z]{3}/.test(n) ? n.toLowerCase().replace(/(^|[\s(/&-])([a-z])/g, (_, a: string, b: string) => a + b.toUpperCase()) : n;
+  return n === n.toUpperCase() && /[A-Z]{3}/.test(n)
+    ? n.toLowerCase().replace(/(^|[\s(/&-])([a-z])/g, (_, a: string, b: string) => a + b.toUpperCase())
+    : n;
 }
 
 function monthlyMax(s: RawJob["salary"]): number | null {
@@ -100,19 +102,38 @@ const sgDate = (d?: string) => {
 function toJob(raw: RawJob, ctx: FetchContext, stats: FetchResult["stats"]): Job | "old" | null {
   const listed = sgDate(raw.metadata?.newPostingDate) ?? sgDate(raw.metadata?.originalPostingDate);
   const postedAt = sgDate(raw.metadata?.originalPostingDate) ?? listed;
-  if (!listed || !postedAt || postedAt > new Date(ctx.now.getTime() + 86_400_000)) { stats.tooOld++; return null; }
-  if (listed < ctx.since) { stats.tooOld++; return "old"; }
-  if (postedAt < ctx.since) { stats.tooOld++; return null; }
-  if (!analyzeJob(raw.title, "").isSoftware) { stats.notSoftware = (stats.notSoftware ?? 0) + 1; return null; }
+  if (!listed || !postedAt || postedAt > new Date(ctx.now.getTime() + 86_400_000)) {
+    stats.tooOld++;
+    return null;
+  }
+  if (listed < ctx.since) {
+    stats.tooOld++;
+    return "old";
+  }
+  if (postedAt < ctx.since) {
+    stats.tooOld++;
+    return null;
+  }
+  if (!analyzeJob(raw.title, "").isSoftware) {
+    stats.notSoftware = (stats.notSoftware ?? 0) + 1;
+    return null;
+  }
 
   const description = htmlToText(raw.description ?? "");
   const cls = classify(description, { country: "SG" });
   let sponsorship: Job["sponsorship"];
-  if (cls.sponsorship === "negative") { stats.noSponsorshipSignal = (stats.noSponsorshipSignal ?? 0) + 1; return null; }
-  if (cls.sponsorship === "confirmed_text") sponsorship = { status: "confirmed_text", evidence: cls.sponsorshipEvidence };
+  if (cls.sponsorship === "negative") {
+    stats.noSponsorshipSignal = (stats.noSponsorshipSignal ?? 0) + 1;
+    return null;
+  }
+  if (cls.sponsorship === "confirmed_text")
+    sponsorship = { status: "confirmed_text", evidence: cls.sponsorshipEvidence };
   else {
     const salary = monthlyMax(raw.salary);
-    if (salary === null || salary < EP_QUALIFYING_MONTHLY_SGD) { stats.noSponsorshipSignal = (stats.noSponsorshipSignal ?? 0) + 1; return null; }
+    if (salary === null || salary < EP_QUALIFYING_MONTHLY_SGD) {
+      stats.noSponsorshipSignal = (stats.noSponsorshipSignal ?? 0) + 1;
+      return null;
+    }
     sponsorship = {
       status: "possible",
       evidence: `Posted salary up to S$${salary.toLocaleString("en-SG")}/month is above the Employment Pass qualifying salary (S$${EP_QUALIFYING_MONTHLY_SGD.toLocaleString("en-SG")} for a ~30-year-old from Jan 2027), so the role can be EP-eligible. The posting does not say the employer sponsors; ask before applying.`,
@@ -132,6 +153,7 @@ function toJob(raw: RawJob, ctx: FetchContext, stats: FetchResult["stats"]): Job
     postedAt,
     description,
     sponsorship,
-    relocation: cls.relocation === "none" ? { status: "none" } : { status: cls.relocation, evidence: cls.relocationEvidence },
+    relocation:
+      cls.relocation === "none" ? { status: "none" } : { status: cls.relocation, evidence: cls.relocationEvidence },
   };
 }

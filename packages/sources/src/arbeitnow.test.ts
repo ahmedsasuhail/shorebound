@@ -48,7 +48,12 @@ describe("arbeitnow connector", () => {
     let calls = 0;
     const paged: FetchLike = async () => {
       calls++;
-      return { ok: true, status: 200, json: async () => ({ ...fixture, links: { next: "https://x/next" } }), text: async () => "" };
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ ...fixture, links: { next: "https://x/next" } }),
+        text: async () => "",
+      };
     };
     await arbeitnow.fetchJobs({ fetch: paged, since, now, delayMs: 0 });
     expect(calls).toBe(1);
@@ -57,9 +62,17 @@ describe("arbeitnow connector", () => {
 
 describe("inferCountry", () => {
   it.each([
-    ["London", "GB"], ["Berlin, Germany", "DE"], ["Zürich", "CH"], ["Zurich, Zürich, Switzerland", "CH"],
-    ["Berlin Office", "DE"], ["Munich", "DE"], ["Amsterdam", "NL"], ["Cambridge, United States", "US"],
-    ["Dublin", "IE"], ["Dubai", "AE"], ["San Francisco, CA", "US"],
+    ["London", "GB"],
+    ["Berlin, Germany", "DE"],
+    ["Zürich", "CH"],
+    ["Zurich, Zürich, Switzerland", "CH"],
+    ["Berlin Office", "DE"],
+    ["Munich", "DE"],
+    ["Amsterdam", "NL"],
+    ["Cambridge, United States", "US"],
+    ["Dublin", "IE"],
+    ["Dubai", "AE"],
+    ["San Francisco, CA", "US"],
   ])("%s → %s", (loc, code) => expect(inferCountry(loc)).toBe(code));
 
   it("returns undefined when unknown or empty", () => {
@@ -71,6 +84,8 @@ describe("inferCountry", () => {
 
 describe("htmlToText", () => {
   it("strips tags and keeps sentence breaks between blocks", () => {
-    expect(htmlToText("<p>We cannot sponsor</p><p>Free lunch &amp; gym</p>")).toBe("We cannot sponsor. Free lunch & gym.");
+    expect(htmlToText("<p>We cannot sponsor</p><p>Free lunch &amp; gym</p>")).toBe(
+      "We cannot sponsor. Free lunch & gym.",
+    );
   });
 });

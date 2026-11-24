@@ -1,6 +1,9 @@
 import type { Job } from "@shorebound/core";
 
-export type FetchLike = (url: string, init?: { headers?: Record<string, string> }) => Promise<{
+export type FetchLike = (
+  url: string,
+  init?: { headers?: Record<string, string> },
+) => Promise<{
   ok: boolean;
   status: number;
   json(): Promise<unknown>;
