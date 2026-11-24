@@ -69,6 +69,11 @@ export const cases: Case[] = [
   { text: "Visasponsoring möglich.", country: "DE", sponsorship: "confirmed_text", relocation: "none", why: "German short" },
   { text: "Gültige Arbeitserlaubnis für Deutschland erforderlich.", country: "DE", sponsorship: "negative", relocation: "none", why: "German negative" },
   { text: "Kein Visa-Sponsoring.", country: "DE", sponsorship: "negative", relocation: "none", why: "German negative, short" },
+  // Found on live Hacker News data: "support"/"assistance" wording was read as positive.
+  { text: "Tokyo, Japan (no visa support, US/Canada remote available)", sponsorship: "negative", relocation: "none", why: "real HN false positive: 'no visa support'" },
+  { text: "Unfortunately we cannot offer visa assistance.", sponsorship: "negative", relocation: "none", why: "negated 'visa assistance'" },
+  { text: "We do not provide work permit support for this role.", sponsorship: "negative", relocation: "none", why: "negated 'work permit support'" },
+  { text: "Visa support and relocation assistance are provided.", sponsorship: "confirmed_text", relocation: "offered", why: "positive 'visa support' still works" },
   { text: "التأشيرة والسكن وتذكرة الطيران مقدمة من الشركة", country: "SA", sponsorship: "confirmed_text", relocation: "offered", why: "Arabic: visa, housing and air ticket provided by the company" },
 
   // ── Presence / residency requirements (employer expects you to already be there) ──

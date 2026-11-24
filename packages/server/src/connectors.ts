@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
-  arbeitnow, atsConnector, fetchUkRegisterCsv, parseUkRegister,
+  arbeitnow, atsConnector, fetchUkRegisterCsv, hackerNews, parseUkRegister,
   type FetchLike, type RegisterIndex, type SeedCompany, type SourceConnector,
 } from "@shorebound/sources";
 import { z } from "zod";
@@ -49,5 +49,5 @@ export function ukRegisterLoader(appData: string, fetchFn: FetchLike, now = () =
 
 export function buildConnectors(o: { dataDir: string; appData: string; fetchImpl?: typeof fetch }): SourceConnector[] {
   const f = (o.fetchImpl ?? fetch) as unknown as FetchLike;
-  return [arbeitnow, atsConnector(loadSeed(o.dataDir), ukRegisterLoader(o.appData, f))];
+  return [arbeitnow, hackerNews, atsConnector(loadSeed(o.dataDir), ukRegisterLoader(o.appData, f))];
 }
