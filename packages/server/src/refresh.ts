@@ -1,7 +1,7 @@
 import type { SourceConnector } from "@shorebound/sources";
 import type { Db } from "./db.js";
 import { timedFetch } from "./http.js";
-import { pruneJobs, upsertJobs } from "./jobs.js";
+import { pruneJobs, purgeNegative, upsertJobs } from "./jobs.js";
 
 export interface RefreshReport {
   startedAt: string;
@@ -54,5 +54,6 @@ export async function refreshJobs(
     }
   }
   pruneJobs(db, new Date(now.getTime() - 30 * 86_400_000));
+  purgeNegative(db);
   return report;
 }

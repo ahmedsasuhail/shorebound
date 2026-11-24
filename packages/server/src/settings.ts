@@ -10,8 +10,6 @@ const SearchSchema = z.object({
   /** Only jobs posted within this many days (real posting dates). */
   lookbackDays: z.number().int().min(1).max(30).default(7),
   sort: z.enum(["newest", "match", "confidence"]).default("newest"),
-  /** Hide non-software roles and weak matches (requires a profile). */
-  onlyMatching: z.boolean().default(true),
   /** Hide jobs below this match score: Broad 40, Balanced 55, Strict 70. */
   minMatch: z.number().int().min(0).max(100).default(55),
   /** Max jobs per company in the feed so one employer cannot flood it (0 = no cap). */
@@ -19,8 +17,6 @@ const SearchSchema = z.object({
 });
 
 const SponsorshipSchema = z.object({
-  /** Hide jobs whose text rules out sponsorship ("no sponsorship", "must already live there"). */
-  excludeNegative: z.boolean().default(true),
   /** "required": only jobs with employer-paid relocation; "bonus": ranks them higher; "ignore". */
   relocation: z.enum(["required", "bonus", "ignore"]).default("bonus"),
   /**

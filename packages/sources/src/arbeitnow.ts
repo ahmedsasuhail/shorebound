@@ -31,7 +31,7 @@ export const arbeitnow: SourceConnector = {
   id: "arbeitnow",
 
   async fetchJobs(ctx: FetchContext): Promise<FetchResult> {
-    const stats = { requests: 0, seen: 0, tooOld: 0, unknownCountry: 0 };
+    const stats = { requests: 0, seen: 0, tooOld: 0, unknownCountry: 0, noSponsorshipSignal: 0 };
     const jobs: Job[] = [];
     let url: string | null | undefined = ARBEITNOW_URL;
 
@@ -56,7 +56,9 @@ export const arbeitnow: SourceConnector = {
           stats.unknownCountry++;
           continue;
         }
-        jobs.push(normalize(raw, postedAt, country));
+        const job = normalize(raw, postedAt, country);
+        if (job) jobs.push(job);
+        else stats.noSponsorshipSignal++; // explicit "no sponsorship": discarded
       }
       url = reachedOld ? null : body.links?.next;
     }
@@ -64,16 +66,16 @@ export const arbeitnow: SourceConnector = {
   },
 };
 
-function normalize(raw: RawJob, postedAt: Date, country: string): Job {
+/** Returns null when the posting text rules sponsorship out, even though the board's visa filter listed it. */
+function normalize(raw: RawJob, postedAt: Date, country: string): Job | null {
   const description = htmlToText(raw.description);
   const c = classify(description, { country });
-  // The board's visa filter is a source-level signal; explicit text can strengthen or veto it.
+  if (c.sponsorship === "negative") return null;
+  // The board's visa filter is a source-level signal; explicit text strengthens it.
   const sponsorship =
-    c.sponsorship === "negative"
-      ? { status: "negative" as const, evidence: c.sponsorshipEvidence }
-      : c.sponsorship === "confirmed_text"
-        ? { status: "confirmed_text" as const, evidence: c.sponsorshipEvidence }
-        : { status: "visa_source" as const, evidence: "Listed under Arbeitnow's visa-sponsorship filter." };
+    c.sponsorship === "confirmed_text"
+      ? { status: "confirmed_text" as const, evidence: c.sponsorshipEvidence }
+      : { status: "visa_source" as const, evidence: "Listed under Arbeitnow's visa-sponsorship filter." };
   const relocation =
     c.relocation === "none" ? { status: "none" as const } : { status: c.relocation, evidence: c.relocationEvidence };
 

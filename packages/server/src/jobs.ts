@@ -49,10 +49,14 @@ export function pruneJobs(db: Db, before: Date): number {
   return Number(db.prepare("DELETE FROM jobs WHERE posted_at < ?").run(before.toISOString()).changes);
 }
 
+/** Deletes stored jobs whose text rules out sponsorship (older versions kept them hidden). */
+export function purgeNegative(db: Db): number {
+  return Number(db.prepare("DELETE FROM jobs WHERE sponsorship = 'negative'").run().changes);
+}
+
 export interface JobQuery {
   countries?: string[];
   sinceDays?: number;
-  excludeNegative?: boolean;
   relocation?: "offered" | "any";
   q?: string;
   limit?: number;
@@ -73,7 +77,7 @@ export function queryJobs(db: Db, f: JobQuery = {}): JobDTO[] {
     where.push(`country IN (${f.countries.map(() => "?").join(",")})`);
     args.push(...f.countries);
   }
-  if (f.excludeNegative) where.push("sponsorship != 'negative'");
+  where.push("sponsorship != 'negative'"); // explicit "no sponsorship" jobs are never shown
   if (f.relocation === "offered") where.push("relocation = 'offered'");
   if (f.q?.trim()) {
     where.push("(title LIKE ? ESCAPE '\\' OR company LIKE ? ESCAPE '\\')");

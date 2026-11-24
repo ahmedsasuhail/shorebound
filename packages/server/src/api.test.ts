@@ -7,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { buildApp } from "./app.js";
 import { openDb, type Db } from "./db.js";
 import { putSetting } from "./db.js";
-import { upsertJobs } from "./jobs.js";
+import { purgeNegative, upsertJobs } from "./jobs.js";
 
 const dataDir = fileURLToPath(new URL("../../../data", import.meta.url));
 let dir: string;
@@ -19,7 +19,7 @@ const job = (id: string, over: Partial<Job> = {}): Job => ({
   sourceId: "t",
   sourceJobId: id,
   url: "https://x/" + id,
-  title: "Engineer " + id,
+  title: "Senior Backend Engineer " + id,
   company: "Acme",
   country: "DE",
   postedAt: new Date("2026-11-21T12:00:00Z"),
@@ -39,7 +39,7 @@ beforeEach(() => {
       job("old-de", { postedAt: new Date("2026-11-01T12:00:00Z") }),
       job("neg-de", { sponsorship: { status: "negative" } }),
       job("reloc-gb", { country: "GB", relocation: { status: "offered" } }),
-      job("us", { country: "US", title: "Staff Engineer" }),
+      job("us", { country: "US", title: "Staff Software Engineer" }),
     ],
     now,
   );
@@ -58,7 +58,7 @@ const makeWithProfile = async () => {
     url: "/api/profile",
     payload: { skills: ["node.js"], yearsExperience: 7, seniority: "senior", families: ["backend"], title: null },
   });
-  await app.inject({ method: "PUT", url: "/api/settings", payload: { search: { minMatch: 0, onlyMatching: false } } });
+  await app.inject({ method: "PUT", url: "/api/settings", payload: { search: { minMatch: 0 } } });
   return app;
 };
 
@@ -82,11 +82,18 @@ describe("api", () => {
     expect(search).toHaveLength(1);
   });
 
-  it("negatives can be shown on request", async () => {
-    const r = (
-      await (await makeWithProfile()).inject("/api/jobs?countries=DE&sinceDays=30&excludeNegative=false")
-    ).json().jobs;
-    expect(r.map((j: { id: string }) => j.id)).toContain("neg-de");
+  it("explicit no-sponsorship jobs are never returned, even when stored", async () => {
+    const app = await makeWithProfile();
+    const ids = (await app.inject("/api/jobs?countries=DE&sinceDays=30")).json().jobs.map((j: { id: string }) => j.id);
+    expect(ids).not.toContain("neg-de"); // seeded as negative in beforeEach
+  });
+
+  it("refresh purges stored no-sponsorship jobs", async () => {
+    const before = Number(
+      (db.prepare("SELECT COUNT(*) AS n FROM jobs WHERE sponsorship = 'negative'").get() as { n: number }).n,
+    );
+    expect(before).toBeGreaterThan(0);
+    expect(purgeNegative(db)).toBe(before);
   });
 
   it("settings round-trip and validation", async () => {
@@ -200,7 +207,7 @@ describe("api", () => {
     await app.inject({
       method: "PUT",
       url: "/api/settings",
-      payload: { sponsorship: { excludeNegative: true, relocation: "bonus", includePossible: false } },
+      payload: { sponsorship: { relocation: "bonus", includePossible: false } },
     });
     expect(await ids()).not.toContain("poss");
   });
@@ -215,7 +222,7 @@ describe("api", () => {
       method: "PUT",
       url: "/api/settings",
       payload: {
-        sponsorship: { excludeNegative: true, relocation: "bonus", includePossible: true, includeRegister: false },
+        sponsorship: { relocation: "bonus", includePossible: true, includeRegister: false },
       },
     });
     expect(await ids()).not.toContain("reg");
@@ -246,7 +253,7 @@ describe("api", () => {
       now,
     );
     const ids = async (minMatch: number) => {
-      await app.inject({ method: "PUT", url: "/api/settings", payload: { search: { minMatch, onlyMatching: true } } });
+      await app.inject({ method: "PUT", url: "/api/settings", payload: { search: { minMatch } } });
       return (await app.inject("/api/jobs?countries=DE&sinceDays=30")).json().jobs.map((j: { id: string }) => j.id);
     };
     expect(await ids(40)).toContain("weak");
@@ -285,6 +292,7 @@ describe("api", () => {
           description: "Node.js, TypeScript, AWS. 5+ years of experience.",
         }),
         job("ta", { title: "Talent Acquisition Specialist", company: "Gamma", description: "Recruiting" }),
+        job("go", { title: "Junior Go Backend Developer", company: "Delta", description: "Go microservices." }),
       ],
       now,
     );
@@ -305,8 +313,9 @@ describe("api", () => {
     const feed = (await app.inject("/api/jobs?countries=DE&sinceDays=30")).json();
     const ids = feed.jobs.map((j: { id: string }) => j.id);
     expect(ids).toContain("be");
-    expect(ids).not.toContain("ta");
-    expect(feed.hidden.notMatching).toBeGreaterThan(0);
+    expect(ids).not.toContain("ta"); // non-engineering: discarded outright...
+    expect(ids).not.toContain("go"); // ...a weak software match is hidden and counted
+    expect(feed.hidden.notMatching).toBe(1);
     const be = feed.jobs.find((j: { id: string }) => j.id === "be");
     expect(be.match.score).toBeGreaterThanOrEqual(80);
     expect(be.confidence.coverage).toBe(0.65);

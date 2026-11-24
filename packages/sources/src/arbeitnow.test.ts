@@ -32,11 +32,11 @@ describe("arbeitnow connector", () => {
     }
   });
 
-  it("marks visa-filter jobs as visa_source and lets explicit negative text veto", async () => {
-    const { jobs } = await arbeitnow.fetchJobs({ fetch: fakeFetch, since, now, delayMs: 0 });
-    expect(jobs.find((j) => j.sourceJobId === "neg-1")?.sponsorship.status).toBe("negative");
-    const ok = jobs.filter((j) => j.sourceJobId !== "neg-1");
-    expect(ok.every((j) => ["visa_source", "confirmed_text"].includes(j.sponsorship.status))).toBe(true);
+  it("marks visa-filter jobs as visa_source, and discards jobs whose text rules sponsorship out", async () => {
+    const { jobs, stats } = await arbeitnow.fetchJobs({ fetch: fakeFetch, since, now, delayMs: 0 });
+    expect(jobs.map((j) => j.sourceJobId)).not.toContain("neg-1"); // "We cannot provide visa sponsorship"
+    expect(stats.noSponsorshipSignal).toBe(1);
+    expect(jobs.every((j) => ["visa_source", "confirmed_text"].includes(j.sponsorship.status))).toBe(true);
   });
 
   it("throws a clear error on HTTP failure", async () => {
