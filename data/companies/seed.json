@@ -1,5 +1,5 @@
 {
-  "_about": "Starter list of employers with public job-board APIs. 'register' maps a country to the exact organisation name(s) on that country's official sponsor register, so a job in that country at that company counts as 'registered sponsor'. Add companies here (verify the register name first; never use fuzzy matches).",
+  "_about": "Starter list of employers with public job-board APIs. 'register' maps a country to the exact organisation name(s) on that country's official sponsor register, so a job in that country at that company counts as 'registered sponsor'. Add companies here (verify the register name first; never use fuzzy matches). Canada: names are as listed in the LMIA positive-employers data for software occupations (NOC 2123x), last four quarters to 2026Q2.",
   "_meta": {
     "schema_version": 1,
     "researched_on": "2026-11-23",
@@ -7,12 +7,13 @@
       "model": "claude-sonnet-5-5",
       "harness": "Claude Code",
       "effort": "medium",
-      "method": "probed each public ATS endpoint (HTTP 200 with jobs) and matched names against the UK Home Office register CSV dated 2026-11-19"
+      "method": "probed each public ATS endpoint (HTTP 200 with jobs); matched names against the UK Home Office register CSV (2026-11-19) and Canada's LMIA positive-employer XLSX files (2025Q3-2026Q2), exact names only"
     },
     "confidence": "high",
     "open_questions": [
-      "Only GB has a register importer so far; other countries' jobs need explicit sponsorship text",
-      "Board tokens can change if a company switches ATS"
+      "GB and CA have register importers; other countries need explicit sponsorship text",
+      "Board tokens can change if a company switches ATS",
+      "LMIA approval is an employer-level signal for temporary foreign workers, not proof a given role is sponsored"
     ],
     "review_by": "2027-05-23"
   },
@@ -24,6 +25,9 @@
       "register": {
         "GB": [
           "Stripe Payments UK Ltd"
+        ],
+        "CA": [
+          "Stripe"
         ]
       }
     },
@@ -34,6 +38,9 @@
       "register": {
         "GB": [
           "Airbnb UK Limited"
+        ],
+        "CA": [
+          "Airbnb Canada Inc"
         ]
       }
     },
@@ -104,6 +111,9 @@
       "register": {
         "GB": [
           "Databricks UK Limited"
+        ],
+        "CA": [
+          "Databricks Canada ULC"
         ]
       }
     },
@@ -124,6 +134,9 @@
       "register": {
         "GB": [
           "Okta UK Ltd"
+        ],
+        "CA": [
+          "Okta"
         ]
       }
     },
@@ -154,6 +167,9 @@
       "register": {
         "GB": [
           "Pinterest UK"
+        ],
+        "CA": [
+          "Pinterest Canada Limited"
         ]
       }
     },
@@ -164,6 +180,9 @@
       "register": {
         "GB": [
           "Reddit UK Ltd"
+        ],
+        "CA": [
+          "Reddit Canada"
         ]
       }
     },
@@ -224,6 +243,9 @@
       "register": {
         "GB": [
           "Carta Financial Services Limited"
+        ],
+        "CA": [
+          "Carta Maple Technologies Inc"
         ]
       }
     },
@@ -265,6 +287,59 @@
       "register": {
         "GB": [
           "Snowflake Computing U.K. Limited"
+        ],
+        "CA": [
+          "Snowflake Computing Canada ULC"
+        ]
+      }
+    },
+    {
+      "name": "Cohere",
+      "ats": "ashby",
+      "token": "cohere",
+      "register": {
+        "CA": [
+          "Cohere Inc."
+        ]
+      }
+    },
+    {
+      "name": "Trulioo",
+      "ats": "ashby",
+      "token": "trulioo",
+      "register": {
+        "CA": [
+          "Trulioo Information Services Inc."
+        ]
+      }
+    },
+    {
+      "name": "Wealthsimple",
+      "ats": "ashby",
+      "token": "wealthsimple",
+      "register": {
+        "CA": [
+          "Wealthsimple Technologies Inc."
+        ]
+      }
+    },
+    {
+      "name": "Benevity",
+      "ats": "ashby",
+      "token": "benevity",
+      "register": {
+        "CA": [
+          "Benevity Inc"
+        ]
+      }
+    },
+    {
+      "name": "Faire",
+      "ats": "greenhouse",
+      "token": "faire",
+      "register": {
+        "CA": [
+          "Faire"
         ]
       }
     }

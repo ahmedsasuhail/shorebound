@@ -23,7 +23,7 @@ describe("settings", () => {
     const s = loadSettings(db, ["DE", "AE"]);
     expect(s.countries).toEqual(["DE", "AE"]);
     expect(s.search.lookbackDays).toBe(7);
-    expect(s.sponsorship).toEqual({ excludeNegative: true, relocation: "bonus" });
+    expect(s.sponsorship).toEqual({ excludeNegative: true, relocation: "bonus", includePossible: true });
   });
 
   it("persists updates across reopening the database", () => {

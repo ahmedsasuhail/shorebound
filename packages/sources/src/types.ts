@@ -5,6 +5,8 @@ export type FetchLike = (url: string, init?: { headers?: Record<string, string> 
   status: number;
   json(): Promise<unknown>;
   text(): Promise<string>;
+  /** Needed only for binary downloads (e.g. XLSX). */
+  arrayBuffer?(): Promise<ArrayBuffer>;
 }>;
 
 export interface FetchContext {

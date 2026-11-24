@@ -7,7 +7,7 @@ import { ConfidenceRing, MatchPill } from "./Meters";
 
 const RAIL: Record<string, string> = {
   confirmed_text: "bg-emerald-500", confirmed_register: "bg-emerald-500", visa_source: "bg-sky-500",
-  country_norm: "bg-sky-400", negative: "bg-rose-500",
+  country_norm: "bg-sky-400", possible: "bg-amber-400", negative: "bg-rose-500",
 };
 
 export function JobCard({ job, index, onOpen }: { job: JobDTO; index: number; onOpen: () => void }) {

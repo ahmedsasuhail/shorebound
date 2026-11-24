@@ -131,6 +131,15 @@ describe("api", () => {
     expect(p.skills).toEqual(["go"]);
   });
 
+  it("setting includePossible=false hides weaker-signal jobs from the feed", async () => {
+    const app = await makeWithProfile();
+    upsertJobs(db, [job("poss", { sponsorship: { status: "possible" }, country: "SG" })], now);
+    const ids = async () => (await app.inject("/api/jobs?countries=SG&sinceDays=30")).json().jobs.map((j: { id: string }) => j.id);
+    expect(await ids()).toContain("poss");
+    await app.inject({ method: "PUT", url: "/api/settings", payload: { sponsorship: { excludeNegative: true, relocation: "bonus", includePossible: false } } });
+    expect(await ids()).not.toContain("poss");
+  });
+
   it("strictness: a higher minMatch hides weaker jobs", async () => {
     const app = make();
     await app.inject({ method: "PUT", url: "/api/profile", payload: { skills: ["typescript", "node.js", "react"], yearsExperience: 7, seniority: "senior", families: ["fullstack", "frontend", "backend"], title: null } });

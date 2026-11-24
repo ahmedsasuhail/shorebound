@@ -108,7 +108,15 @@ const PARSERS: Record<AtsKind, (b: unknown) => Candidate[]> = { greenhouse: pars
 
 // ── Connector ───────────────────────────────────────────────────────────────
 
-export function atsConnector(companies: SeedCompany[], getRegisters: () => Promise<RegisterIndex>): SourceConnector {
+/** What being "on the register" means in each country, shown as evidence in the UI. */
+const REGISTER_EVIDENCE: Record<string, (name: string) => string> = {
+  GB: (n) => `${n} holds a UK Home Office Skilled Worker sponsor licence.`,
+  CA: (n) => `${n} was approved for a Labour Market Impact Assessment for software occupations in the last four quarters (Canada's foreign-worker programme).`,
+};
+
+export type RegistersResult = RegisterIndex | { index: RegisterIndex; warnings: string[] };
+
+export function atsConnector(companies: SeedCompany[], getRegisters: () => Promise<RegistersResult>): SourceConnector {
   return {
     id: "company-boards",
 
@@ -119,7 +127,12 @@ export function atsConnector(companies: SeedCompany[], getRegisters: () => Promi
 
       let registers: RegisterIndex = new Map();
       try {
-        registers = await getRegisters();
+        const r = await getRegisters();
+        if (r instanceof Map) registers = r;
+        else {
+          registers = r.index;
+          warnings.push(...r.warnings);
+        }
       } catch (e) {
         warnings.push(`Sponsor register unavailable (${(e as Error).message}); only jobs with explicit sponsorship text will appear.`);
       }
@@ -160,7 +173,7 @@ function toJob(co: SeedCompany, c: Candidate, ctx: FetchContext, registers: Regi
     const known = registers.get(country);
     const hit = co.register?.[country]?.find((n) => known?.has(normalizeOrg(n)));
     if (!hit) { stats.noSponsorshipSignal = (stats.noSponsorshipSignal ?? 0) + 1; return null; }
-    sponsorship = { status: "confirmed_register", evidence: `${hit} is on the official ${country} sponsor register (licensed to sponsor Skilled Workers).` };
+    sponsorship = { status: "confirmed_register", evidence: (REGISTER_EVIDENCE[country] ?? ((n: string) => `${n} is on the official ${country} sponsor register.`))(hit) };
   }
 
   return {

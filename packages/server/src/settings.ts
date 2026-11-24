@@ -30,8 +30,10 @@ export const SettingsSchema = z.object({
       excludeNegative: z.boolean().default(true),
       /** "required": must offer employer-paid relocation; "bonus": ranks higher; "ignore". */
       relocation: z.enum(["required", "bonus", "ignore"]).default("bonus"),
+      /** Show jobs whose only sponsorship signal is "salary meets the visa threshold" (e.g. Singapore). */
+      includePossible: z.boolean().default(true),
     })
-    .default({ excludeNegative: true, relocation: "bonus" }),
+    .default({ excludeNegative: true, relocation: "bonus", includePossible: true }),
   sources: z.object({ disabled: z.array(z.string()).default([]) }).default({ disabled: [] }),
   schedule: z.object({ refreshHours: z.number().min(1).max(168).default(6) }).default({ refreshHours: 6 }),
   appearance: z.object({ theme: z.enum(["system", "light", "dark"]).default("system") }).default({ theme: "system" }),

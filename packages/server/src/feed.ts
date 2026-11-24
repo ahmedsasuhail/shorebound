@@ -9,6 +9,8 @@ export interface FeedOptions {
   minMatch: number;
   maxPerCompany: number;
   relocationBonus: boolean;
+  /** Keep jobs whose sponsorship status is only "possible" (weaker signal). */
+  includePossible?: boolean;
   limit?: number;
   now?: Date;
 }
@@ -25,6 +27,7 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   let notMatching = 0;
   const scored: JobDTO[] = [];
   for (const j of rows) {
+    if (o.includePossible === false && j.sponsorship.status === "possible") continue;
     const analysis = analyzeJob(j.title, j.description);
     const match = o.profile ? matchScore(o.profile, analysis) : null;
     if (o.onlyMatching && match && match.score < o.minMatch) {

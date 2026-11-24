@@ -140,7 +140,12 @@ export function SettingsPage() {
             <div className="mb-2 text-sm font-medium">Relocation</div>
             <Segmented value={s.sponsorship.relocation} onChange={(r) => save.mutate({ sponsorship: { ...s.sponsorship, relocation: r } })}
               options={[{ v: "required", label: "Must be offered" }, { v: "bonus", label: "Bonus" }, { v: "ignore", label: "Ignore" }]} />
-            <p className="mt-2 text-xs text-muted">Sponsorship is always required. Jobs that expect you to already live there or hold the right to work are hidden by default.</p>
+            <div className="mt-4 text-sm font-medium">Jobs where only the salary meets the visa bar</div>
+            <Segmented value={s.sponsorship.includePossible ? "yes" : "no"}
+              onChange={(v) => save.mutate({ sponsorship: { ...s.sponsorship, includePossible: v === "yes" } })}
+              options={[{ v: "yes", label: "Include (marked)" }, { v: "no", label: "Hide" }]} />
+            <p className="mt-2 text-xs text-muted">Singapore has no sponsor register and few postings mention visas. Where a posted salary clears the Employment Pass minimum, the job is listed as "Visa-eligible salary · unconfirmed". It does not mean the employer sponsors: ask before applying.</p>
+            <p className="mt-2 text-xs text-muted">Every job needs some sponsorship signal: stated in the posting, a sponsor-register match, or (if enabled above) a visa-eligible salary. Jobs that expect you to already live there or hold the right to work are hidden by default.</p>
           </div>
         </div>
       </Section>
