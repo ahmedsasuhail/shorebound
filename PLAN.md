@@ -30,7 +30,7 @@ your machine.
 | Employer on an official register | `confirmed_register` (employer-level: the posting itself may not mention visas; shown as "Employer on sponsor register", ranks below explicit text, can be hidden) | UK Skilled Worker licence; Canada LMIA for a software occupation |
 | Board only lists sponsoring jobs | `visa_source` | Arbeitnow visa filter |
 | Salary clears the visa threshold | `possible` (marked *unconfirmed*, can be hidden) | Singapore: ≥ S$7,750/month |
-| Text rules it out | `negative` (hidden by default) | "No sponsorship", "must already be based in Dubai" |
+| Text rules it out | `negative`: **always discarded**, no option | "No sponsorship", "must already be based in Dubai" |
 
 Register and salary signals are company- or role-level indications, not proof that a specific role is sponsored;
 the UI says so.
