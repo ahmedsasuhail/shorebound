@@ -32,6 +32,8 @@ const VISA_TERM = String.raw`(?:visas?|work[- ]?permits?|employment pass|employm
 
 const SPONSOR_NEG: RegExp[] = [
   new RegExp(String.raw`\b${NEGATION}\b(?:\W+\w+){0,5}?\W+(?:visa\s+)?sponsor`, "i"),
+  // "no visa support", "cannot offer visa assistance", "no work permit help"
+  new RegExp(String.raw`\b${NEGATION}\b(?:\W+\w+){0,4}?\W+(?:visa|work[- ]?permit|immigration)\s+(?:support|assistance|help|handling)\b`, "i"),
   /\bsponsor\w*\s+(?:is\s+|are\s+|will\s+)?(?:not|no longer)\s+(?:be\s+)?(?:available|provided|offered|possible|supported)/i,
   /\b(?:requir|need)\w*\s+(?:visa\s+)?sponsorship\b[^.]{0,40}\b(?:not|cannot|ineligible|unable)\b/i,
   /\b(?:must|should|need to|required to)\s+(?:\w+\s+){0,3}(?:have|hold|possess)\s+(?:\w+\s+){0,3}right to work\b/i,
