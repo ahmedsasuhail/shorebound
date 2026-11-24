@@ -39,7 +39,7 @@ export function App() {
             initial={{ rotate: -20, scale: 0.8, opacity: 0 }}
             animate={{ rotate: 0, scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 260, damping: 16 }}
-            className="grid h-9 w-9 place-items-center rounded-xl bg-accent text-white shadow-lg shadow-accent/30"
+            className="grid h-9 w-9 place-items-center rounded-xl bg-accent text-onaccent shadow-lg shadow-accent/30"
           >
             <Waves size={20} strokeWidth={2.4} />
           </motion.div>
@@ -82,7 +82,7 @@ export function App() {
               <button
                 key={n.id}
                 onClick={() => setPage(n.id)}
-                className={`rounded-full px-4 py-1.5 text-sm ${page === n.id ? "bg-accent text-white" : "bg-surface2 text-muted"}`}
+                className={`rounded-full px-4 py-1.5 text-sm ${page === n.id ? "bg-accent text-onaccent" : "bg-surface2 text-muted"}`}
               >
                 {n.label}
               </button>

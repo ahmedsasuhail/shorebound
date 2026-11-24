@@ -43,7 +43,7 @@ export function Onboarding() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-800 dark:text-amber-200"
+          className="mt-4 rounded-2xl border border-caution/40 bg-cautionsoft p-4 text-sm text-cautionink"
         >
           We saved the file but couldn't read skills from it automatically (scanned PDFs are the usual cause).{" "}
           <button

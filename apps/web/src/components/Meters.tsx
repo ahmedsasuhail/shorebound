@@ -2,7 +2,8 @@ import type { JobDTO } from "@shorebound/core";
 import { AlertTriangle } from "lucide-react";
 import { motion } from "motion/react";
 
-const BAND = { high: "#10b981", medium: "#f59e0b", low: "#f43f5e" } as const;
+/** Score-ring band colours: theme tokens, so both themes use their validated, colour-blind-separated values. */
+const BAND = { high: "var(--good)", medium: "var(--caution)", low: "var(--bad)" } as const;
 
 /** Animated ring for the 0–100 confidence score. Dashed track when coverage is partial. */
 export function ConfidenceRing({ job, size = 46 }: { job: JobDTO; size?: number }) {
@@ -48,7 +49,8 @@ export function ConfidenceRing({ job, size = 46 }: { job: JobDTO; size?: number 
 export function MatchPill({ job }: { job: JobDTO }) {
   if (!job.match) return null;
   const s = job.match.score;
-  const tone = s >= 75 ? "bg-accent text-white" : s >= 55 ? "bg-accentsoft text-accentink" : "bg-surface2 text-muted";
+  const tone =
+    s >= 75 ? "bg-accent text-onaccent" : s >= 55 ? "bg-accentsoft text-accentink" : "bg-surface2 text-muted";
   return <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold tabular-nums ${tone}`}>{s}% match</span>;
 }
 
@@ -84,7 +86,7 @@ export function WhyPanel({ job }: { job: JobDTO }) {
   return (
     <div className="space-y-4">
       {c && c.flags.length > 0 && (
-        <div className="rounded-xl border border-rose-500/40 bg-rose-500/10 p-3.5 text-[13px] text-rose-700 dark:text-rose-300">
+        <div className="rounded-xl border border-bad/40 bg-badsoft p-3.5 text-[13px] text-badink">
           <div className="mb-1 flex items-center gap-1.5 font-semibold">
             <AlertTriangle size={14} /> Possible scam signals
           </div>

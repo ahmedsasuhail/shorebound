@@ -77,7 +77,7 @@ export function JobDrawer({ job, onClose }: { job: JobDTO | null; onClose: () =>
             <div className="flex-1 space-y-4 overflow-y-auto p-5">
               <WhyPanel job={job} />
               {job.sponsorship.status === "confirmed_register" && (
-                <div className="rounded-xl border border-sky-500/40 bg-sky-500/10 p-3.5 text-[13px] text-sky-800 dark:text-sky-200">
+                <div className="rounded-xl border border-info/40 bg-infosoft p-3.5 text-[13px] text-infoink">
                   <b>The posting does not mention visas or relocation.</b> It is listed because the employer is on an
                   official sponsor register, so it is allowed to sponsor. Whether this particular role is sponsored is
                   something to confirm with the employer.
@@ -103,7 +103,7 @@ export function JobDrawer({ job, onClose }: { job: JobDTO | null; onClose: () =>
                 href={job.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-transform hover:scale-[1.01] active:scale-[0.99]"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-semibold text-onaccent shadow-lg shadow-accent/30 transition-transform hover:scale-[1.01] active:scale-[0.99]"
               >
                 Open original posting <ArrowUpRight size={16} />
               </a>

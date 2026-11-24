@@ -27,7 +27,7 @@ function Toggle({
     <button
       onClick={onClick}
       aria-pressed={on}
-      className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium ring-1 ring-inset transition-all ${on ? "bg-accent text-white ring-accent shadow-md shadow-accent/25" : "bg-surface text-muted ring-line hover:text-ink"}`}
+      className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium ring-1 ring-inset transition-all ${on ? "bg-accent text-onaccent ring-accent shadow-md shadow-accent/25" : "bg-surface text-muted ring-line hover:text-ink"}`}
     >
       {icon}
       {children}
@@ -101,7 +101,7 @@ export function FeedPage({ goSettings }: { goSettings: () => void }) {
             })
           }
           disabled={refresh.isPending}
-          className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-all hover:brightness-110 active:scale-[0.97] disabled:opacity-70"
+          className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-onaccent shadow-lg shadow-accent/30 transition-all hover:brightness-110 active:scale-[0.97] disabled:opacity-70"
         >
           {refresh.isPending ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
           {refresh.isPending ? "Fetching…" : "Refresh"}
@@ -188,9 +188,9 @@ export function FeedPage({ goSettings }: { goSettings: () => void }) {
       </div>
 
       {jobs.isError && (
-        <div className="flex items-center gap-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-700 dark:text-rose-300">
+        <div className="flex items-center gap-3 rounded-2xl border border-bad/30 bg-badsoft p-4 text-sm text-badink">
           <AlertCircle size={18} /> Could not reach the local server. Run{" "}
-          <code className="rounded bg-black/10 px-1.5">npm run dev</code> and reload.
+          <code className="rounded bg-surface2 px-1.5">npm run dev</code> and reload.
         </div>
       )}
 

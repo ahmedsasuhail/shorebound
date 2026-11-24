@@ -68,7 +68,7 @@ function ProfileCard() {
                   <button
                     aria-label={`Remove ${sk}`}
                     onClick={() => put({ skills: p.skills.filter((x) => x !== sk) })}
-                    className="rounded-full p-0.5 hover:bg-accent hover:text-white"
+                    className="rounded-full p-0.5 hover:bg-accent hover:text-onaccent"
                   >
                     <X size={11} />
                   </button>
