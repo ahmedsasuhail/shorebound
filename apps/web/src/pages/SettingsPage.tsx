@@ -1,7 +1,7 @@
-import { FileText, Lock, Monitor, Moon, Sun, Trash2, UploadCloud } from "lucide-react";
-import { motion } from "motion/react";
+import { FileText, Lock, Monitor, Moon, Plus, Sun, Trash2, UploadCloud, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState } from "react";
-import { useCatalog, useRemoveResume, useResume, useSaveSettings, useSettings, useUploadResume, type CatalogCountry } from "../api";
+import { useCatalog, useProfile, useRemoveResume, useResume, useSaveProfile, useSaveSettings, useSettings, useUploadResume, type CatalogCountry, type Profile } from "../api";
 import { CountryChip } from "../components/Badges";
 
 const REGIONS: Record<string, string> = {
@@ -68,7 +68,68 @@ function ResumeCard() {
         </motion.div>
       )}
       {upload.error && <p className="mt-3 text-sm text-rose-500">{(upload.error as Error).message}</p>}
-      <p className="mt-3 flex items-center gap-1.5 text-xs text-muted"><Lock size={12} /> Nothing is uploaded anywhere. Reading skills from the file arrives with the AI step.</p>
+      {upload.data?.parseError && <p className="mt-3 text-sm text-amber-600">{upload.data.parseError}</p>}
+      <p className="mt-3 flex items-center gap-1.5 text-xs text-muted"><Lock size={12} /> Read on this machine only. Nothing is uploaded anywhere.</p>
+    </Section>
+  );
+}
+
+
+const LEVELS: Profile["seniority"][] = ["junior", "mid", "senior", "lead", "manager"];
+
+function ProfileCard() {
+  const q = useProfile();
+  const save = useSaveProfile();
+  const [adding, setAdding] = useState("");
+  const p = q.data?.profile;
+  if (!p) return null;
+  const put = (patch: Partial<Profile>) => {
+    const { source: _s, ...rest } = { ...p, ...patch };
+    save.mutate(rest);
+  };
+  const add = () => {
+    const v = adding.trim().toLowerCase();
+    if (v && !p.skills.includes(v)) put({ skills: [...p.skills, v] });
+    setAdding("");
+  };
+  return (
+    <Section title="Your profile" hint={p.source === "user" ? "Edited by you. Used to rank jobs by fit." : "Read from your resume. Fix anything it got wrong; jobs re-rank instantly."}>
+      <div className="grid gap-5 sm:grid-cols-[1fr_auto]">
+        <div>
+          <div className="mb-2 text-sm font-medium">Skills</div>
+          <div className="flex flex-wrap gap-1.5">
+            <AnimatePresence initial={false}>
+              {p.skills.map((sk) => (
+                <motion.span key={sk} layout initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}
+                  className="inline-flex items-center gap-1 rounded-full bg-accentsoft py-1 pl-3 pr-1.5 text-xs font-medium text-accentink">
+                  {sk}
+                  <button aria-label={`Remove ${sk}`} onClick={() => put({ skills: p.skills.filter((x) => x !== sk) })} className="rounded-full p-0.5 hover:bg-accent hover:text-white"><X size={11} /></button>
+                </motion.span>
+              ))}
+            </AnimatePresence>
+            <form onSubmit={(e) => { e.preventDefault(); add(); }} className="inline-flex items-center rounded-full border border-dashed border-line pl-3 pr-1">
+              <input value={adding} onChange={(e) => setAdding(e.target.value)} placeholder="add skill" className="w-24 bg-transparent py-1 text-xs outline-none" />
+              <button type="submit" aria-label="Add skill" className="rounded-full p-1 text-muted hover:text-accent"><Plus size={12} /></button>
+            </form>
+          </div>
+        </div>
+        <div className="space-y-4 sm:w-56">
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-medium">Years of experience</span>
+            <input type="number" min={0} max={50} step={0.5} value={p.yearsExperience ?? ""}
+              onChange={(e) => put({ yearsExperience: e.target.value === "" ? null : Number(e.target.value) })}
+              className="w-full rounded-xl border border-line bg-bg px-3 py-2 text-sm outline-none focus:border-accent" />
+          </label>
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-medium">Level</span>
+            <select value={p.seniority} onChange={(e) => put({ seniority: e.target.value as Profile["seniority"] })}
+              className="w-full rounded-xl border border-line bg-bg px-3 py-2 text-sm capitalize outline-none focus:border-accent">
+              {LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+            </select>
+          </label>
+        </div>
+      </div>
+      {p.families.length > 0 && <p className="mt-4 text-xs text-muted">Role families: {p.families.join(", ")}{p.title ? ` · Title: ${p.title}` : ""}</p>}
     </Section>
   );
 }
@@ -105,6 +166,7 @@ export function SettingsPage() {
     <div className="space-y-5">
       <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
       <ResumeCard />
+      <ProfileCard />
 
       <Section title="Countries" hint="Only countries with researched visa data can be switched on. More are coming.">
         <div className="mb-4 flex flex-wrap gap-2 text-xs">

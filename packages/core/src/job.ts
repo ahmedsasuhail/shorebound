@@ -31,4 +31,17 @@ export interface Job {
 }
 
 /** Job as sent over the API (dates as ISO strings). */
-export type JobDTO = Omit<Job, "postedAt"> & { postedAt: string; firstSeenAt: string };
+export type JobDTO = Omit<Job, "postedAt"> & {
+  postedAt: string;
+  firstSeenAt: string;
+  /** Filled by the server feed: fit to the user's profile (null when no profile yet). */
+  match?: { score: number; reasons: string[] } | null;
+  confidence?: {
+    score: number;
+    band: "low" | "medium" | "high";
+    coverage: number;
+    factors: { id: string; label: string; weight: number; value: number | null }[];
+    flags: { id: string; label: string; weight: number; hard: boolean }[];
+  };
+  analysis?: { isSoftware: boolean; family: string | null; seniority: string; minYears: number | null; skills: string[] };
+};

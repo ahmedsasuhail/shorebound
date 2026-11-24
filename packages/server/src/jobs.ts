@@ -71,7 +71,7 @@ export function queryJobs(db: Db, f: JobQuery = {}): JobDTO[] {
   }
   const sql = `SELECT json, first_seen_at FROM jobs ${where.length ? "WHERE " + where.join(" AND ") : ""}
                ORDER BY posted_at DESC LIMIT ?`;
-  args.push(Math.min(f.limit ?? 200, 500));
+  args.push(Math.min(f.limit ?? 200, 5000));
   const rows = db.prepare(sql).all(...args) as { json: string; first_seen_at: string }[];
   return rows.map((r) => ({ ...(JSON.parse(r.json) as JobDTO), firstSeenAt: r.first_seen_at }));
 }

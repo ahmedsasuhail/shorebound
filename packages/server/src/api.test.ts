@@ -96,4 +96,45 @@ describe("api", () => {
     const bad = await app.inject({ method: "PUT", url: "/api/resume", headers: { "content-type": "application/octet-stream", "x-filename": "a.exe" }, payload: Buffer.from([1]) });
     expect(bad.statusCode).toBe(400);
   });
+
+  it("resume upload builds a profile that filters and scores the feed", async () => {
+    upsertJobs(db, [
+      job("be", { title: "Senior Backend Engineer", company: "Beta", description: "Node.js, TypeScript, AWS. 5+ years of experience." }),
+      job("ta", { title: "Talent Acquisition Specialist", company: "Gamma", description: "Recruiting" }),
+    ], now);
+    const app = make();
+    const resume = "Senior Software Engineer with 7+ years of experience. Skills: TypeScript, Node.js, NestJS, React, Next.js, HTML, CSS, AWS, Docker, MySQL.";
+    const put = (await app.inject({
+      method: "PUT", url: "/api/resume",
+      headers: { "content-type": "application/octet-stream", "x-filename": "cv.txt" },
+      payload: Buffer.from(resume),
+    })).json();
+    expect(put.profile.yearsExperience).toBe(7);
+    expect(put.profile.skills).toContain("node.js");
+
+    const feed = (await app.inject("/api/jobs?countries=DE&sinceDays=30")).json();
+    const ids = feed.jobs.map((j: { id: string }) => j.id);
+    expect(ids).toContain("be");
+    expect(ids).not.toContain("ta");
+    expect(feed.hidden.notMatching).toBeGreaterThan(0);
+    const be = feed.jobs.find((j: { id: string }) => j.id === "be");
+    expect(be.match.score).toBeGreaterThanOrEqual(80);
+    expect(be.confidence.coverage).toBe(0.65);
+  });
+
+  it("a partial settings update does not reset other saved settings", async () => {
+    const app = make();
+    await app.inject({ method: "PUT", url: "/api/settings", payload: { countries: ["GB", "DE"] } });
+    const after = await app.inject({ method: "PUT", url: "/api/settings", payload: { appearance: { theme: "dark" } } });
+    expect(after.json().countries).toEqual(["GB", "DE"]);
+    expect((await app.inject("/api/settings")).json().countries).toEqual(["GB", "DE"]);
+  });
+
+  it("user can edit the profile; invalid edits are rejected", async () => {
+    const app = make();
+    const ok = await app.inject({ method: "PUT", url: "/api/profile", payload: { skills: ["go"], yearsExperience: 3, seniority: "mid", families: ["backend"], title: null } });
+    expect(ok.json().profile.source).toBe("user");
+    const bad = await app.inject({ method: "PUT", url: "/api/profile", payload: { skills: [], yearsExperience: -1, seniority: "guru", families: [], title: null } });
+    expect(bad.statusCode).toBe(400);
+  });
 });

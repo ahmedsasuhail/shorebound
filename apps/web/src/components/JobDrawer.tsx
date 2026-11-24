@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 import { timeAgo } from "../api";
 import { COUNTRY_NAMES, CountryChip, RelocationBadge, SponsorshipBadge } from "./Badges";
+import { WhyPanel } from "./Meters";
 
 function Evidence({ label, text }: { label: string; text: string }) {
   return (
@@ -49,6 +50,7 @@ export function JobDrawer({ job, onClose }: { job: JobDTO | null; onClose: () =>
             </div>
 
             <div className="flex-1 space-y-4 overflow-y-auto p-5">
+              <WhyPanel job={job} />
               {job.sponsorship.evidence && <Evidence label="Sponsorship evidence" text={job.sponsorship.evidence} />}
               {job.relocation.evidence && <Evidence label="Relocation evidence" text={job.relocation.evidence} />}
               <div>
