@@ -32,6 +32,12 @@ describe("buildFeed", () => {
     expect(f.jobs[0]!.match).toBeNull();
   });
 
+  it("jobs with only a 'possible' sponsorship signal can be excluded", () => {
+    const rows = [mk("sure", "Senior Backend Engineer", "A", 1, { sponsorship: { status: "confirmed_text" } }), mk("maybe", "Senior Backend Engineer", "B", 2, { sponsorship: { status: "possible" } })];
+    expect(buildFeed(rows, base).jobs.map((j) => j.id)).toEqual(["sure", "maybe"]);
+    expect(buildFeed(rows, { ...base, includePossible: false }).jobs.map((j) => j.id)).toEqual(["sure"]);
+  });
+
   it("relocation offered breaks ties upward when sorting by match", () => {
     const rows = [mk("plain", "Senior Backend Engineer", "A", 1), mk("reloc", "Senior Backend Engineer", "B", 2, { relocation: { status: "offered" } })];
     expect(buildFeed(rows, { ...base, sort: "match" }).jobs[0]!.id).toBe("reloc");

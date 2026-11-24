@@ -113,6 +113,7 @@ export function buildApp(deps: AppDeps): FastifyInstance {
       minMatch: s.search.minMatch,
       maxPerCompany: s.search.maxPerCompany,
       relocationBonus: s.sponsorship.relocation === "bonus",
+      includePossible: s.sponsorship.includePossible,
     });
   });
 
