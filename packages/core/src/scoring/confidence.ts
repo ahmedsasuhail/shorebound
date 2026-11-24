@@ -112,9 +112,14 @@ export interface ConfidenceResult {
   flags: ScamFlag[];
 }
 
+/**
+ * How much each kind of sponsorship evidence is worth. Text in the posting itself ranks highest. A register match
+ * is employer-level (the company is licensed/approved to sponsor, the posting may not mention visas), so it is
+ * worth less than explicit text.
+ */
 const SPONSOR_VALUE: Record<SponsorshipStatus, number> = {
-  confirmed_register: 1,
   confirmed_text: 0.9,
+  confirmed_register: 0.7,
   visa_source: 0.6,
   possible: 0.3,
   unknown: 0.1,

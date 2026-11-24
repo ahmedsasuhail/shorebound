@@ -11,6 +11,8 @@ export interface FeedOptions {
   relocationBonus: boolean;
   /** Keep jobs whose sponsorship status is only "possible" (weaker signal). */
   includePossible?: boolean;
+  /** Keep jobs whose only signal is an employer-level register match. */
+  includeRegister?: boolean;
   limit?: number;
   now?: Date;
 }
@@ -28,6 +30,7 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   const scored: JobDTO[] = [];
   for (const j of rows) {
     if (o.includePossible === false && j.sponsorship.status === "possible") continue;
+    if (o.includeRegister === false && j.sponsorship.status === "confirmed_register") continue;
     const analysis = analyzeJob(j.title, j.description);
     const match = o.profile ? matchScore(o.profile, analysis) : null;
     if (o.onlyMatching && match && match.score < o.minMatch) {

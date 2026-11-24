@@ -65,6 +65,15 @@ describe("buildFeed", () => {
     expect(buildFeed(rows, { ...base, includePossible: false }).jobs.map((j) => j.id)).toEqual(["sure"]);
   });
 
+  it("employer-level register matches can be excluded, and rank below explicit text when sorting by trust", () => {
+    const rows = [
+      mk("register", "Senior Backend Engineer", "A", 1, { sponsorship: { status: "confirmed_register" } }),
+      mk("text", "Senior Backend Engineer", "B", 2, { sponsorship: { status: "confirmed_text" } }),
+    ];
+    expect(buildFeed(rows, { ...base, sort: "confidence" }).jobs.map((j) => j.id)).toEqual(["text", "register"]);
+    expect(buildFeed(rows, { ...base, includeRegister: false }).jobs.map((j) => j.id)).toEqual(["text"]);
+  });
+
   it("relocation offered breaks ties upward when sorting by match", () => {
     const rows = [
       mk("plain", "Senior Backend Engineer", "A", 1),

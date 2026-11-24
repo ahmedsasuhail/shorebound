@@ -23,6 +23,11 @@ const SponsorshipSchema = z.object({
   excludeNegative: z.boolean().default(true),
   /** "required": only jobs with employer-paid relocation; "bonus": ranks them higher; "ignore". */
   relocation: z.enum(["required", "bonus", "ignore"]).default("bonus"),
+  /**
+   * Show jobs whose only signal is that the EMPLOYER is on a sponsor register (UK licence, Canada LMIA). The posting
+   * itself does not mention visas, so these are leads to verify, not stated offers.
+   */
+  includeRegister: z.boolean().default(true),
   /** Show jobs whose only signal is "salary meets the visa threshold" (Singapore), clearly marked. */
   includePossible: z.boolean().default(true),
 });

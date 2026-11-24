@@ -205,6 +205,22 @@ describe("api", () => {
     expect(await ids()).not.toContain("poss");
   });
 
+  it("setting includeRegister=false hides employer-level register jobs from the feed", async () => {
+    const app = await makeWithProfile();
+    upsertJobs(db, [job("reg", { sponsorship: { status: "confirmed_register" } })], now);
+    const ids = async () =>
+      (await app.inject("/api/jobs?countries=DE&sinceDays=30")).json().jobs.map((j: { id: string }) => j.id);
+    expect(await ids()).toContain("reg");
+    await app.inject({
+      method: "PUT",
+      url: "/api/settings",
+      payload: {
+        sponsorship: { excludeNegative: true, relocation: "bonus", includePossible: true, includeRegister: false },
+      },
+    });
+    expect(await ids()).not.toContain("reg");
+  });
+
   it("strictness: a higher minMatch hides weaker jobs", async () => {
     const app = make();
     await app.inject({
