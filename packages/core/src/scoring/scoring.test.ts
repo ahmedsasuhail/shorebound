@@ -76,6 +76,10 @@ describe("analyzeJob", () => {
     ["Mechanical Engineer", false, null, "mid"],
     ["Senior Venture Associate", false, null, "senior"],
     ["Platform QA Chapter Lead (all genders)", true, "qa", "lead"],
+    ["Solutions Architect (Growth Accounts - All sectors) x 2 New Roles", false, null, "lead"],
+    ["Senior Solutions Engineer", false, null, "senior"],
+    ["Quant Developer in AI", false, null, "mid"],
+    ["Technical Support Engineer", false, null, "mid"],
     ["Lead Systems Engineer (Orbital Launch)", false, null, "lead"],
     ["Senior Data Platform Engineer", true, "data", "senior"],
   ])("%s → software=%s family=%s level=%s", (title, sw, fam, lvl) => {
@@ -111,6 +115,51 @@ describe("matchScore", () => {
   });
   it("prefers matching stack over a different one", () => {
     expect(score("Senior Software Engineer", "Node.js TypeScript React AWS")).toBeGreaterThan(score("Senior Software Engineer", "Scala Spark Kafka Rust C++"));
+  });
+});
+
+describe("relevance: real misses from a live feed must stay out of a full-stack TypeScript profile's results", () => {
+  const p: Profile = extractProfile(RESUME, now);
+  const score = (title: string, desc = "") => matchScore(p, analyzeJob(title, desc)).score;
+  const HIDE_BELOW = 55; // default "Balanced" threshold
+
+  it.each([
+    ["Wordpress Web Developer at United Media", "Build WordPress themes with PHP and CSS."],
+    ["Junior Go Backend Developer (f/m/d)", "Go microservices, REST API, AWS, CI/CD."],
+    ["Application Security Engineer", "Python, CI/CD, threat modelling."],
+    ["Staff Applied AI Engineer", "LLMs, Python, evaluation."],
+    ["Platform QA Chapter Lead (all genders)", "CI/CD pipelines, test automation."],
+    ["Senior Cloud Engineer - Resilience", "Kubernetes, SQL, MySQL, observability, on-call."],
+    ["Software Engineer", "C#, C++ and low-latency systems."],
+    ["Solutions Architect (Growth Accounts)", "Python, SQL, AWS with customers."],
+  ])("hides: %s", (title, desc) => expect(score(title, desc)).toBeLessThan(HIDE_BELOW));
+
+  it.each([
+    ["Frontend Engineer (f/m/d)", "TypeScript, React, Next.js, CSS."],
+    ["Senior Backend Engineer", "Node.js, TypeScript, NestJS, PostgreSQL, AWS."],
+    ["Software Engineer II (Full-Stack)", "TypeScript, React, Node.js and REST APIs."],
+    ["Senior Full Stack Developer", "JavaScript, React and Express on AWS."],
+  ])("shows: %s", (title, desc) => expect(score(title, desc)).toBeGreaterThanOrEqual(75));
+
+  it("incidental supporting skills (SQL, MySQL, observability) do not carry a job", () => {
+    expect(score("Senior Software Engineer", "SQL, MySQL, Redis, observability, Docker, CI/CD")).toBeLessThan(HIDE_BELOW + 10);
+  });
+
+  it("a title naming a language you lack is capped even if the description mentions yours", () => {
+    expect(score("Senior Rust Engineer", "We use Rust. Some TypeScript tooling and React dashboards.")).toBeLessThanOrEqual(40);
+  });
+
+  it("explains why: names the stack mismatch", () => {
+    expect(matchScore(p, analyzeJob("Junior Go Backend Developer", "Go services")).reasons.join(" ")).toMatch(/go/i);
+  });
+});
+
+describe("profile families need real evidence", () => {
+  it("a full-stack resume that lists AWS/Docker/CI is not also a devops or mobile profile", () => {
+    const p = extractProfile(RESUME, now);
+    expect(p.families).not.toContain("devops");
+    expect(p.families).not.toContain("mobile");
+    expect(p.families).not.toContain("data");
   });
 });
 

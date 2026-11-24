@@ -34,7 +34,7 @@ export interface Job {
 export type JobDTO = Omit<Job, "postedAt"> & {
   postedAt: string;
   firstSeenAt: string;
-  /** Filled by the server feed: fit to the user's profile (null when no profile yet). */
+  /** Filled by the server feed: fit to the user's profile. */
   match?: { score: number; reasons: string[] } | null;
   confidence?: {
     score: number;
@@ -43,5 +43,5 @@ export type JobDTO = Omit<Job, "postedAt"> & {
     factors: { id: string; label: string; weight: number; value: number | null }[];
     flags: { id: string; label: string; weight: number; hard: boolean }[];
   };
-  analysis?: { isSoftware: boolean; family: string | null; seniority: string; minYears: number | null; skills: string[] };
+  analysis?: { isSoftware: boolean; family: string | null; seniority: string; minYears: number | null; skills: string[]; titleSkills: string[]; offStack: boolean };
 };
