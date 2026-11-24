@@ -1,10 +1,22 @@
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
-  arbeitnow, atsConnector, fetchCanadaLmia, fetchUkRegisterCsv, hackerNews, myCareersFuture, parseUkRegister,
-  type FetchLike, type RegisterIndex, type RegistersResult, type SeedCompany, type SheetReader, type SourceConnector,
+  arbeitnow,
+  atsConnector,
+  fetchCanadaLmia,
+  fetchUkRegisterCsv,
+  hackerNews,
+  myCareersFuture,
+  parseUkRegister,
+  type FetchLike,
+  type RegisterIndex,
+  type RegistersResult,
+  type SeedCompany,
+  type SheetReader,
+  type SourceConnector,
 } from "@shorebound/sources";
 import { z } from "zod";
+import { timedFetch } from "./http.js";
 
 const SeedSchema = z.object({
   companies: z.array(
@@ -27,7 +39,11 @@ const WEEK_MS = 7 * 86_400_000;
  * UK sponsor register, cached on disk for a week (the file is ~11 MB and changes a few times a month).
  * If the download fails, an older cached copy is still used.
  */
-export function ukRegisterLoader(appData: string, fetchFn: FetchLike, now = () => Date.now()): () => Promise<RegisterIndex> {
+export function ukRegisterLoader(
+  appData: string,
+  fetchFn: FetchLike,
+  now = () => Date.now(),
+): () => Promise<RegisterIndex> {
   const file = join(appData, "registers", "gb.csv");
   return async () => {
     let csv: string | null = null;
@@ -76,7 +92,9 @@ export function canadaRegisterLoader(
 }
 
 /** Merges several register loaders; a failing one is reported as a warning, the rest still apply. */
-export function combineRegisters(loaders: { label: string; load: () => Promise<RegisterIndex> }[]): () => Promise<RegistersResult> {
+export function combineRegisters(
+  loaders: { label: string; load: () => Promise<RegisterIndex> }[],
+): () => Promise<RegistersResult> {
   return async () => {
     const index: RegisterIndex = new Map();
     const warnings: string[] = [];
@@ -92,11 +110,32 @@ export function combineRegisters(loaders: { label: string; load: () => Promise<R
   };
 }
 
+/** Every job source, in refresh order. `id` matches settings.sources.disabled. */
+export const SOURCE_INFO = [
+  { id: "arbeitnow", label: "Arbeitnow", description: "Job board with a visa-sponsorship filter. Mostly UK and EU." },
+  {
+    id: "hackernews",
+    label: "Hacker News: Who is hiring?",
+    description: "Monthly thread; strongest in the first week of each month.",
+  },
+  {
+    id: "mycareersfuture",
+    label: "MyCareersFuture (Singapore)",
+    description: "Government job portal. Uses the visa-eligible salary signal.",
+  },
+  {
+    id: "company-boards",
+    label: "Company job boards",
+    description: "Greenhouse, Lever and Ashby boards of employers on the UK/Canada registers. Slowest source.",
+  },
+] as const;
+
 export function buildConnectors(o: { dataDir: string; appData: string; fetchImpl?: typeof fetch }): SourceConnector[] {
-  const f = (o.fetchImpl ?? fetch) as unknown as FetchLike;
+  // Register files are large (UK ~11 MB), so they get a longer timeout than job APIs.
+  const registerFetch = timedFetch(120_000, o.fetchImpl) as unknown as FetchLike;
   const registers = combineRegisters([
-    { label: "UK", load: ukRegisterLoader(o.appData, f) },
-    { label: "Canada", load: canadaRegisterLoader(o.appData, f) },
+    { label: "UK", load: ukRegisterLoader(o.appData, registerFetch) },
+    { label: "Canada", load: canadaRegisterLoader(o.appData, registerFetch) },
   ]);
   return [arbeitnow, hackerNews, myCareersFuture, atsConnector(loadSeed(o.dataDir), registers)];
 }

@@ -1,41 +1,39 @@
 import { z } from "zod";
 import { getSetting, putSetting, type Db } from "./db.js";
 
-/** User settings (PLAN.md §8). Secrets such as the Claude API key are NOT stored here. */
+/**
+ * User settings. Everything here is read by the app; nothing is "for later".
+ * Stored as one JSON value; older stored settings with extra keys still parse (zod drops unknown keys).
+ * Secrets are never stored here.
+ */
+const SearchSchema = z.object({
+  /** Only jobs posted within this many days (real posting dates). */
+  lookbackDays: z.number().int().min(1).max(30).default(7),
+  sort: z.enum(["newest", "match", "confidence"]).default("newest"),
+  /** Hide non-software roles and weak matches (requires a profile). */
+  onlyMatching: z.boolean().default(true),
+  /** Hide jobs below this match score: Broad 40, Balanced 55, Strict 70. */
+  minMatch: z.number().int().min(0).max(100).default(55),
+  /** Max jobs per company in the feed so one employer cannot flood it (0 = no cap). */
+  maxPerCompany: z.number().int().min(0).max(50).default(3),
+});
+
+const SponsorshipSchema = z.object({
+  /** Hide jobs whose text rules out sponsorship ("no sponsorship", "must already live there"). */
+  excludeNegative: z.boolean().default(true),
+  /** "required": only jobs with employer-paid relocation; "bonus": ranks them higher; "ignore". */
+  relocation: z.enum(["required", "bonus", "ignore"]).default("bonus"),
+  /** Show jobs whose only signal is "salary meets the visa threshold" (Singapore), clearly marked. */
+  includePossible: z.boolean().default(true),
+});
+
 export const SettingsSchema = z.object({
+  /** Enabled destination countries (ISO alpha-2); defaults come from data/countries/*.json. */
   countries: z.array(z.string().length(2)).default([]),
-  search: z
-    .object({
-      targetRoles: z.array(z.string()).default([]),
-      mustHaveKeywords: z.array(z.string()).default([]),
-      excludeKeywords: z.array(z.string()).default([]),
-      lookbackDays: z.number().int().min(1).max(30).default(7),
-      workModes: z.array(z.enum(["onsite", "hybrid", "remote"])).default(["onsite", "hybrid", "remote"]),
-      showUnknownPostedDate: z.boolean().default(false),
-      sort: z.enum(["newest", "match", "confidence"]).default("newest"),
-      /** Hide non-software roles and weak matches once a profile exists. */
-      onlyMatching: z.boolean().default(true),
-      /** Hide jobs below this match score: Broad 40, Balanced 55, Strict 70. */
-      minMatch: z.number().int().min(0).max(100).default(55),
-      /** Max jobs per company in the feed so one employer cannot flood it (0 = no cap). */
-      maxPerCompany: z.number().int().min(0).max(50).default(3),
-    })
-    .default(() => ({
-      targetRoles: [], mustHaveKeywords: [], excludeKeywords: [], lookbackDays: 7,
-      workModes: ["onsite", "hybrid", "remote"] as ("onsite" | "hybrid" | "remote")[], showUnknownPostedDate: false,
-      sort: "newest" as const, onlyMatching: true, minMatch: 55, maxPerCompany: 3,
-    })),
-  sponsorship: z
-    .object({
-      excludeNegative: z.boolean().default(true),
-      /** "required": must offer employer-paid relocation; "bonus": ranks higher; "ignore". */
-      relocation: z.enum(["required", "bonus", "ignore"]).default("bonus"),
-      /** Show jobs whose only sponsorship signal is "salary meets the visa threshold" (e.g. Singapore). */
-      includePossible: z.boolean().default(true),
-    })
-    .default({ excludeNegative: true, relocation: "bonus", includePossible: true }),
+  search: SearchSchema.default(() => SearchSchema.parse({})),
+  sponsorship: SponsorshipSchema.default(() => SponsorshipSchema.parse({})),
+  /** Source ids (see packages/server/src/connectors.ts) the user switched off. */
   sources: z.object({ disabled: z.array(z.string()).default([]) }).default({ disabled: [] }),
-  schedule: z.object({ refreshHours: z.number().min(1).max(168).default(6) }).default({ refreshHours: 6 }),
   appearance: z.object({ theme: z.enum(["system", "light", "dark"]).default("system") }).default({ theme: "system" }),
 });
 

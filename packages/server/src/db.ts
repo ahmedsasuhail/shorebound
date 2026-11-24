@@ -52,8 +52,9 @@ export function getSetting<T>(db: Db, key: string): T | undefined {
 }
 
 export function putSetting(db: Db, key: string, value: unknown): void {
-  db.prepare("INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value")
-    .run(key, JSON.stringify(value));
+  db.prepare(
+    "INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+  ).run(key, JSON.stringify(value));
 }
 
 export function deleteSetting(db: Db, key: string): void {
