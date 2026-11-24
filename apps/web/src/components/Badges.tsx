@@ -1,5 +1,5 @@
 import type { JobDTO } from "@shorebound/core";
-import { BadgeCheck, Globe2, Plane, ShieldAlert, Sparkles } from "lucide-react";
+import { BadgeCheck, Globe2, HelpCircle, Plane, ShieldAlert, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
 
 export function Pill({ tone, icon, children }: { tone: "good" | "info" | "warn" | "bad" | "muted"; icon?: ReactNode; children: ReactNode }) {
@@ -24,6 +24,7 @@ export function SponsorshipBadge({ job }: { job: JobDTO }) {
     case "confirmed_register": return <Pill tone="good" icon={<BadgeCheck size={12} />}>Registered sponsor</Pill>;
     case "visa_source": return <Pill tone="info" icon={<Sparkles size={12} />}>Visa-filtered board</Pill>;
     case "country_norm": return <Pill tone="info" icon={<Globe2 size={12} />}>Usual here</Pill>;
+    case "possible": return <Pill tone="warn" icon={<HelpCircle size={12} />}>Visa-eligible salary · unconfirmed</Pill>;
     case "negative": return <Pill tone="bad" icon={<ShieldAlert size={12} />}>No sponsorship</Pill>;
     default: return <Pill tone="muted">Sponsorship unclear</Pill>;
   }

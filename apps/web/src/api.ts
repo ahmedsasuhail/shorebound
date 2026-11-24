@@ -11,7 +11,7 @@ export interface Settings {
     lookbackDays: number; showUnknownPostedDate: boolean; targetRoles: string[];
     sort: "newest" | "match" | "confidence"; onlyMatching: boolean; minMatch: number; maxPerCompany: number;
   };
-  sponsorship: { excludeNegative: boolean; relocation: "required" | "bonus" | "ignore" };
+  sponsorship: { excludeNegative: boolean; relocation: "required" | "bonus" | "ignore"; includePossible: boolean };
   sources: { disabled: string[] };
   schedule: { refreshHours: number };
   appearance: { theme: "system" | "light" | "dark" };
