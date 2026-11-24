@@ -5,6 +5,7 @@ import {
   atsConnector,
   fetchCanadaLmia,
   fetchIrelandPermits,
+  fetchNetherlandsRegister,
   fetchUkRegisterCsv,
   hackerNews,
   myCareersFuture,
@@ -119,6 +120,29 @@ export function irelandRegisterLoader(
   };
 }
 
+/** Netherlands: IND recognised sponsors (one ~1 MB HTML page). Cached for a week; falls back to an old copy. */
+export function netherlandsRegisterLoader(
+  appData: string,
+  fetchFn: FetchLike,
+  now = () => Date.now(),
+): () => Promise<RegisterIndex> {
+  const file = join(appData, "registers", "nl.json");
+  const fromDisk = () => new Map([["NL", new Set<string>(JSON.parse(readFileSync(file, "utf8")).names as string[])]]);
+  return async () => {
+    const cached = existsSync(file);
+    if (cached && now() - statSync(file).mtimeMs < WEEK_MS) return fromDisk();
+    try {
+      const names = await fetchNetherlandsRegister(fetchFn);
+      mkdirSync(join(appData, "registers"), { recursive: true });
+      writeFileSync(file, JSON.stringify({ names: [...names] }));
+      return new Map([["NL", names]]);
+    } catch (e) {
+      if (!cached) throw e;
+      return fromDisk();
+    }
+  };
+}
+
 /** Merges several register loaders; a failing one is reported as a warning, the rest still apply. */
 export function combineRegisters(
   loaders: { label: string; load: () => Promise<RegisterIndex> }[],
@@ -155,7 +179,7 @@ export const SOURCE_INFO = [
     id: "company-boards",
     label: "Company job boards",
     description:
-      "Greenhouse, Lever and Ashby boards of employers on the UK, Canada or Ireland registers. Slowest source.",
+      "Greenhouse, Lever and Ashby boards of employers on the UK, Canada, Ireland or Netherlands registers. Slowest source.",
   },
 ] as const;
 
@@ -166,6 +190,7 @@ export function buildConnectors(o: { dataDir: string; appData: string; fetchImpl
     { label: "UK", load: ukRegisterLoader(o.appData, registerFetch) },
     { label: "Canada", load: canadaRegisterLoader(o.appData, registerFetch) },
     { label: "Ireland", load: irelandRegisterLoader(o.appData, registerFetch) },
+    { label: "Netherlands", load: netherlandsRegisterLoader(o.appData, registerFetch) },
   ]);
   return [arbeitnow, hackerNews, myCareersFuture, atsConnector(loadSeed(o.dataDir), registers)];
 }

@@ -144,6 +144,8 @@ const PARSERS: Record<AtsKind, (b: unknown) => Candidate[]> = {
 /** What being "on the register" means in each country, shown as evidence in the UI. */
 const REGISTER_EVIDENCE: Record<string, (name: string) => string> = {
   GB: (n) => `${n} holds a UK Home Office Skilled Worker sponsor licence.`,
+  NL: (n) =>
+    `${n} is an IND recognised sponsor: only recognised sponsors can apply for the Dutch Highly Skilled Migrant permit.`,
   IE: (n) =>
     `${n} was issued Irish employment permits in the latest published year (Department of Enterprise list): it hires non-EU workers.`,
   CA: (n) =>

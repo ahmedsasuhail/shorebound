@@ -1,5 +1,5 @@
 {
-  "_about": "Starter list of employers with public job-board APIs. 'register' maps a country to the exact organisation name(s) on that country's official sponsor register, so a job in that country at that company counts as 'registered sponsor'. Add companies here (verify the register name first; never use fuzzy matches). Canada: names are as listed in the LMIA positive-employers data for software occupations (NOC 2123x), last four quarters to 2026Q2. Ireland: names exactly as in the Department of Enterprise 'Permits issued to companies 2025' file (one, 'Tines Security Services Limited,', keeps the source's trailing comma).",
+  "_about": "Starter list of employers with public job-board APIs. 'register' maps a country to the exact organisation name(s) on that country's official sponsor register, so a job in that country at that company counts as 'registered sponsor'. Add companies here (verify the register name first; never use fuzzy matches). Canada: names are as listed in the LMIA positive-employers data for software occupations (NOC 2123x), last four quarters to 2026Q2. Ireland: names exactly as in the Department of Enterprise 'Permits issued to companies 2025' file (one, 'Tines Security Services Limited,', keeps the source's trailing comma). Netherlands: names exactly as in the IND public register of recognised sponsors (regular labour and highly skilled migrants), November 2026.",
   "_meta": {
     "schema_version": 1,
     "researched_on": "2026-11-23",
@@ -11,7 +11,7 @@
     },
     "confidence": "high",
     "open_questions": [
-      "GB, CA and IE have register importers; other countries need explicit sponsorship text",
+      "GB, CA, IE and NL have register importers; other countries need explicit sponsorship text",
       "Board tokens can change if a company switches ATS",
       "LMIA approval is an employer-level signal for temporary foreign workers, not proof a given role is sponsored"
     ],
@@ -32,6 +32,9 @@
         "IE": [
           "Stripe Technology Company Limited",
           "Stripe Payments Europe Limited"
+        ],
+        "NL": [
+          "Stripe Netherlands B.V."
         ]
       }
     },
@@ -48,6 +51,9 @@
         ],
         "IE": [
           "Airbnb Ireland Unlimited Company"
+        ],
+        "NL": [
+          "Airbnb Netherlands B.V."
         ]
       }
     },
@@ -61,6 +67,9 @@
         ],
         "IE": [
           "Datadog Ireland Limited"
+        ],
+        "NL": [
+          "Datadog Netherlands B.V."
         ]
       }
     },
@@ -71,6 +80,9 @@
       "register": {
         "GB": [
           "Cloudflare Limited"
+        ],
+        "NL": [
+          "Cloudflare Netherlands B.V."
         ]
       }
     },
@@ -81,6 +93,9 @@
       "register": {
         "GB": [
           "Elasticsearch Limited"
+        ],
+        "NL": [
+          "elasticsearch B.V."
         ]
       }
     },
@@ -94,6 +109,9 @@
         ],
         "IE": [
           "MongoDB Limited"
+        ],
+        "NL": [
+          "MongoDB Netherlands B.V."
         ]
       }
     },
@@ -107,6 +125,9 @@
         ],
         "IE": [
           "Twilio Ireland Limited"
+        ],
+        "NL": [
+          "Twilio Netherlands B.V."
         ]
       }
     },
@@ -130,6 +151,9 @@
         ],
         "CA": [
           "Databricks Canada ULC"
+        ],
+        "NL": [
+          "Databricks"
         ]
       }
     },
@@ -156,6 +180,9 @@
         ],
         "IE": [
           "Okta Identity Ireland Limited"
+        ],
+        "NL": [
+          "Okta Identity Netherlands B.V."
         ]
       }
     },
@@ -281,6 +308,9 @@
       "register": {
         "GB": [
           "Spotify Limited"
+        ],
+        "NL": [
+          "Spotify Netherlands B.V."
         ]
       }
     },
@@ -292,6 +322,9 @@
         "GB": [
           "Palantir Technologies UK Limited",
           "Palantir UK Limited"
+        ],
+        "NL": [
+          "Palantir Technologies NL"
         ]
       }
     },
@@ -315,6 +348,9 @@
         ],
         "CA": [
           "Snowflake Computing Canada ULC"
+        ],
+        "NL": [
+          "Snowflake Computing Netherlands B.V."
         ]
       }
     },
@@ -415,6 +451,37 @@
       "register": {
         "IE": [
           "Flipdish Ltd"
+        ]
+      }
+    },
+    {
+      "name": "Adyen",
+      "ats": "greenhouse",
+      "token": "adyen",
+      "register": {
+        "NL": [
+          "Adyen N.V.",
+          "Adyen Netherlands B.V."
+        ]
+      }
+    },
+    {
+      "name": "Mollie",
+      "ats": "ashby",
+      "token": "mollie",
+      "register": {
+        "NL": [
+          "Mollie B.V."
+        ]
+      }
+    },
+    {
+      "name": "Catawiki",
+      "ats": "greenhouse",
+      "token": "catawiki",
+      "register": {
+        "NL": [
+          "Catawiki B.V."
         ]
       }
     }
