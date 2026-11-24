@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
-  arbeitnow, atsConnector, fetchCanadaLmia, fetchUkRegisterCsv, hackerNews, parseUkRegister,
+  arbeitnow, atsConnector, fetchCanadaLmia, fetchUkRegisterCsv, hackerNews, myCareersFuture, parseUkRegister,
   type FetchLike, type RegisterIndex, type RegistersResult, type SeedCompany, type SheetReader, type SourceConnector,
 } from "@shorebound/sources";
 import { z } from "zod";
@@ -98,5 +98,5 @@ export function buildConnectors(o: { dataDir: string; appData: string; fetchImpl
     { label: "UK", load: ukRegisterLoader(o.appData, f) },
     { label: "Canada", load: canadaRegisterLoader(o.appData, f) },
   ]);
-  return [arbeitnow, hackerNews, atsConnector(loadSeed(o.dataDir), registers)];
+  return [arbeitnow, hackerNews, myCareersFuture, atsConnector(loadSeed(o.dataDir), registers)];
 }
