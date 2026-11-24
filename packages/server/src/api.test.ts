@@ -82,6 +82,12 @@ describe("api", () => {
     expect((await first).statusCode).toBe(200);
   });
 
+  it("a bodyless POST works with any content type (e.g. form-encoded from other clients)", async () => {
+    const app = buildApp({ db, appData: dir, dataDir, refresh: async () => ({ startedAt: "x", sources: [] }) });
+    const r = await app.inject({ method: "POST", url: "/api/refresh", headers: { "content-type": "application/x-www-form-urlencoded" } });
+    expect(r.statusCode).toBe(200);
+  });
+
   it("resume upload, read and delete", async () => {
     const app = make();
     const put = await app.inject({

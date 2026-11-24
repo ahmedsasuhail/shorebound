@@ -1,0 +1,272 @@
+{
+  "_about": "Starter list of employers with public job-board APIs. 'register' maps a country to the exact organisation name(s) on that country's official sponsor register, so a job in that country at that company counts as 'registered sponsor'. Add companies here (verify the register name first; never use fuzzy matches).",
+  "_meta": {
+    "schema_version": 1,
+    "researched_on": "2026-11-23",
+    "generated_by": {
+      "model": "claude-sonnet-5-5",
+      "harness": "Claude Code",
+      "effort": "medium",
+      "method": "probed each public ATS endpoint (HTTP 200 with jobs) and matched names against the UK Home Office register CSV dated 2026-11-19"
+    },
+    "confidence": "high",
+    "open_questions": [
+      "Only GB has a register importer so far; other countries' jobs need explicit sponsorship text",
+      "Board tokens can change if a company switches ATS"
+    ],
+    "review_by": "2027-05-23"
+  },
+  "companies": [
+    {
+      "name": "Stripe",
+      "ats": "greenhouse",
+      "token": "stripe",
+      "register": {
+        "GB": [
+          "Stripe Payments UK Ltd"
+        ]
+      }
+    },
+    {
+      "name": "Airbnb",
+      "ats": "greenhouse",
+      "token": "airbnb",
+      "register": {
+        "GB": [
+          "Airbnb UK Limited"
+        ]
+      }
+    },
+    {
+      "name": "Datadog",
+      "ats": "greenhouse",
+      "token": "datadog",
+      "register": {
+        "GB": [
+          "Datadog Ireland Limited"
+        ]
+      }
+    },
+    {
+      "name": "Cloudflare",
+      "ats": "greenhouse",
+      "token": "cloudflare",
+      "register": {
+        "GB": [
+          "Cloudflare Limited"
+        ]
+      }
+    },
+    {
+      "name": "Elastic",
+      "ats": "greenhouse",
+      "token": "elastic",
+      "register": {
+        "GB": [
+          "Elasticsearch Limited"
+        ]
+      }
+    },
+    {
+      "name": "MongoDB",
+      "ats": "greenhouse",
+      "token": "mongodb",
+      "register": {
+        "GB": [
+          "MongoDB UK Limited"
+        ]
+      }
+    },
+    {
+      "name": "Twilio",
+      "ats": "greenhouse",
+      "token": "twilio",
+      "register": {
+        "GB": [
+          "Twilio UK Limited"
+        ]
+      }
+    },
+    {
+      "name": "Figma",
+      "ats": "greenhouse",
+      "token": "figma",
+      "register": {
+        "GB": [
+          "Figma UK Limited"
+        ]
+      }
+    },
+    {
+      "name": "Databricks",
+      "ats": "greenhouse",
+      "token": "databricks",
+      "register": {
+        "GB": [
+          "Databricks UK Limited"
+        ]
+      }
+    },
+    {
+      "name": "Robinhood",
+      "ats": "greenhouse",
+      "token": "robinhood",
+      "register": {
+        "GB": [
+          "Robinhood U.K Ltd."
+        ]
+      }
+    },
+    {
+      "name": "Okta",
+      "ats": "greenhouse",
+      "token": "okta",
+      "register": {
+        "GB": [
+          "Okta UK Ltd"
+        ]
+      }
+    },
+    {
+      "name": "Squarespace",
+      "ats": "greenhouse",
+      "token": "squarespace",
+      "register": {
+        "GB": [
+          "Squarespace UK Limited"
+        ]
+      }
+    },
+    {
+      "name": "Asana",
+      "ats": "greenhouse",
+      "token": "asana",
+      "register": {
+        "GB": [
+          "Asana Software UK Limited"
+        ]
+      }
+    },
+    {
+      "name": "Pinterest",
+      "ats": "greenhouse",
+      "token": "pinterest",
+      "register": {
+        "GB": [
+          "Pinterest UK"
+        ]
+      }
+    },
+    {
+      "name": "Reddit",
+      "ats": "greenhouse",
+      "token": "reddit",
+      "register": {
+        "GB": [
+          "Reddit UK Ltd"
+        ]
+      }
+    },
+    {
+      "name": "Vercel",
+      "ats": "greenhouse",
+      "token": "vercel",
+      "register": {
+        "GB": [
+          "Vercel UK Limited"
+        ]
+      }
+    },
+    {
+      "name": "Monzo",
+      "ats": "greenhouse",
+      "token": "monzo",
+      "register": {
+        "GB": [
+          "Monzo Bank Ltd"
+        ]
+      }
+    },
+    {
+      "name": "Wise",
+      "ats": "greenhouse",
+      "token": "wise",
+      "register": {
+        "GB": [
+          "Wise Payments Limited"
+        ]
+      }
+    },
+    {
+      "name": "Deliveroo",
+      "ats": "greenhouse",
+      "token": "deliveroo",
+      "register": {
+        "GB": [
+          "Roofoods Ltd t/a Deliveroo"
+        ]
+      }
+    },
+    {
+      "name": "Samsara",
+      "ats": "greenhouse",
+      "token": "samsara",
+      "register": {
+        "GB": [
+          "Samsara Networks Limited"
+        ]
+      }
+    },
+    {
+      "name": "Carta",
+      "ats": "greenhouse",
+      "token": "carta",
+      "register": {
+        "GB": [
+          "Carta Financial Services Limited"
+        ]
+      }
+    },
+    {
+      "name": "Spotify",
+      "ats": "lever",
+      "token": "spotify",
+      "register": {
+        "GB": [
+          "Spotify Limited"
+        ]
+      }
+    },
+    {
+      "name": "Palantir",
+      "ats": "lever",
+      "token": "palantir",
+      "register": {
+        "GB": [
+          "Palantir Technologies UK Limited",
+          "Palantir UK Limited"
+        ]
+      }
+    },
+    {
+      "name": "OpenAI",
+      "ats": "ashby",
+      "token": "openai",
+      "register": {
+        "GB": [
+          "OpenAI UK Ltd"
+        ]
+      }
+    },
+    {
+      "name": "Snowflake",
+      "ats": "ashby",
+      "token": "snowflake",
+      "register": {
+        "GB": [
+          "Snowflake Computing U.K. Limited"
+        ]
+      }
+    }
+  ]
+}

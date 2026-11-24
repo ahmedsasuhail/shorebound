@@ -3,6 +3,7 @@ import { loadData, type DataStore } from "@shorebound/data-schema";
 import Fastify, { type FastifyInstance } from "fastify";
 import { z } from "zod";
 import { getSetting, putSetting, type Db } from "./db.js";
+import { buildConnectors } from "./connectors.js";
 import { buildFeed } from "./feed.js";
 import { extractResumeText } from "./resumeText.js";
 import { queryJobs } from "./jobs.js";
@@ -106,7 +107,7 @@ export function buildApp(deps: AppDeps): FastifyInstance {
   app.post("/api/refresh", async (_req, reply) => {
     if (refreshing) return reply.code(409).send({ error: "A refresh is already running." });
     const s = loadSettings(deps.db, enabledDefaults);
-    const run = deps.refresh ?? ((db, o) => refreshJobs(db, o));
+    const run = deps.refresh ?? ((db, o) => refreshJobs(db, { ...o, connectors: buildConnectors({ dataDir: deps.dataDir, appData: deps.appData }) }));
     refreshing = run(deps.db, { lookbackDays: s.search.lookbackDays, disabled: s.sources.disabled });
     try {
       return await refreshing;
@@ -117,6 +118,8 @@ export function buildApp(deps: AppDeps): FastifyInstance {
 
   // Resume: raw bytes in the body, original file name in the `x-filename` header (URI-encoded).
   app.addContentTypeParser("application/octet-stream", { parseAs: "buffer" }, (_r, body, done) => done(null, body));
+  // Routes like POST /api/refresh take no body; accept (and ignore) whatever content type a client sends.
+  app.addContentTypeParser("*", { parseAs: "buffer" }, (_r, body, done) => done(null, body));
   app.get("/api/resume", async () => ({ resume: getResume(deps.db) ?? null }));
   app.put("/api/resume", async (req, reply) => {
     const name = decodeURIComponent(String(req.headers["x-filename"] ?? ""));

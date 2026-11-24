@@ -7,3 +7,4 @@ export * from "./refresh.js";
 export * from "./app.js";
 export * from "./feed.js";
 export * from "./resumeText.js";
+export * from "./connectors.js";
