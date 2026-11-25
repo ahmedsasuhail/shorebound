@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { motion } from "motion/react";
 
 export function Section({ title, hint, children }: { title: string; hint?: string; children: React.ReactNode }) {
@@ -23,13 +24,16 @@ export function Segmented<T extends string | number>({
   options: { v: T; label: React.ReactNode }[];
   onChange: (v: T) => void;
 }) {
+  // Each instance needs its own layoutId: two controls with the same option values (e.g. two
+  // Include/Hide toggles) would otherwise share one highlight, which jumps between them.
+  const id = useId();
   return (
     <div className="inline-flex rounded-full bg-surface2 p-0.5 text-sm font-medium">
       {options.map((o) => (
         <button key={String(o.v)} onClick={() => onChange(o.v)} className="relative rounded-full px-4 py-1.5">
           {value === o.v && (
             <motion.span
-              layoutId={`seg-${options.map((x) => x.v).join("-")}`}
+              layoutId={`seg-${id}`}
               className="absolute inset-0 rounded-full bg-surface shadow-sm"
               transition={{ type: "spring", stiffness: 420, damping: 32 }}
             />
