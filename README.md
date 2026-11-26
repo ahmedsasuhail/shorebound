@@ -11,7 +11,7 @@ no account, no telemetry, no API keys.
 
 ## Quick start
 
-Requires **Node.js 22+** (24 recommended).
+Requires **Node.js 22+** (24 recommended; `nvm use` picks it up from `.nvmrc`).
 
 ```sh
 npm install
