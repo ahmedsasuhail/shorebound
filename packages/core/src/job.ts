@@ -33,6 +33,8 @@ export interface Job {
 export type JobDTO = Omit<Job, "postedAt"> & {
   postedAt: string;
   firstSeenAt: string;
+  /** Filled by the server feed: set when the poster looks like a staffing agency / recruiter. */
+  agency?: { evidence: string };
   /** Filled by the server feed: fit to the user's profile. */
   match?: { score: number; reasons: string[] } | null;
   confidence?: {
