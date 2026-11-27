@@ -39,6 +39,7 @@ For development (hot reload): `npm run dev` and open http://localhost:5173.
 | **Relocation** | Employer-paid relocation is detected and can be a bonus or a requirement. |
 | **Fit to your resume** | Match score led by the job title and your core stack; wrong specialty, other languages, junior roles and platform/CMS roles are capped. Strictness: Broad / Balanced / Strict. Non-engineering roles (recruiters, sales...) are discarded outright. |
 | **Confidence meter** | Sponsorship evidence, ease of moving from India, posting freshness, plus scam checks (fees, WhatsApp-only contact, "come on a visit visa"...). Factors without free data are shown as missing, never guessed. |
+| **Direct employers first** | Postings from staffing agencies and recruiters ("on behalf of our client", Singapore EA licence numbers, known agency names) are hidden by default: the real employer, and so the sponsor, is unnamed. They can be shown, marked "Recruiter posting". |
 | **Private** | Resume, settings and jobs live in your OS app-data folder (`%APPDATA%\Shorebound`, `~/Library/Application Support/Shorebound`, `~/.config/shorebound`). |
 
 ### Sources

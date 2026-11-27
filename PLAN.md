@@ -17,7 +17,7 @@ your machine.
 | Registers | UK Home Office Skilled Worker sponsor register; Canada positive-LMIA employers for software occupations (last 4 quarters); Ireland companies issued employment permits (latest year); Netherlands IND recognised sponsors. Disk-cached, fall back to old copies. |
 | Countries | 14 researched: US, CA, GB, IE, DE, NL, FR, JP, AE, SA, QA, SG, MY, TH. |
 | Sponsorship | Rule-based classifier (negation-aware, English plus common German/Arabic phrases); register matches; Singapore salary signal shown as *unconfirmed*. |
-| Ranking | Match score (title + core stack led, hard caps for wrong roles); confidence meter with scam signals and visible coverage; sort by newest / best fit / most trusted; strictness; max 3 per company. |
+| Ranking | Match score (title + core stack led, hard caps for wrong roles); confidence meter with scam signals and visible coverage; sort by newest / best fit / most trusted; strictness; max 3 per company; staffing-agency / recruiter postings hidden by default (unnamed employer, so the sponsor can't be checked), shown marked when included. |
 | UI | Feed with filters and animated cards, detail drawer with evidence and "why" panel, onboarding, settings (resume, profile, countries, search, sources, appearance), light/dark. |
 | Ops | `npm run build && npm start` (one process); CI: typecheck, lint, format, tests, data validation, build. |
 
@@ -56,19 +56,18 @@ Ordered roughly by value. Each is independent of the v1 core.
 
 1. **TODO: Adzuna connector** (free API key per user; ~20 countries including Australia; keyword search for
    "visa sponsorship"; returns real `created` dates). Needs a Settings field for the user's app id and key.
-2. **Staffing-agency filter**: many Singapore results are contract/agency postings.
-3. **More registers**: US (DOL LCA data; the USCIS H-1B hub was unreliable in 2026). (Ireland and the Netherlands
+2. **More registers**: US (DOL LCA data; the USCIS H-1B hub was unreliable in 2026). (Ireland and the Netherlands
    were added in Nov 2026.)
-4. **More countries**: research the *coming soon* entries in `data/catalog.json` (Australia needs a free source
+3. **More countries**: research the *coming soon* entries in `data/catalog.json` (Australia needs a free source
    first: none is permitted today); free sources for the Gulf, Malaysia and Thailand. Considered and skipped:
    Germany's federal Jobsuche API (no descriptions in results, German postings rarely mention visas).
-5. **Keyword filters**: target roles, must-have and excluded keywords, work mode (remote/hybrid/onsite).
-6. **Scheduled refresh and notifications** for new high-fit jobs.
-7. **Application tracker** (saved → applied → interviewing → offer).
-8. **LinkedIn/Indeed quick-search links** (pre-filled, opened in your own browser; never fetched).
-9. **Company reputation and reviews** (Wikidata, Companies House, layoff trackers; review sites are link-only).
-10. **Desktop app** (Electron) with OS-keychain secret storage.
-11. **Optional AI (Claude)**: profile refinement, unclear-posting classification, cover-letter drafts, with the
+4. **Keyword filters**: target roles, must-have and excluded keywords, work mode (remote/hybrid/onsite).
+5. **Scheduled refresh and notifications** for new high-fit jobs.
+6. **Application tracker** (saved → applied → interviewing → offer).
+7. **LinkedIn/Indeed quick-search links** (pre-filled, opened in your own browser; never fetched).
+8. **Company reputation and reviews** (Wikidata, Companies House, layoff trackers; review sites are link-only).
+9. **Desktop app** (Electron) with OS-keychain secret storage.
+10. **Optional AI (Claude)**: profile refinement, unclear-posting classification, cover-letter drafts, with the
     user's own API key and a budget cap.
 11. Other origin countries; family/dependant visa planning.
 
