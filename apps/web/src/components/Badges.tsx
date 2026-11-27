@@ -1,5 +1,5 @@
 import type { JobDTO } from "@shorebound/core";
-import { BadgeCheck, HelpCircle, Plane, ShieldAlert, Sparkles } from "lucide-react";
+import { BadgeCheck, HelpCircle, Plane, ShieldAlert, Sparkles, Users } from "lucide-react";
 import type { ReactNode } from "react";
 
 export function Pill({
@@ -80,6 +80,16 @@ export function RelocationBadge({ job }: { job: JobDTO }) {
       </Pill>
     );
   return null;
+}
+
+/** Shown when the poster looks like a staffing agency or recruiter (only when the user chose to include them). */
+export function AgencyBadge({ job }: { job: JobDTO }) {
+  if (!job.agency) return null;
+  return (
+    <Pill tone="muted" icon={<Users size={12} />}>
+      Recruiter posting
+    </Pill>
+  );
 }
 
 /** Flag emoji do not render on Windows, so use a code chip. */

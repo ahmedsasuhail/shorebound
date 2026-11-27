@@ -24,6 +24,7 @@ export interface Settings {
     relocation: "required" | "bonus" | "ignore";
     includePossible: boolean;
     includeRegister: boolean;
+    includeAgencies: boolean;
   };
   sources: { disabled: string[] };
   appearance: { theme: "system" | "light" | "dark" };
@@ -39,7 +40,7 @@ export interface Profile {
 export interface Feed {
   jobs: JobDTO[];
   total: number;
-  hidden: { notMatching: number; companyCap: number };
+  hidden: { notMatching: number; companyCap: number; agency: number };
   relocationOffered: number;
   needsProfile?: boolean;
 }

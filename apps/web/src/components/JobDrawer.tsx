@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 import { useNow } from "../hooks/useNow";
 import { COUNTRY_NAMES, timeAgo } from "../lib/format";
-import { CountryChip, RelocationBadge, SponsorshipBadge } from "./Badges";
+import { AgencyBadge, CountryChip, RelocationBadge, SponsorshipBadge } from "./Badges";
 import { WhyPanel } from "./Meters";
 
 function Evidence({ label, text }: { label: string; text: string }) {
@@ -63,6 +63,7 @@ export function JobDrawer({ job, onClose }: { job: JobDTO | null; onClose: () =>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <SponsorshipBadge job={job} />
                   <RelocationBadge job={job} />
+                  <AgencyBadge job={job} />
                 </div>
               </div>
               <button
@@ -90,6 +91,12 @@ export function JobDrawer({ job, onClose }: { job: JobDTO | null; onClose: () =>
                 />
               )}
               {job.relocation.evidence && <Evidence label="Relocation evidence" text={job.relocation.evidence} />}
+              {job.agency && (
+                <div className="rounded-xl border border-caution/40 bg-cautionsoft p-3.5 text-[13px] text-cautionink">
+                  <b>Posted by a recruiter.</b> {job.agency.evidence} The real employer, who would sponsor the visa, is
+                  not named: ask the recruiter who it is and confirm sponsorship before sharing documents.
+                </div>
+              )}
               <div>
                 <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted">Description</h3>
                 <p className="whitespace-pre-line text-[13.5px] leading-relaxed text-ink/90">
