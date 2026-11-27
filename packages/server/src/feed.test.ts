@@ -70,6 +70,19 @@ describe("buildFeed", () => {
     expect(buildFeed(rows, { ...base, includeRegister: false }).jobs.map((j) => j.id)).toEqual(["text"]);
   });
 
+  it("hides recruiter postings when asked, counts them, and marks them when shown", () => {
+    const rows = [
+      mk("direct", "Senior Backend Engineer", "Acme", 1),
+      mk("agency", "Senior Backend Engineer", "Hays Specialist Recruitment", 2),
+    ];
+    const hidden = buildFeed(rows, { ...base, includeAgencies: false });
+    expect(hidden.jobs.map((j) => j.id)).toEqual(["direct"]);
+    expect(hidden.hidden.agency).toBe(1);
+    const shown = buildFeed(rows, base);
+    expect(shown.jobs.find((j) => j.id === "agency")?.agency?.evidence).toMatch(/recruitment/i);
+    expect(shown.jobs.find((j) => j.id === "direct")?.agency).toBeUndefined();
+  });
+
   it("discards non-engineering roles (match 5) outright, without counting them as hidden poor fits", () => {
     const rows = [mk("rec", "Technical Recruiter", "A", 1), mk("be", "Senior Backend Engineer", "B", 2)];
     const f = buildFeed(rows, { ...base, minMatch: 0 });
