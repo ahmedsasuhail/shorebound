@@ -3,3 +3,4 @@ export * from "./analyze.js";
 export * from "./match.js";
 export * from "./confidence.js";
 export * from "./agency.js";
+export * from "./keywords.js";
