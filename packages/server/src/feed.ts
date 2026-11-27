@@ -1,4 +1,13 @@
-import { analyzeJob, confidenceScore, detectAgency, matchScore, type JobDTO, type Profile } from "@shorebound/core";
+import {
+  analyzeJob,
+  checkKeywords,
+  confidenceScore,
+  detectAgency,
+  type KeywordFilter,
+  matchScore,
+  type JobDTO,
+  type Profile,
+} from "@shorebound/core";
 
 export interface FeedOptions {
   profile: Profile | null;
@@ -14,6 +23,8 @@ export interface FeedOptions {
   includeRegister?: boolean;
   /** Keep postings from staffing agencies / recruiters (the real employer and sponsor are unnamed). */
   includeAgencies?: boolean;
+  /** Must-have (any, title or description) and excluded (title) keywords. */
+  keywords?: KeywordFilter;
   limit?: number;
   now?: Date;
 }
@@ -21,7 +32,7 @@ export interface FeedOptions {
 export interface Feed {
   jobs: JobDTO[];
   total: number;
-  hidden: { notMatching: number; companyCap: number; agency: number };
+  hidden: { notMatching: number; companyCap: number; agency: number; keywords: number };
   /** How many of the listed jobs state employer-offered relocation. */
   relocationOffered: number;
 }
@@ -83,12 +94,17 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   const now = o.now ?? new Date();
   let notMatching = 0;
   let agencyHidden = 0;
+  let keywordHidden = 0;
   const scored: JobDTO[] = [];
   for (const j of dedupeJobs(rows)) {
     // Explicit "no sponsorship" is never listed (connectors already drop it; this guards older stored rows).
     if (j.sponsorship.status === "negative") continue;
     if (o.includePossible === false && j.sponsorship.status === "possible") continue;
     if (o.includeRegister === false && j.sponsorship.status === "confirmed_register") continue;
+    if (o.keywords && !checkKeywords(j.title, j.description, o.keywords).ok) {
+      keywordHidden++;
+      continue;
+    }
     const ag = detectAgency(j.company ?? "", j.description);
     const agency = ag.agency ? { evidence: ag.evidence! } : undefined;
     const analysis = analyzeJob(j.title, j.description);
@@ -140,7 +156,7 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   return {
     jobs,
     total: capped.length,
-    hidden: { notMatching, companyCap, agency: agencyHidden },
+    hidden: { notMatching, companyCap, agency: agencyHidden, keywords: keywordHidden },
     relocationOffered: capped.filter((j) => j.relocation.status === "offered").length,
   };
 }

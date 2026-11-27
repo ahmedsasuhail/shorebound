@@ -14,6 +14,10 @@ const SearchSchema = z.object({
   minMatch: z.number().int().min(0).max(100).default(55),
   /** Max jobs per company in the feed so one employer cannot flood it (0 = no cap). */
   maxPerCompany: z.number().int().min(0).max(50).default(3),
+  /** Must-have keywords: a job needs at least one, in its title or description (empty = no requirement). */
+  includeKeywords: z.array(z.string().trim().min(1).max(40)).max(30).default([]),
+  /** Excluded keywords: jobs whose TITLE contains any are hidden. */
+  excludeKeywords: z.array(z.string().trim().min(1).max(40)).max(30).default([]),
 });
 
 const SponsorshipSchema = z.object({

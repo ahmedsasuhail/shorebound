@@ -70,6 +70,17 @@ describe("buildFeed", () => {
     expect(buildFeed(rows, { ...base, includeRegister: false }).jobs.map((j) => j.id)).toEqual(["text"]);
   });
 
+  it("applies keyword filters and counts what they hid", () => {
+    const rows = [
+      mk("ts", "Senior Backend Engineer", "A", 1),
+      mk("php", "Senior PHP Engineer", "B", 2),
+      mk("go", "Senior Backend Engineer", "C", 3, { description: "Go and Kubernetes. ".repeat(20) }),
+    ];
+    const f = buildFeed(rows, { ...base, minMatch: 0, keywords: { include: ["typescript"], exclude: ["php"] } });
+    expect(f.jobs.map((j) => j.id)).toEqual(["ts"]);
+    expect(f.hidden.keywords).toBe(2);
+  });
+
   it("hides recruiter postings when asked, counts them, and marks them when shown", () => {
     const rows = [
       mk("direct", "Senior Backend Engineer", "Acme", 1),
