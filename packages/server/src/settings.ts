@@ -26,6 +26,11 @@ const SponsorshipSchema = z.object({
   includeRegister: z.boolean().default(true),
   /** Show jobs whose only signal is "salary meets the visa threshold" (Singapore), clearly marked. */
   includePossible: z.boolean().default(true),
+  /**
+   * Show postings from staffing agencies and recruiters. Off by default: the real employer (and so the sponsor) is
+   * unnamed, sponsorship claims cannot be checked, and register matches would name the wrong company.
+   */
+  includeAgencies: z.boolean().default(false),
 });
 
 export const SettingsSchema = z.object({

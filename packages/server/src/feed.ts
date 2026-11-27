@@ -1,4 +1,4 @@
-import { analyzeJob, confidenceScore, matchScore, type JobDTO, type Profile } from "@shorebound/core";
+import { analyzeJob, confidenceScore, detectAgency, matchScore, type JobDTO, type Profile } from "@shorebound/core";
 
 export interface FeedOptions {
   profile: Profile | null;
@@ -12,6 +12,8 @@ export interface FeedOptions {
   includePossible?: boolean;
   /** Keep jobs whose only signal is an employer-level register match. */
   includeRegister?: boolean;
+  /** Keep postings from staffing agencies / recruiters (the real employer and sponsor are unnamed). */
+  includeAgencies?: boolean;
   limit?: number;
   now?: Date;
 }
@@ -19,7 +21,7 @@ export interface FeedOptions {
 export interface Feed {
   jobs: JobDTO[];
   total: number;
-  hidden: { notMatching: number; companyCap: number };
+  hidden: { notMatching: number; companyCap: number; agency: number };
   /** How many of the listed jobs state employer-offered relocation. */
   relocationOffered: number;
 }
@@ -80,17 +82,24 @@ export function dedupeJobs(rows: JobDTO[]): JobDTO[] {
 export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   const now = o.now ?? new Date();
   let notMatching = 0;
+  let agencyHidden = 0;
   const scored: JobDTO[] = [];
   for (const j of dedupeJobs(rows)) {
     // Explicit "no sponsorship" is never listed (connectors already drop it; this guards older stored rows).
     if (j.sponsorship.status === "negative") continue;
     if (o.includePossible === false && j.sponsorship.status === "possible") continue;
     if (o.includeRegister === false && j.sponsorship.status === "confirmed_register") continue;
+    const ag = detectAgency(j.company ?? "", j.description);
+    const agency = ag.agency ? { evidence: ag.evidence! } : undefined;
     const analysis = analyzeJob(j.title, j.description);
     const match = o.profile ? matchScore(o.profile, analysis) : null;
     if (match && match.score <= DISCARD_AT_OR_BELOW) continue;
     if (match && match.score < o.minMatch) {
       notMatching++;
+      continue;
+    }
+    if (agency && o.includeAgencies === false) {
+      agencyHidden++;
       continue;
     }
     const confidence = confidenceScore({
@@ -102,7 +111,7 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
       hasCompany: Boolean(j.company?.trim()),
       text: `${j.title}\n${j.description}`,
     });
-    scored.push({ ...j, analysis, match, confidence });
+    scored.push({ ...j, analysis, match, confidence, ...(agency ? { agency } : {}) });
   }
 
   const reloc = (j: JobDTO) => (o.relocationBonus && j.relocation.status === "offered" ? 5 : 0);
@@ -131,7 +140,7 @@ export function buildFeed(rows: JobDTO[], o: FeedOptions): Feed {
   return {
     jobs,
     total: capped.length,
-    hidden: { notMatching, companyCap },
+    hidden: { notMatching, companyCap, agency: agencyHidden },
     relocationOffered: capped.filter((j) => j.relocation.status === "offered").length,
   };
 }

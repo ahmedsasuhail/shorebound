@@ -133,7 +133,8 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     // No profile → no feed. Without a resume there is nothing to judge fit against, and an
     // unranked list of every job would be misleading.
     const profile = await getProfile();
-    if (!profile) return { jobs: [], total: 0, hidden: { notMatching: 0, companyCap: 0 }, needsProfile: true };
+    if (!profile)
+      return { jobs: [], total: 0, hidden: { notMatching: 0, companyCap: 0, agency: 0 }, needsProfile: true };
     const rows = queryJobs(deps.db, {
       countries,
       sinceDays: q.data.sinceDays ?? s.search.lookbackDays,
@@ -150,6 +151,7 @@ export function buildApp(deps: AppDeps): FastifyInstance {
       relocationBonus: s.sponsorship.relocation === "bonus",
       includePossible: s.sponsorship.includePossible,
       includeRegister: s.sponsorship.includeRegister,
+      includeAgencies: s.sponsorship.includeAgencies,
     });
   });
 

@@ -2,7 +2,7 @@ import type { JobDTO } from "@shorebound/core";
 import { ArrowUpRight, Clock, MapPin } from "lucide-react";
 import { motion } from "motion/react";
 import { COUNTRY_NAMES, timeAgo } from "../lib/format";
-import { CountryChip, RelocationBadge, SponsorshipBadge } from "./Badges";
+import { AgencyBadge, CountryChip, RelocationBadge, SponsorshipBadge } from "./Badges";
 import { ConfidenceRing, MatchPill } from "./Meters";
 
 const RAIL: Record<string, string> = {
@@ -57,6 +57,7 @@ export function JobCard({ job, index, now, onOpen }: { job: JobDTO; index: numbe
           <MatchPill job={job} />
           <SponsorshipBadge job={job} />
           <RelocationBadge job={job} />
+          <AgencyBadge job={job} />
         </div>
       </div>
       <div className="self-center">

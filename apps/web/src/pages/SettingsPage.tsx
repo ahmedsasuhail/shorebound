@@ -392,6 +392,15 @@ function SponsorshipPanel() {
             onChange={(v) => save.mutate({ sponsorship: { ...s.sponsorship, includePossible: v } })}
           />
         </Field>
+        <Field
+          label="Posted by a staffing agency or recruiter"
+          help="Recruiters post for an unnamed client, so the company that would sponsor your visa is unknown and register checks can't apply. Hidden by default; when shown, they are marked “Recruiter posting”."
+        >
+          <IncludeHide
+            value={s.sponsorship.includeAgencies}
+            onChange={(v) => save.mutate({ sponsorship: { ...s.sponsorship, includeAgencies: v } })}
+          />
+        </Field>
       </div>
     </Section>
   );

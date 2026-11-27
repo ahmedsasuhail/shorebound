@@ -19,7 +19,7 @@ afterEach(() => {
 });
 
 describe("settings", () => {
-  it("returns defaults on first run: 7-day window, relocation as a bonus, marked weaker signals shown", () => {
+  it("returns defaults on first run: 7-day window, relocation as a bonus, marked weaker signals shown, recruiters hidden", () => {
     const s = loadSettings(db, ["DE", "AE"]);
     expect(s.countries).toEqual(["DE", "AE"]);
     expect(s.search.lookbackDays).toBe(7);
@@ -27,6 +27,7 @@ describe("settings", () => {
       relocation: "bonus",
       includePossible: true,
       includeRegister: true,
+      includeAgencies: false,
     });
   });
 
