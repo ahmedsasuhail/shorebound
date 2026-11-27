@@ -5,11 +5,9 @@ import {
   Monitor,
   Moon,
   Palette,
-  Plus,
   ShieldCheck,
   SlidersHorizontal,
   Sun,
-  X,
   type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -25,6 +23,7 @@ import {
   type Profile,
 } from "../api";
 import { CountryChip } from "../components/Badges";
+import { ChipInput } from "../components/ChipInput";
 import { ResumeCard } from "../components/ResumeCard";
 import { Field, Section, Segmented } from "../components/Section";
 import { useNow } from "../hooks/useNow";
@@ -43,18 +42,13 @@ const LEVELS: Profile["seniority"][] = ["junior", "mid", "senior", "lead", "mana
 function ProfileCard() {
   const q = useProfile();
   const save = useSaveProfile();
-  const [adding, setAdding] = useState("");
   const p = q.data?.profile;
   if (!p) return null;
   const put = (patch: Partial<Profile>) => {
     const { source: _s, ...rest } = { ...p, ...patch };
     save.mutate(rest);
   };
-  const add = () => {
-    const v = adding.trim().toLowerCase();
-    if (v && !p.skills.includes(v)) put({ skills: [...p.skills, v] });
-    setAdding("");
-  };
+
   return (
     <Section
       title="Your profile"
@@ -67,46 +61,13 @@ function ProfileCard() {
       <div className="grid gap-5 sm:grid-cols-[1fr_auto]">
         <div>
           <div className="mb-2 text-sm font-medium">Skills</div>
-          <div className="flex flex-wrap gap-1.5">
-            <AnimatePresence initial={false}>
-              {p.skills.map((sk) => (
-                <motion.span
-                  key={sk}
-                  layout
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className="inline-flex items-center gap-1 rounded-full bg-accentsoft py-1 pl-3 pr-1.5 text-xs font-medium text-accentink"
-                >
-                  {sk}
-                  <button
-                    aria-label={`Remove ${sk}`}
-                    onClick={() => put({ skills: p.skills.filter((x) => x !== sk) })}
-                    className="rounded-full p-0.5 hover:bg-accent hover:text-onaccent"
-                  >
-                    <X size={11} />
-                  </button>
-                </motion.span>
-              ))}
-            </AnimatePresence>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                add();
-              }}
-              className="inline-flex items-center rounded-full border border-dashed border-line pl-3 pr-1"
-            >
-              <input
-                value={adding}
-                onChange={(e) => setAdding(e.target.value)}
-                placeholder="add skill"
-                className="w-24 bg-transparent py-1 text-xs outline-none"
-              />
-              <button type="submit" aria-label="Add skill" className="rounded-full p-1 text-muted hover:text-accent">
-                <Plus size={12} />
-              </button>
-            </form>
-          </div>
+          <ChipInput
+            values={p.skills}
+            onChange={(skills) => put({ skills })}
+            placeholder="add skill"
+            label="skill"
+            lowercase
+          />
         </div>
         <div className="space-y-4 sm:w-56">
           <label className="block">
@@ -339,6 +300,29 @@ function SearchPanel() {
               { v: "bonus", label: "Bonus" },
               { v: "ignore", label: "Ignore" },
             ]}
+          />
+        </Field>
+        <Field
+          label="Must-have keywords"
+          help="Only show jobs that mention at least one of these, in the title or description. Leave empty to rely on your resume match."
+        >
+          <ChipInput
+            values={s.search.includeKeywords}
+            onChange={(includeKeywords) => save.mutate({ search: { ...s.search, includeKeywords } })}
+            placeholder="e.g. typescript"
+            label="must-have keyword"
+          />
+        </Field>
+        <Field
+          label="Exclude jobs whose title contains"
+          help="Hides a job when its title has any of these words (only the title, since descriptions mention everything)."
+        >
+          <ChipInput
+            values={s.search.excludeKeywords}
+            onChange={(excludeKeywords) => save.mutate({ search: { ...s.search, excludeKeywords } })}
+            placeholder="e.g. php, contract"
+            label="excluded keyword"
+            tone="bad"
           />
         </Field>
         <Field label="Jobs per company" help="Stops one employer filling the feed.">

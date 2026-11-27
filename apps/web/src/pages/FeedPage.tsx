@@ -196,6 +196,7 @@ export function FeedPage({ goSettings }: { goSettings: () => void }) {
               {jobs.data?.relocationOffered ? ` · ${jobs.data.relocationOffered} offer relocation` : ""}
               {jobs.data?.hidden.notMatching ? ` · ${jobs.data.hidden.notMatching} hidden as poor fit` : ""}
               {jobs.data?.hidden.companyCap ? ` · ${jobs.data.hidden.companyCap} more from the same companies` : ""}
+              {jobs.data?.hidden.keywords ? ` · ${jobs.data.hidden.keywords} filtered by your keywords` : ""}
               {jobs.data?.hidden.agency ? ` · ${jobs.data.hidden.agency} from recruiters hidden` : ""}
             </span>
             <div className="flex rounded-full bg-surface2 p-0.5 font-medium" role="group" aria-label="Sort">

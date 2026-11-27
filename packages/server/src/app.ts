@@ -134,7 +134,12 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     // unranked list of every job would be misleading.
     const profile = await getProfile();
     if (!profile)
-      return { jobs: [], total: 0, hidden: { notMatching: 0, companyCap: 0, agency: 0 }, needsProfile: true };
+      return {
+        jobs: [],
+        total: 0,
+        hidden: { notMatching: 0, companyCap: 0, agency: 0, keywords: 0 },
+        needsProfile: true,
+      };
     const rows = queryJobs(deps.db, {
       countries,
       sinceDays: q.data.sinceDays ?? s.search.lookbackDays,
@@ -152,6 +157,7 @@ export function buildApp(deps: AppDeps): FastifyInstance {
       includePossible: s.sponsorship.includePossible,
       includeRegister: s.sponsorship.includeRegister,
       includeAgencies: s.sponsorship.includeAgencies,
+      keywords: { include: s.search.includeKeywords, exclude: s.search.excludeKeywords },
     });
   });
 

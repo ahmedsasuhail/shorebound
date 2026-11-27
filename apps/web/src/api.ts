@@ -19,6 +19,8 @@ export interface Settings {
     sort: "newest" | "match" | "confidence";
     minMatch: number;
     maxPerCompany: number;
+    includeKeywords: string[];
+    excludeKeywords: string[];
   };
   sponsorship: {
     relocation: "required" | "bonus" | "ignore";
@@ -40,7 +42,7 @@ export interface Profile {
 export interface Feed {
   jobs: JobDTO[];
   total: number;
-  hidden: { notMatching: number; companyCap: number; agency: number };
+  hidden: { notMatching: number; companyCap: number; agency: number; keywords: number };
   relocationOffered: number;
   needsProfile?: boolean;
 }
